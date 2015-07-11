@@ -2,7 +2,6 @@
 //
 var origin = window.location.origin;
 var pathname = window.location.pathname;
-//var baseUrl = origin + pathname.toLowerCase().replace("index.html", "");
 var baseUrl='/';
 require.config({
 	baseUrl: baseUrl,
@@ -12,7 +11,7 @@ require.config({
 		resources: baseUrl + 'resources',
 		bluebird: baseUrl + "javascripts/bluebird/bluebird",
 		pouchdb: baseUrl + "javascripts/pouchdb/pouchdb.min",
-		papaparse: baseUrl + "javascriptsb/papaparse/papaparse"
+		papaparse: baseUrl + "javascripts/papaparse/papaparse"
 	},
 	shim: {
 		"pouchdb": {
