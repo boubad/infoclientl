@@ -1,5 +1,11 @@
 // Place your settings in this file to overwrite default and user settings.
 {
 	"editor.insertSpaces": false,
-	"editor.renderWhitespace": true
+	"editor.renderWhitespace": true,
+	"files.exclude": {
+		"**/.git": true,
+		"**/.DS_Store": true,
+		"**/*.map":true,
+		"**/*.js": { "when": "$(basename).ts"}
+	}
 }
