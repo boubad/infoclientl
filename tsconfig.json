@@ -69,6 +69,7 @@
         "./public/js/platform/basedetail.ts",
         "./public/js/platform/baseeditmodel.ts",
         "./public/js/platform/baseelement.ts",
+		"./public/js/platform/baselist.ts",
         "./public/js/platform/consultmodel.ts",
         "./public/js/platform/depsiglenamemodel.ts",
         "./public/js/platform/infobaseview.ts",
