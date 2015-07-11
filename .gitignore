@@ -4,6 +4,7 @@ public/**/*.js
 public/**/*.map
 # main init file
 !public/main-init.js
+!public/javascripts/**/*.js
 # special files
 .DS_STORE
 .c9
