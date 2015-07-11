@@ -85,6 +85,7 @@
         "./public/js/platform/siglenamemodel.ts",
         "./public/js/platform/syncmanager.ts",
         "./public/js/resources/connect-bar.ts",
+		"./public/js/resources/elements-bar.ts",
         "./public/js/resources/index.ts",
         "./public/js/resources/nav-bar.ts",
         "./public/js/views/app.ts",
