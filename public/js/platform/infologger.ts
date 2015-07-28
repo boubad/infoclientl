@@ -8,8 +8,8 @@ export class InfoLogger implements ILogManager {
     private _name: string;
     private _logger: LogManager.Logger;
     //
-    constructor(sname?: string) {
-        this._name = ((sname !== undefined) && (sname !== null)) ? sname : 'InfoLogger';
+    constructor() {
+        this._name =  'InfoLogger';
         this._logger = LogManager.getLogger(this._name);
     }// constructor
     //

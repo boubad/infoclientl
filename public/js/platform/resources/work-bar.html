@@ -1,0 +1,54 @@
+<template>
+  <table if.bind="is_connected">
+    <tr>
+      <td if.bind="choose_departement">
+        <div class="form-group">
+          <label class="form-label" for="departements">Dép.</label>
+          <select id="departements" value.bind="departement">
+            <option repeat.for="depelem of departements" model.bind="depelem">${depelem.text}</option>
+          </select>
+        </div>
+      </td>
+      <td if:bind="choose_annee">
+        <div class="form-group">
+          <label class="form-label" for="annees">Année</label>
+          <select id="annees" value.bind="annee">
+            <option repeat.for="anelem of annees" model.bind="anelem">${anelem.text}</option>
+          </select>
+        </div>
+      </td>
+      <td if.bind="choose_semestre">
+        <div class="form-group">
+          <label class="form-label" for="semestres">Sem.</label>
+          <select id="semestres" value.bind="semestre">
+            <option repeat.for="semelem of semestres" model.bind="semelem">${semelem.text}</option>
+          </select>
+        </div>
+      </td>
+      <td if.bind="choose_unite">
+        <div class="form-group">
+          <label class="form-label" for="unites">Unité</label>
+          <select id="unites" value.bind="unite">
+            <option repeat.for="unelem of unites" model.bind="unelem">${unelem.text}</option>
+          </select>
+        </div>
+      </td>
+      <td if.bind="choose_matiere">
+        <div class="form-group">
+          <label class="form-label" for="matieres">Matière</label>
+          <select id="matieres" value.bind="matiere">
+            <option repeat.for="matelem of matieres" model.bind="matelem">${matelem.text}</option>
+          </select>
+        </div>
+      </td>
+      <td if.bind="choose_groupe">
+        <div class="form-group">
+          <label class="form-label" for="groupes">Groupe</label>
+          <select id="groupes" value.bind="groupe">
+            <option repeat.for="grpelem of groupes" model.bind="grpelem">${grpelem.text}</option>
+          </select>
+        </div>
+      </td>
+    </tr>
+  </table>
+</template>

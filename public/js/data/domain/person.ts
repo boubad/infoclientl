@@ -2,79 +2,78 @@
 //
 import {BaseItem} from './baseitem';
 import {IPerson} from 'infodata';
-import {PERSON_KEY, PERSON_PREFIX} from '../infoconstants';
+import {PERSON_KEY, PERSON_PREFIX,ROLE_ADMIN,ROLE_PROF,ROLE_ETUD,ROLE_SUPER} from '../utils/infoconstants';
 //
 export class Person extends BaseItem implements IPerson {
     //
-    private _username: string = null;
-    private _firstname: string = null;
-    private _lastname: string = null;
+    private _username: string;
+    private _firstname: string;
+    private _lastname: string;
     //
-    public email: string = null;
-    public phone: string = null;
-    public password: string = null;
+    public _email: string ;
+    public _phone: string ;
+    public _password: string;
     //
-    public roles: string[] = [];
-    public departementids: string[] = [];
+    public _roles: string[];
+    public _departementids: string[];
 
     //
     constructor(oMap?: any) {
         super(oMap);
         if ((oMap !== undefined) && (oMap !== null)) {
             if (oMap.username !== undefined) {
-                this.username = oMap.username;
+                this._username = oMap.username;
             }
             if (oMap.password !== undefined) {
-                this.password = oMap.password;
+                this._password = oMap.password;
             }
             if (oMap.firstname !== undefined) {
-                this.firstname = oMap.firstname;
+                this._firstname = oMap.firstname;
             }
             if (oMap.lastname !== undefined) {
-                this.lastname = oMap.lastname;
+                this._lastname = oMap.lastname;
             }
             if (oMap.email !== undefined) {
-                this.email = oMap.email;
+                this._email = oMap.email;
             }
             if (oMap.phone !== undefined) {
-                this.phone = oMap.phone;
+                this._phone = oMap.phone;
             }
             if (oMap.departementids !== undefined) {
-                this.departementids = oMap.departementids;
+                this._departementids = oMap.departementids;
             } //
             if (oMap.roles !== undefined) {
-                this.roles = oMap.roles;
+                this._roles = oMap.roles;
             } //
-
         } // oMap
     } // constructor
     //
     public from_map(oMap: any): void {
         super.from_map(oMap);
         if ((oMap !== undefined) && (oMap !== null)) {
-            if (oMap.username !== undefined) {
-                this.username = oMap.username;
+             if (oMap.username !== undefined) {
+                this._username = oMap.username;
             }
             if (oMap.password !== undefined) {
-                this.password = oMap.password;
+                this._password = oMap.password;
             }
             if (oMap.firstname !== undefined) {
-                this.firstname = oMap.firstname;
+                this._firstname = oMap.firstname;
             }
             if (oMap.lastname !== undefined) {
-                this.lastname = oMap.lastname;
+                this._lastname = oMap.lastname;
             }
             if (oMap.email !== undefined) {
-                this.email = oMap.email;
+                this._email = oMap.email;
             }
             if (oMap.phone !== undefined) {
-                this.phone = oMap.phone;
+                this._phone = oMap.phone;
             }
             if (oMap.departementids !== undefined) {
-                this.departementids = oMap.departementids;
+                this._departementids = oMap.departementids;
             } //
             if (oMap.roles !== undefined) {
-                this.roles = oMap.roles;
+                this._roles = oMap.roles;
             } //
         } // oMap
     }
@@ -93,6 +92,42 @@ export class Person extends BaseItem implements IPerson {
         }
     } // to_insert_map
     //
+	public get password():string {
+		return (this._password !== undefined) ? this._password : null;
+	}
+	public set password(s: string){
+		this._password = (s !== undefined) ? s : null;
+	}
+	public get email():string {
+		return (this._email !== undefined) ? this._email : null;
+	}
+	public set email(s:string){
+		this._email = (s !== undefined) ? s : null;
+	}
+	public get phone():string {
+		return (this._phone !== undefined) ? this._phone : null;
+	}
+	public set phone(s:string){
+		this._phone = s;
+	}
+	public get roles():string[] {
+		if ((this._roles == undefined) || (this._roles === null)){
+			this._roles = [];
+		}
+		return this._roles;
+	}
+	public set roles(s:string[]) {
+		this._roles = ((s !== undefined) && (s !== null)) ? s : [];
+	}
+	public get departementids():string[] {
+		if ((this._departementids == undefined) || (this._departementids === null)){
+			this._departementids = [];
+		}
+		return this._departementids;
+	}
+	public set departementids(s:string[]) {
+		this._departementids = ((s !== undefined) && (s !== null)) ? s : [];
+	}
     public get username(): string {
         return (this._username !== undefined) ? this._username : null;
     }
@@ -201,16 +236,16 @@ export class Person extends BaseItem implements IPerson {
         return bRet;
     } // hasrole_
     public get is_admin(): boolean {
-        return (this.has_role('super') || this.has_role('admin'));
+        return (this.has_role(ROLE_SUPER) || this.has_role(ROLE_ADMIN));
     }
     public get is_super(): boolean {
-        return this.has_role('super');
+        return this.has_role(ROLE_SUPER);
     }
     public get is_prof(): boolean {
-        return this.has_role('prof');
+        return this.has_role(ROLE_PROF);
     }
     public get is_etud(): boolean {
-        return this.has_role('etud');
+        return this.has_role(ROLE_ETUD);
     }
     public get sort_func(): (p1: IPerson, p2: IPerson) => number {
         return Person.g_sort_func;

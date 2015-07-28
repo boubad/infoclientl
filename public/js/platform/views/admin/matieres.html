@@ -1,0 +1,70 @@
+<template>
+  <div class="container">
+    <user-bar></user-bar>
+    <table>
+      <tr>
+        <td style="text-align:center">
+          <sheader-bar></sheader-bar>
+        </td>
+      </tr>
+      <tr>
+        <td style="text-align:center">
+          <table>
+            <tr>
+              <td style="text-align:center">
+                <div class="form-group">
+                  <label class="form-label" for="departements">Dép.</label>
+                  <select id="departements" value.bind="departement">
+                    <option repeat.for="depelem of departements" model.bind="depelem">${depelem.text}</option>
+                  </select>
+                </div>
+              </td>
+              <td style="text-align:center">
+                <div class="form-group">
+                  <label class="form-label" for="unites">Unité</label>
+                  <select id="unites" value.bind="unite">
+                    <option repeat.for="unelem of unites" model.bind="unelem">${unelem.text}</option>
+                  </select>
+                </div>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+      <tr if.bind="canShowForm">
+        <td style="text-align:center">
+          <elements-bar></elements-bar>
+        </td>
+        <td>&nbsp;&nbsp;</td>
+        <td>
+          <form role="form">
+            <avatar-bar></avatar-bar>
+            <siglename-bar></siglename-bar>
+            <div class="form-group">
+              <label class="form-label" for="genre">Genre</label>
+              <select class="form-control" id="genre" value.bind="genre">
+                <option>Genre...</option>
+                <option value="PRATIQUE">Pratique</option>
+                <option value="THEORIE">Théorie</option>
+                <option value="AUTRE">Autre</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="mat_module">Module</label>
+              <input class="form-control" type="text" id="mat_module" value.bind="mat_module" placeholder="Module"></input>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="coefficient">Coefficient</label>
+              <input class="form-control" type="text" id="coefficient" value.bind="coefficient" placeholder="Coefficient"></input>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="ecs">ECS</label>
+              <input class="form-control" type="text" id="ecs" value.bind="ecs" placeholder="ECS"></input>
+            </div>
+            <command-bar></command-bar>
+          </form>
+        </td>
+      </tr>
+    </table>
+  </div>
+</template>

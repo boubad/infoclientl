@@ -1,0 +1,76 @@
+<template>
+  <div class="container" if.bind="is_connected">
+    <user-bar></user-bar>
+    <table>
+      <tr>
+        <td style="text-align:center">
+          <sheader-bar></sheader-bar>
+        </td>
+      </tr>
+      <tr>
+        <td style="text-align:center">
+          <work-bar></work-bar>
+        </td>
+      </tr>
+      <tr if:bind="hasPages">
+        <td style="text-align:center">
+          <table>
+            <tr>
+              <td class="text-success">
+                <strong>${pageStatus}</strong>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <ul class="pagination">
+                  <li>
+                    <a href="#" click.delegate="firstPage()" show.bind="canPrevPage">Début</a>
+                  </li>
+                  <li>
+                    <a href="#" click.delegate="prevPage()" show.bind="canPrevPage">Préc.</a>
+                  </li>
+                  <li>
+                    <a href="#" click.delegate="nextPage()" show.bind="canNextPage">Suivant</a>
+                  </li>
+                  <li>
+                    <a href="#" click.delegate="lastPage()" show.bind="canNextPage">Fin</a>
+                  </li>
+                </ul>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+      <tr if.bind="hasItems">
+        <td>
+          <table id="link-table">
+            <tr>
+              <th></th>
+              <th>Date</th>
+              <th>Genre</th>
+              <th>Nom</th>
+              <th>Matière</th>
+              <th>Groupe</th>
+              <th>Observations</th>
+            </tr>
+            <tr repeat.for="evt of items">
+              <td>
+                <div if.bind="evt.has_url">
+                <img src.bind="evt.url" height="48"></img>
+              </div>
+              </td>
+              <td>${evt.dateString}</td>
+              <td>${evt.genre}</td>
+              <td>
+                <a route-href="route: grpevt; params.bind: { id: evt.id }">${evt.name}</a>
+              </td>
+              <td>${evt.matiereSigle}</td>
+              <td>${evt.groupeSigle}</td>
+              <td>${evt.description}</td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </div>
+</template>

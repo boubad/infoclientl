@@ -1,6 +1,6 @@
 //itemfactory.ts
 //
-import {InfoElement} from '../infoelement';
+import {InfoElement} from '../utils/infoelement';
 import {BaseItem} from './baseitem';
 import {Person} from './person';
 import {Departement} from './departement';
@@ -19,68 +19,84 @@ import {EtudAffectation} from './etudaffectation';
 import {GroupeEvent} from './groupeevent';
 import {EtudEvent} from './etudevent';
 import {Administrator} from './administrator';
-import {PERSON_KEY, ETUDIANTPERSON_KEY, DEPARTEMENT_TYPE, GROUPE_TYPE,
+import {ETUDIANTPERSON_KEY, DEPARTEMENT_TYPE, GROUPE_TYPE,
 UNITE_TYPE, ANNEE_TYPE, SEMESTRE_TYPE, MATIERE_TYPE, ETUDIANT_TYPE, ENSEIGNANT_TYPE,
 PROFAFFECTATION_TYPE, ETUDAFFECTATION_TYPE, GROUPEEVENT_TYPE,
 ETUDEVENT_TYPE, ADMINISTRATOR_TYPE, ADMINISTRATORPERSON_TYPE,
-ENSEIGNANTPERSON_TYPE,  PERSON_TYPE , ETUDIANTPERSON_TYPE, BASEITEM_TYPE} from '../infoconstants';
-import {IBaseItem, IItemFactory,  IPouchDoc , IPerson} from 'infodata';
+ENSEIGNANTPERSON_TYPE, PERSON_TYPE, ETUDIANTPERSON_TYPE, BASEITEM_TYPE} from '../utils/infoconstants';
+import {IBaseItem, IItemFactory, IPerson} from 'infodata';
 //
 export class ItemFactory extends InfoElement implements IItemFactory {
     constructor() {
         super();
     }
-    public create(oMap: any): IBaseItem {
-             if ((oMap === undefined) || (oMap === null)) {
-                   return null;
-             }
-             if ((oMap.type === undefined) || (oMap.type === null)) {
-                   return null;
-             }
-             let t = oMap.type.trim().toLowerCase();
-             if (t == PERSON_KEY) {
-                   return new Person(oMap);
-             } else if (t == DEPARTEMENT_TYPE) {
-                   return new Departement(oMap);
-             } else if (t == ANNEE_TYPE) {
-                   return new Annee(oMap);
-             } else if (t == UNITE_TYPE) {
-                   return new Unite(oMap);
-             } else if (t == GROUPE_TYPE) {
-                   return new Groupe(oMap);
-             } else if (t == SEMESTRE_TYPE) {
-                   return new Semestre(oMap);
-             } else if (t == MATIERE_TYPE) {
-                   return new Matiere(oMap);
-             } else if (t == ETUDIANTPERSON_KEY) {
-                   return new EtudiantPerson(oMap);
-             } else if (t == ETUDIANT_TYPE) {
-                   return new Etudiant(oMap);
-             } else if (t == ENSEIGNANT_TYPE) {
-                   return new Enseignant(oMap);
-             } else if (t == PROFAFFECTATION_TYPE) {
-                   return new ProfAffectation(oMap);
-             } else if (t == ETUDAFFECTATION_TYPE) {
-                   return new EtudAffectation(oMap);
-             } else if (t == GROUPEEVENT_TYPE) {
-                   return new GroupeEvent(oMap);
-             } else if (t == ETUDEVENT_TYPE) {
-                   return new EtudEvent(oMap);
-             } else if (t == ADMINISTRATOR_TYPE) {
-                   return new Administrator(oMap);
-             } else if (t == ADMINISTRATORPERSON_TYPE) {
-                   return new AdministratorPerson(oMap);
-             } else if (t == ENSEIGNANTPERSON_TYPE) {
-                   return new EnseignantPerson(oMap);
-             } else if (t == BASEITEM_TYPE) {
-                   return new BaseItem(oMap);
-             }
-             return null;
-       }// create
+    public create(oMap: any, stype?: string): IBaseItem {
+		let t: string = null;
+		if ((stype !== undefined) && (stype !== null)) {
+			t = stype.trim().toLowerCase();
+			if (t.length < 1) {
+				t = null;
+			}
+		}
+		if (t === null) {
+			if ((oMap === undefined) || (oMap === null)) {
+				return null;
+			}
+			if ((oMap.type === undefined) || (oMap.type === null)) {
+				return null;
+			}
+			t = oMap.type.trim().toLowerCase();
+			if (t.length < 1) {
+				t = null;
+			}
+		}
+		if (t === null) {
+			return null;
+		}
+		t = oMap.type.trim().toLowerCase();
+		if (t == PERSON_TYPE) {
+			return new Person(oMap);
+		} else if (t == DEPARTEMENT_TYPE) {
+			return new Departement(oMap);
+		} else if (t == ANNEE_TYPE) {
+			return new Annee(oMap);
+		} else if (t == UNITE_TYPE) {
+			return new Unite(oMap);
+		} else if (t == GROUPE_TYPE) {
+			return new Groupe(oMap);
+		} else if (t == SEMESTRE_TYPE) {
+			return new Semestre(oMap);
+		} else if (t == MATIERE_TYPE) {
+			return new Matiere(oMap);
+		} else if (t == ETUDIANTPERSON_KEY) {
+			return new EtudiantPerson(oMap);
+		} else if (t == ETUDIANT_TYPE) {
+			return new Etudiant(oMap);
+		} else if (t == ENSEIGNANT_TYPE) {
+			return new Enseignant(oMap);
+		} else if (t == PROFAFFECTATION_TYPE) {
+			return new ProfAffectation(oMap);
+		} else if (t == ETUDAFFECTATION_TYPE) {
+			return new EtudAffectation(oMap);
+		} else if (t == GROUPEEVENT_TYPE) {
+			return new GroupeEvent(oMap);
+		} else if (t == ETUDEVENT_TYPE) {
+			return new EtudEvent(oMap);
+		} else if (t == ADMINISTRATOR_TYPE) {
+			return new Administrator(oMap);
+		} else if (t == ADMINISTRATORPERSON_TYPE) {
+			return new AdministratorPerson(oMap);
+		} else if (t == ENSEIGNANTPERSON_TYPE) {
+			return new EnseignantPerson(oMap);
+		} else if (t == BASEITEM_TYPE) {
+			return new BaseItem(oMap);
+		}
+		return null;
+	}// create
 
-    public create_person(oMap: IPouchDoc): IPerson {
+    public create_person(oMap: any): IPerson {
         let vRet: IPerson = null;
-        if ((oMap === undefined) || (oMap !== null)) {
+        if ((oMap === undefined) || (oMap === null)) {
             return vRet;
         }
         let type: string = (oMap.type !== undefined) ? oMap.type : null;

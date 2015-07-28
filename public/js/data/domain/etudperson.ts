@@ -2,62 +2,63 @@
 //
 import {UserPerson} from './userperson';
 import {IEtudiantPerson, IEtudiant, IDatabaseManager} from 'infodata';
-import {ETUDIANTPERSON_KEY, ROLE_ETUD, ETUDIANT_BY_PERSON} from '../infoconstants';
+import {ETUDIANTPERSON_TYPE, ROLE_ETUD, ETUDIANT_BY_PERSON} from '../utils/infoconstants';
 //
 export class EtudiantPerson extends UserPerson implements IEtudiantPerson {
-    public etudiantids: string[] = [];
-    public dossier: string = null;
-    public sexe: string = null;
+    private _etudiantids: string[] = [];
+    private _dossier: string = null;
+    private _sexe: string = null;
     private _date: Date;
-    public ville: string = null;
-    public etablissement: string = null;
-    public serieBac: string = null;
-    public optionBac: string = null;
-    public mentionBac: string = null;
-    public etudesSuperieures: string = null;
+    private _ville: string = null;
+    private _etablissement: string = null;
+    private _serieBac: string = null;
+    private _optionBac: string = null;
+    private _mentionBac: string = null;
+    private _etudesSuperieures: string = null;
     //
     constructor(oMap?: any) {
         super(oMap);
         this.roles = [ROLE_ETUD];
         if ((oMap !== undefined) && (oMap !== null)) {
             if (oMap.etudiantids !== undefined) {
-                this.etudiantids = oMap.etudiantids;
+                this._etudiantids = oMap.etudiantids;
             }
             if (oMap.dossier !== undefined) {
-                this.dossier = oMap.dossier;
+                this._dossier = oMap.dossier;
             }
             if (oMap.sexe !== undefined) {
-                this.sexe = oMap.sexe;
+                this._sexe = oMap.sexe;
             }
             if (oMap.birthDate !== undefined) {
-                this.birthDate = oMap.birthDate;
+                this._date = oMap.birthDate;
             }
             if (oMap.etablissement !== undefined) {
-                this.etablissement = oMap.etablissement;
+                this._etablissement = oMap.etablissement;
             }
             if (oMap.ville !== undefined) {
-                this.ville = oMap.ville;
+                this._ville = oMap.ville;
             }
             if (oMap.serieBac !== undefined) {
-                this.serieBac = oMap.serieBac;
+                this._serieBac = oMap.serieBac;
             }
             if (oMap.optionBac !== undefined) {
-                this.optionBac = oMap.optionBac;
+                this._optionBac = oMap.optionBac;
             }
             if (oMap.mentionBac != undefined) {
-                this.mentionBac = oMap.mentionBac;
+                this._mentionBac = oMap.mentionBac;
             }
             if (oMap.etudesSuperieures !== undefined) {
-                this.etudesSuperieures = oMap.etudesSuperieures;
+                this._etudesSuperieures = oMap.etudesSuperieures;
             }
         } // oMap
     } // constructor
+
     public to_map(oMap: any): void {
         super.to_map(oMap);
         if ((oMap !== undefined) && (oMap !== null)) {
-            if ((this.etudiantids !== undefined) && (this.etudiantids !== null) &&
-                (this.etudiantids.length > 0)) {
-                oMap.etudiantids = this.etudiantids;
+            if ((this._etudiantids !== undefined) && (this._etudiantids !== null) &&
+                (this._etudiantids.length > 0)) {
+                oMap.etudiantids = this._etudiantids;
             }
             if (this.dossier !== null) {
                 oMap.dossier = this.dossier;
@@ -92,39 +93,93 @@ export class EtudiantPerson extends UserPerson implements IEtudiantPerson {
         super.from_map(oMap);
         if ((oMap !== undefined) && (oMap !== null)) {
             if (oMap.etudiantids !== undefined) {
-                this.etudiantids = oMap.etudiantids;
+                this._etudiantids = oMap.etudiantids;
             }
             if (oMap.dossier !== undefined) {
-                this.dossier = oMap.dossier;
+                this._dossier = oMap.dossier;
             }
             if (oMap.sexe !== undefined) {
-                this.sexe = oMap.sexe;
+                this._sexe = oMap.sexe;
             }
             if (oMap.birthDate !== undefined) {
-                this.birthDate = oMap.birthDate;
+                this._date = oMap.birthDate;
             }
             if (oMap.etablissement !== undefined) {
-                this.etablissement = oMap.etablissement;
+                this._etablissement = oMap.etablissement;
             }
             if (oMap.ville !== undefined) {
-                this.ville = oMap.ville;
+                this._ville = oMap.ville;
             }
             if (oMap.serieBac !== undefined) {
-                this.serieBac = oMap.serieBac;
+                this._serieBac = oMap.serieBac;
             }
             if (oMap.optionBac !== undefined) {
-                this.optionBac = oMap.optionBac;
+                this._optionBac = oMap.optionBac;
             }
             if (oMap.mentionBac != undefined) {
-                this.mentionBac = oMap.mentionBac;
+                this._mentionBac = oMap.mentionBac;
             }
             if (oMap.etudesSuperieures !== undefined) {
-                this.etudesSuperieures = oMap.etudesSuperieures;
+                this._etudesSuperieures = oMap.etudesSuperieures;
             }
         }
     }// from_map
+	public get etudiantids():string[] {
+		if ((this._etudiantids === undefined) || (this._etudiantids === null)){
+			this._etudiantids = [];
+		}
+		return this._etudiantids;
+	}
+	public get dossier(): string {
+		return (this._dossier !== undefined) ? this._dossier : null;
+	}
+	public set dossier(s: string) {
+		this._dossier = (s !== undefined) ? s : null;
+	}
+	public get sexe(): string {
+		return (this._sexe !== undefined) ? this._sexe : null;
+	}
+	public set sexe(s: string) {
+		this._sexe = (s !== undefined) ? s : null;
+	}
+	public get ville(): string {
+		return (this._ville !== undefined) ? this._ville : null;
+	}
+	public set ville(s: string) {
+		this._ville = (s !== undefined) ? s : null;
+	}
+	public get etablissement(): string {
+		return (this._etablissement !== undefined) ? this._etablissement : null;
+	}
+	public set etablissement(s: string) {
+		this._etablissement = (s !== undefined) ? s : null;
+	}
+	public get serieBac(): string {
+		return (this._serieBac !== undefined) ? this._serieBac : null;
+	}
+	public set serieBac(s: string) {
+		this._serieBac = (s !== undefined) ? s : null;
+	}
+	public get optionBac(): string {
+		return (this._optionBac !== undefined) ? this._optionBac : null;
+	}
+	public set optionBac(s: string) {
+		this._optionBac = (s !== undefined) ? s : null;
+	}
+	public get mentionBac(): string {
+		return (this._mentionBac !== undefined) ? this._mentionBac : null;
+	}
+	public set mentionBac(s: string) {
+		this._mentionBac = (s !== undefined) ? s : null;
+	}
+	public get etudesSuperieures(): string {
+		return (this._etudesSuperieures !== undefined) ? this._etudesSuperieures : null;
+	}
+	public set etudesSuperieures(s: string) {
+		this._etudesSuperieures = (s !== undefined) ? s : null;
+	}
     public type(): string {
-        return ETUDIANTPERSON_KEY;
+        return ETUDIANTPERSON_TYPE;
     }
     //
     public get birthDate(): Date {
@@ -152,16 +207,13 @@ export class EtudiantPerson extends UserPerson implements IEtudiantPerson {
     }
     //
     public remove(service: IDatabaseManager): Promise<any> {
-        if ((service === undefined) || (service === null)) {
-            return Promise.reject(new Error('Invalid service'));
-        }
         if ((this.id === null) || (this.rev === null)) {
-            return Promise.reject(new Error('Item not removeable error'));
+            throw new Error('Item not removeable error');
         }
         let self = this;
         let id: string = this.id;
-        return service.get_children_ids(ETUDIANT_BY_PERSON, id).then((aa_ids) => {
-           return self.remove_with_children(service,aa_ids,id);
+        return service.dm_get_children_ids(ETUDIANT_BY_PERSON, id).then((aa_ids) => {
+			return self.remove_with_children(service, aa_ids, id);
         });
     }// remove
 } // class EtudiantPerson

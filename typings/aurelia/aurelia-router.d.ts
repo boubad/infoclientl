@@ -174,7 +174,7 @@ declare module 'aurelia-router/router' {
 	    configure(callbackOrConfig: any): Router;
 	    createRootedPath(fragment: any): any;
 	    navigate(fragment: any, options: any): any;
-	    navigateToRoute(route: any, params: any, options: any): any;
+	    navigateToRoute(route: any, params?: any, options?: any): any;
 	    navigateBack(): void;
 	    createChild(container: any): Router;
 	    createNavigationInstruction(url?: string, parentInstruction?: any): Promise<any>;

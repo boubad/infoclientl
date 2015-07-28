@@ -6,14 +6,15 @@ import {ISigleNameItem} from 'infodata';
 export class SigleNameItem extends BaseItem implements ISigleNameItem {
     private _sigle: string;
     private _name: string;
+	//
     constructor(oMap?: any) {
         super(oMap);
         if ((oMap !== undefined) && (oMap !== null)) {
             if (oMap.sigle !== undefined) {
-                this.sigle = oMap.sigle;
+                this._sigle = oMap.sigle;
             }
             if (oMap.name !== undefined) {
-                this.name = oMap.name;
+                this._name = oMap.name;
             }
         } // oMap
     } // constructor
@@ -22,10 +23,10 @@ export class SigleNameItem extends BaseItem implements ISigleNameItem {
         super.from_map(oMap);
         if ((oMap !== undefined) && (oMap !== null)) {
             if (oMap.sigle !== undefined) {
-                this.sigle = oMap.sigle;
+                this._sigle = oMap.sigle;
             }
             if (oMap.name !== undefined) {
-                this.name = oMap.name;
+                this._name = oMap.name;
             }
         }// oMap
     }

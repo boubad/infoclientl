@@ -1,53 +1,53 @@
 //workitem.ts
 //
 import {DepartementPerson} from './depperson';
-import {IWorkItem, IPerson} from 'infodata';
+import {IWorkItem, IUserPerson} from 'infodata';
 //
 export class WorkItem extends DepartementPerson
     implements IWorkItem {
-    public anneeid: string = null;
-    public semestreid: string = null;
-    public groupeid: string = null;
+    private _anneeid: string;
+    private _semestreid: string;
+    private _groupeid: string;
     private _date: Date = null;
-    public status: string = null;
-    public genre: string = null;
-    public semestreSigle: string = null;
-    public anneeSigle: string = null;
-    public departementSigle: string = null;
-    public groupeSigle: string = null;
+    private _status: string;
+    private _genre: string;
+    private _semestreSigle: string;
+    private _anneeSigle: string;
+    private _departementSigle: string;
+    private _groupeSigle: string;
     //
     constructor(oMap?: any) {
         super(oMap);
         if ((oMap !== undefined) && (oMap !== null)) {
             if (oMap.anneeid !== undefined) {
-                this.anneeid = oMap.anneeid;
+                this._anneeid = oMap.anneeid;
             }
             if (oMap.semestreid !== undefined) {
-                this.semestreid = oMap.semestreid;
+                this._semestreid = oMap.semestreid;
             }
             if (oMap.groupeid !== undefined) {
-                this.groupeid = oMap.groupeid;
+                this._groupeid = oMap.groupeid;
             }
             if (oMap.eventDate !== undefined) {
-                this.eventDate = oMap.eventDate;
+                this._date = oMap.eventDate;
             }
             if (oMap.status !== undefined) {
-                this.status = oMap.status;
+                this._status = oMap.status;
             }
             if (oMap.genre !== undefined) {
-                this.genre = oMap.genre;
+                this._genre = oMap.genre;
             }
             if (oMap.departementSigle !== undefined) {
-                this.departementSigle = oMap.departementSigle;
+                this._departementSigle = oMap.departementSigle;
             }
             if (oMap.anneeSigle !== undefined) {
-                this.anneeSigle = oMap.anneeSigle;
+                this._anneeSigle = oMap.anneeSigle;
             }
             if (oMap.semestreSigle !== undefined) {
-                this.semestreSigle = oMap.semestreSigle;
+                this._semestreSigle = oMap.semestreSigle;
             }
             if (oMap.groupeSigle !== undefined) {
-                this.groupeSigle = oMap.groupeSigle;
+                this._groupeSigle = oMap.groupeSigle;
             }
         } // oMap
     } // constructor
@@ -70,37 +70,55 @@ export class WorkItem extends DepartementPerson
         super.from_map(oMap);
         if ((oMap !== undefined) && (oMap !== null)) {
             if (oMap.anneeid !== undefined) {
-                this.anneeid = oMap.anneeid;
+                this._anneeid = oMap.anneeid;
             }
             if (oMap.semestreid !== undefined) {
-                this.semestreid = oMap.semestreid;
+                this._semestreid = oMap.semestreid;
             }
             if (oMap.groupeid !== undefined) {
-                this.groupeid = oMap.groupeid;
+                this._groupeid = oMap.groupeid;
             }
             if (oMap.eventDate !== undefined) {
-                this.eventDate = oMap.eventDate;
+                this._date = oMap.eventDate;
             }
             if (oMap.status !== undefined) {
-                this.status = oMap.status;
+                this._status = oMap.status;
             }
             if (oMap.genre !== undefined) {
-                this.genre = oMap.genre;
+                this._genre = oMap.genre;
             }
             if (oMap.departementSigle !== undefined) {
-                this.departementSigle = oMap.departementSigle;
+                this._departementSigle = oMap.departementSigle;
             }
             if (oMap.anneeSigle !== undefined) {
-                this.anneeSigle = oMap.anneeSigle;
+                this._anneeSigle = oMap.anneeSigle;
             }
             if (oMap.semestreSigle !== undefined) {
-                this.semestreSigle = oMap.semestreSigle;
+                this._semestreSigle = oMap.semestreSigle;
             }
             if (oMap.groupeSigle !== undefined) {
-                this.groupeSigle = oMap.groupeSigle;
+                this._groupeSigle = oMap.groupeSigle;
             }
         }
     }// from_map
+	public get anneeid():string {
+		return (this._anneeid !== undefined) ? this._anneeid : null;
+	}
+	public set anneeid(s:string){
+		this._anneeid = (s !== undefined) ? s : null;
+	}
+	public get semestreid():string {
+		return (this._semestreid !== undefined) ? this._semestreid : null;
+	}
+	public set semestreid(s:string){
+		this._semestreid = (s !== undefined) ? s : null;
+	}
+	public get groupeid():string {
+		return (this._groupeid !== undefined) ? this._groupeid : null;
+	}
+	public set groupeid(s:string){
+		this._groupeid = (s !== undefined) ? s : null;
+	}
     public get eventDate(): Date {
         return (this._date !== undefined) ? this._date : null;
     }
@@ -113,20 +131,47 @@ export class WorkItem extends DepartementPerson
     public set dateString(s: string) {
         this._date = this.string_to_date(s);
     }
-    public update_person<T extends IPerson>(pPers: T): void {
+	public get status():string {
+		return (this._status !== undefined) ? this._status : null;
+	}
+	public set status(s:string){
+		this._status = (s !== undefined) ? s : null;
+	}
+	public get genre():string {
+		return (this._genre !== undefined) ? this._genre : null;
+	}
+	public set genre(s:string){
+		this._genre = (s !== undefined) ? s : null;
+	}
+	public get semestreSigle():string {
+		return (this._semestreSigle !== undefined) ? this._semestreSigle : null;
+	}
+	public set semestreSigle(s:string){
+		this._semestreSigle = (s !== undefined) ? s : null;
+	}
+	public get departementSigle():string {
+		return (this._departementSigle !== undefined) ? this._departementSigle : null;
+	}
+	public set departementSigle(s:string){
+		this._departementSigle = (s !== undefined) ? s : null;
+	}
+	public get groupeSigle():string {
+		return (this._groupeSigle !== undefined) ? this._groupeSigle : null;
+	}
+	public set groupeSigle(s:string){
+		this._groupeSigle = (s !== undefined) ? s : null;
+	}
+	public get anneeSigle():string {
+		return (this._anneeSigle !== undefined) ? this._anneeSigle : null;
+	}
+	public set anneeSigle(s:string){
+		this._anneeSigle = (s !== undefined) ? s : null;
+	}
+    public update_person<T extends IUserPerson>(pPers: T): void {
         super.update_person(pPers);
         if ((pPers !== undefined) && (pPers !== null)) {
-            if ((pPers.anneeids === undefined) || (pPers.anneeids === null)) {
-                pPers.anneeids = [];
-            }
             this.add_id_to_array(pPers.anneeids, this.anneeid);
-            if ((pPers.semestreids === undefined) || (pPers.semestreids === null)) {
-                pPers.semestreids = [];
-            }
             this.add_id_to_array(pPers.semestreids, this.semestreid);
-            if ((pPers.groupeids === undefined) || (pPers.groupeids === null)) {
-                pPers.groupeids = [];
-            }
             this.add_id_to_array(pPers.groupeids, this.groupeid);
         }// pPers
     }// update_person

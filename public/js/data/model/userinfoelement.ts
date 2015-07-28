@@ -1,26 +1,43 @@
 //userinfoelement.ts
-import * as userinf from './userinfo';
+import {UserInfo} from './userinfo';
 import {RootElement} from './rootelement';
 import {IPerson, IDepartement, IAnnee, ISemestre, IUnite, IMatiere, IGroupe,
-IMessageManager, ILogManager, IUIManager,
+IMessageManager, ILogManager, IUIManager, IItemFactory,
 IObjectStore, ILoginInfo, IInfoMessage, IEnseignant, IDatabaseManager} from 'infodata';
 //
 export class UserInfoElement extends RootElement {
     //
-    private _userinfo: userinf.UserInfo;
+    private _userinfo: UserInfo;
     //
-    constructor(userinfo?: userinf.UserInfo) {
+    constructor(userinfo: UserInfo) {
         super();
-        this._userinfo = userinfo;
+        if ((userinfo !== undefined) && (userinfo !== null)) {
+            this._userinfo = userinfo;
+        }
     }// constructor
-    public get userInfo(): userinf.UserInfo {
+    public get userInfo(): UserInfo {
         return (this._userinfo !== undefined) ? this._userinfo : null;
     }
-    public set userInfo(s: userinf.UserInfo) {
+    public set userInfo(s: UserInfo) {
         this._userinfo = s;
     }
     protected get_dataservice(): IDatabaseManager {
         return (this.userInfo !== null) ? this.userInfo.dataService : null;
+    }
+    protected get_messagemanager(): IMessageManager {
+        return (this.userInfo !== null) ? this.userInfo.messageManager : null;
+    }
+    protected get_logger(): ILogManager {
+        return (this.userInfo !== null) ? this.userInfo.logger : null;
+    }
+    protected get_uimanager(): IUIManager {
+        return (this.userInfo !== null) ? this.userInfo.uiManager : null;
+    }
+    protected get_localstore(): IObjectStore {
+        return (this.userInfo !== null) ? this.userInfo.localStore : null;
+    }
+    protected get itemFactory(): IItemFactory {
+        return (this.userInfo !== null) ? this.userInfo.itemFactory : null;
     }
     //
     public get departements(): IDepartement[] {

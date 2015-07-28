@@ -1,8 +1,8 @@
 //administrator.ts
 //
 import {DepartementPerson} from './depperson';
-import {IPerson, IAdministrator, IAdministratorPerson} from 'infodata';
-import {ADMINISTRATOR_TYPE, ADMINISTRATOR_PREFIX, ROLE_ADMIN} from '../infoconstants';
+import {IAdministrator, IAdministratorPerson} from 'infodata';
+import {ADMINISTRATOR_TYPE, ADMINISTRATOR_PREFIX, ROLE_ADMIN} from '../utils/infoconstants';
 //
 export class Administrator extends DepartementPerson implements IAdministrator {
     //
@@ -18,14 +18,6 @@ export class Administrator extends DepartementPerson implements IAdministrator {
     public update_person(pPers: IAdministratorPerson): void {
         super.update_person(pPers);
         if ((pPers !== undefined) && (pPers !== null)) {
-            if ((pPers.roles === undefined) || (pPers.roles === null)) {
-                pPers.roles = [];
-            }
-            this.add_id_to_array(pPers.roles, ROLE_ADMIN);
-            if ((pPers.administratorids === undefined) ||
-                (pPers.administratorids === null)) {
-                pPers.administratorids = [];
-            }
             this.add_id_to_array(pPers.administratorids, this.id);
         }// pPers
     }// update_person

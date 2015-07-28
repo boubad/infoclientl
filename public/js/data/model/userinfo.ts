@@ -5,17 +5,16 @@ import {Person} from '../domain/person';
 import {LoginInfo} from './logininfo';
 import {EtudiantPerson} from '../domain/etudperson';
 import {IPerson, IDepartement, IAnnee, ISemestre, IUnite, IMatiere, IGroupe,
-IMessageManager, ILogManager,
+IMessageManager, ILogManager, IItemFactory,
 IObjectStore, ILoginInfo, IInfoMessage, IEnseignant, IDatabaseManager} from 'infodata';
 import {DATABASE_NAME, PERSON_KEY, ETUDIANTPERSON_KEY, ENSEIGNANTPERSON_KEY,
 DEPARTEMENT_TYPE, ANNEE_TYPE, SEMESTRE_TYPE, UNITE_TYPE, MATIERE_TYPE, GROUPE_TYPE}
-from '../infoconstants';
-import {DatabaseManager} from '../services/databasemanager';
-import {InfoMessage} from '../infomessage';
+from '../utils/infoconstants';
+import {DatabaseManager} from '../services/pouchdb/databasemanager';
+import {InfoMessage} from '../utils/infomessage';
 //
 export class UserInfo extends RootElement {
     public loginInfo: LoginInfo = null;
-    //public departements: IDepartement[] = [];
     public annees: IAnnee[] = [];
     public semestres: ISemestre[] = [];
     public unites: IUnite[] = [];
@@ -30,14 +29,24 @@ export class UserInfo extends RootElement {
     private _groupe: IGroupe = null;
     //
     private _enseignantid: string = null;
+    private _m_busy: boolean = false;
     //
     constructor() {
         super();
         this.loginInfo = new LoginInfo();
+        this._m_busy = false;
     }// constructor
     //
+    public get itemFactory(): IItemFactory {
+        return this.dataService.itemFactory;
+    }
+    //
     private notify_change(message: string): void {
-        this.publish_string_message(message);
+        if ((!this._m_busy) && (!this.is_in_message)) {
+            this._m_busy = true;
+            this.publish_string_message(message);
+            this._m_busy = false;
+        }
     }
     //
     public get departements(): IDepartement[] {
@@ -73,6 +82,11 @@ export class UserInfo extends RootElement {
     public set departement(s: IDepartement) {
         this._departement = (s !== undefined) ? s : null;
         let self = this;
+        this._annee = null;
+        this._groupe = null;
+        this._unite = null;
+        this._matiere = null;
+        this._semestre = null;
         this.post_update_departement().then((r) => {
             self.notify_change(DEPARTEMENT_TYPE);
         });
@@ -83,6 +97,7 @@ export class UserInfo extends RootElement {
     public set annee(s: IAnnee) {
         this._annee = (s !== undefined) ? s : null;
         let self = this;
+        this._semestre = null;
         this.post_update_annee().then((r) => {
             self.notify_change(ANNEE_TYPE);
         });
@@ -93,6 +108,7 @@ export class UserInfo extends RootElement {
     public set unite(s: IUnite) {
         this._unite = (s !== undefined) ? s : null;
         let self = this;
+        this._matiere = null;
         this.post_update_unite().then((r) => {
             self.notify_change(UNITE_TYPE);
         });
@@ -209,7 +225,7 @@ export class UserInfo extends RootElement {
         let persid: string = null;
         let oAr: string[] = null;
         let pPers = this.person;
-        if ((pPers !== null) && (pPers.enseignantids !== undefined) &&
+        if ((pPers !== null) && (pPers.is_prof) && (pPers.enseignantids !== undefined) &&
             (pPers.enseignantids !== null) && (pPers.enseignantids.length > 0)) {
             oAr = pPers.enseignantids;
             persid = pPers.id;

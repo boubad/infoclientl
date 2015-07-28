@@ -3,28 +3,28 @@
 import {MatiereWorkItem} from './matiereworkitem';
 import {IEnseignantPerson,
    IGroupeEvent, IPerson, IDatabaseManager,IEtudEvent} from 'infodata';
-import { GROUPEEVENT_TYPE, GROUPEEVENT_PREFIX,ETUDEVENTS_BY_GROUPEEVENT } from '../infoconstants';
+import { GROUPEEVENT_TYPE, GROUPEEVENT_PREFIX,ETUDEVENTS_BY_GROUPEEVENT } from '../utils/infoconstants';
 //
 export class GroupeEvent extends MatiereWorkItem
     implements IGroupeEvent {
-    public profaffectationid: string = null;
-    public name: string = null;
-    public location: string = null;
-    public _t1: Date = null;
-    public _t2: Date = null;
-    public _coef: number = null;
+    private _profaffectationid: string;
+    private _name: string;
+    private _location: string;
+    private _t1: Date;
+    private _t2: Date;
+    private _coef: number;
     //
     constructor(oMap?: any) {
         super(oMap);
         if ((oMap !== undefined) && (oMap !== null)) {
             if (oMap.profaffectationid !== undefined) {
-                this.profaffectationid = oMap.profaffectationid;
+                this._profaffectationid = oMap.profaffectationid;
             }
             if (oMap.name !== undefined) {
-                this.name = oMap.name;
+                this._name = oMap.name;
             }
             if (oMap.location !== undefined) {
-                this.location = oMap.location;
+                this._location = oMap.location;
             }
             if (oMap.coefficient !== undefined) {
                 this.coefficient = oMap.coefficient;
@@ -37,6 +37,24 @@ export class GroupeEvent extends MatiereWorkItem
             }
         } // oMap
     } // constructor
+	public get profaffectationid():string {
+		return (this._profaffectationid !== undefined) ? this._profaffectationid : null;
+	}
+	public set profaffectationid(s:string){
+		this._profaffectationid = (s !== undefined) ? s : null;
+	}
+	public get name():string {
+		return (this._name !== undefined) ? this._name : null;
+	}
+	public set name(s:string){
+		this._name = (s !== undefined) ? s : null;
+	}
+	public get location():string {
+		return (this._location !== undefined) ? this._location : null;
+	}
+	public set location(s:string){
+		this._location = (s !== undefined) ? s : null;
+	}
     public to_map(oMap: any): void {
         super.to_map(oMap);
         if ((oMap !== undefined) && (oMap !== null)){
@@ -89,13 +107,13 @@ export class GroupeEvent extends MatiereWorkItem
         return (t1 <= t2);
     }
     public get startTime(): Date {
-        return this._t1;
+        return (this._t1 !== undefined) ? this._t1 : null;
     }
     public set startTime(d: Date) {
         this._t1 = this.check_date(d);
     }
     public get endTime(): Date {
-        return this._t2;
+        return (this._t2 !== undefined) ? this._t2 : null;
     }
     public set endTime(d: Date) {
         this._t2 = this.check_date(d);
@@ -111,18 +129,11 @@ export class GroupeEvent extends MatiereWorkItem
             this._coef = null;
         }
     }
-
     public update_person(pPers: IEnseignantPerson): void {
         super.update_person(pPers);
+        this.check_id();
         if ((pPers !== undefined) && (pPers !== null)) {
-            if ((pPers.eventids === undefined) || (pPers.eventids === null)) {
-                pPers.eventids = [];
-            }
             this.add_id_to_array(pPers.eventids, this.id);
-            if ((pPers.affectationids === undefined) || (pPers.affectationids === null)) {
-                pPers.affectationids = [];
-            }
-            this.add_id_to_array(pPers.affectationids, this.profaffectationid);
         }// pPers
     }// update_person
     public get sort_func(): (p1:IGroupeEvent, p2:IGroupeEvent) => number {
@@ -149,10 +160,9 @@ export class GroupeEvent extends MatiereWorkItem
             return 0;
         }
     } // sort_func
-    public toString(): string {
-        return this.name;
+    protected get_text():string {
+      return this.name;
     }
-
     public start_key(): string {
         let s = this.base_prefix();
         if ((s !== null) && (this.semestreid !== null)) {
@@ -186,15 +196,12 @@ export class GroupeEvent extends MatiereWorkItem
         return GROUPEEVENT_PREFIX;
     }
     public remove(service: IDatabaseManager): Promise<any> {
-        if ((service === undefined) || (service === null)) {
-            return Promise.reject(new Error('Invalid service'));
-        }
         if ((this.id === null) || (this.rev === null)) {
-            return Promise.reject(new Error('Item not removeable error'));
+            throw new Error('Item not removeable error');
         }
         let self = this;
         let id: string = this.id;
-        return service.get_children_ids(ETUDEVENTS_BY_GROUPEEVENT, id).then((aa_ids) => {
+        return service.dm_get_children_ids(ETUDEVENTS_BY_GROUPEEVENT, id).then((aa_ids) => {
             return self.remove_with_children(service,aa_ids,id);
         });
     }// remove

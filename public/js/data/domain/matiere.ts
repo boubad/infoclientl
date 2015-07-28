@@ -1,8 +1,8 @@
 //matiere.ts
 //
-import {DepSigleNameItem} from './depsiglename';
+import {DepSigleNameItem} from './depsiglenameitem';
 import {IMatiere, IDatabaseManager, IProfAffectation} from 'infodata';
-import {MATIERE_TYPE, MATIERE_PREFIX, PROFAFFECTATION_BY_MATIERE} from '../infoconstants';
+import {MATIERE_TYPE, MATIERE_PREFIX, PROFAFFECTATION_BY_MATIERE} from '../utils/infoconstants';
 //
 export class Matiere extends DepSigleNameItem implements IMatiere {
     //
@@ -16,19 +16,19 @@ export class Matiere extends DepSigleNameItem implements IMatiere {
         super(oMap);
         if ((oMap != undefined) && (oMap != null)) {
             if (oMap.uniteid != undefined) {
-                this.uniteid = oMap.uniteid;
+                this._uniteid = oMap.uniteid;
             }
             if (oMap.coefficient != undefined) {
-                this.coefficient = oMap.coefficient;
+                this._coef = oMap.coefficient;
             }
             if (oMap.ecs != undefined) {
-                this.ecs = oMap.ecs;
+                this._ecs = oMap.ecs;
             }
             if (oMap.genre != undefined) {
-                this.genre = oMap.genre;
+                this._genre = oMap.genre;
             }
             if (oMap.mat_module != undefined) {
-                this.mat_module = oMap.mat_module;
+                this._mat_module = oMap.mat_module;
             }
         }// oMap
     } // constructor
@@ -47,19 +47,19 @@ export class Matiere extends DepSigleNameItem implements IMatiere {
         super.from_map(oMap);
         if ((oMap != undefined) && (oMap != null)) {
             if (oMap.uniteid != undefined) {
-                this.uniteid = oMap.uniteid;
+                this._uniteid = oMap.uniteid;
             }
             if (oMap.coefficient != undefined) {
-                this.coefficient = oMap.coefficient;
+                this._coef = oMap.coefficient;
             }
             if (oMap.ecs != undefined) {
-                this.ecs = oMap.ecs;
+                this._ecs = oMap.ecs;
             }
             if (oMap.genre != undefined) {
-                this.genre = oMap.genre;
+                this._genre = oMap.genre;
             }
             if (oMap.mat_module != undefined) {
-                this.mat_module = oMap.mat_module;
+                this._mat_module = oMap.mat_module;
             }
         }// oMap
     }
@@ -125,16 +125,13 @@ export class Matiere extends DepSigleNameItem implements IMatiere {
     }
 
     public remove(service: IDatabaseManager): Promise<any> {
-        if ((service === undefined) || (service === null)) {
-            return Promise.reject(new Error('Invalid service'));
-        }
         if ((this.id === null) || (this.rev === null)) {
-            return Promise.reject(new Error('Item not removeable error'));
+            throw new Error('Item not removeable error');
         }
         let self = this;
         let id: string = this.id;
-        return service.get_children_ids(PROFAFFECTATION_BY_MATIERE, id).then((aa_ids) => {
-            return self.remove_with_children(service,aa_ids,id);
+        return service.dm_get_children_ids(PROFAFFECTATION_BY_MATIERE, id).then((aa_ids) => {
+            return self.remove_with_children(service, aa_ids, id);
         });
     }// remove
 } // class Unite

@@ -5,7 +5,7 @@
 //
 /// </// <reference path="../es6.d.ts"/>
 interface IPouchDocument {
-	_id:string;
+	_id?:string;
 	_rev?:string;
 	_attachments?:any;
 }// interface IPouchDocument

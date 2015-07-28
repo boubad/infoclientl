@@ -1,13 +1,14 @@
 //designdatabase.ts
 import {RootDatabase} from './rootdatabase';
-import {IBaseItem, IDesignDatabaseManager} from 'infodata';
+import {IBaseItem} from 'infodata';
 
 //
 import {PERSON_KEY, SUPER_USERNAME, SUPER_LASTNAME, ETUDEVENT_TYPE,
 PERSON_PREFIX, GROUPEEVENT_TYPE,
-SUPER_FIRSTNAME, ROLE_SUPER, ROLE_ADMIN}  from '../../infoconstants';
+SUPER_FIRSTNAME, ROLE_SUPER, ROLE_ADMIN,
+GROUPEEVENTS_BY_SEMESTRE_MATIERE_GROUPE}  from '../../utils/infoconstants';
 //
-export class DesignDatabase extends RootDatabase implements IDesignDatabaseManager {
+export class DesignDatabase extends RootDatabase {
     constructor(name?: string) {
         super(name);
     }// constructor
@@ -24,7 +25,7 @@ export class DesignDatabase extends RootDatabase implements IDesignDatabaseManag
             return { ok: true, id: pOld._id, rev: pOld._rev };
         }, (ex) => {
             if (ex.status != 404) {
-                return Promise.reject(new Error('Admin user find error.'));
+                throw new Error('Admin user find error.');
             }
             return xdb.put({
                 _id: id,
@@ -70,7 +71,18 @@ export class DesignDatabase extends RootDatabase implements IDesignDatabaseManag
                             }
                         }
                     }.toString()
-                }
+                },
+				by_semestre_matiere_groupe: {
+					map: function(doc) {
+                        if ((doc.type !== undefined) && (doc.type == 'groupeevent')) {
+                            if ((doc.semestreid !== undefined) && (doc.semestreid !== null) &&
+								(doc.matiereid !== undefined) && (doc.matiereid !== null) &&
+								(doc.groupeid !== undefined) && (doc.groupeid !== null)) {
+                                emit([doc.semestreid,doc.matiereid, doc.groupeid]);
+                            }
+                        }
+                    }.toString()
+				}
             }
         };
         return this.maintains_design_doc(ddoc);
@@ -393,7 +405,7 @@ export class DesignDatabase extends RootDatabase implements IDesignDatabaseManag
             if (err.status == 404) {
                 return self.check_design_docs();
             } else {
-                Promise.reject(new Error(err.reason));
+                throw new Error(err.reason);
             }
         }).then((bRet) => {
             return self.check_admin();

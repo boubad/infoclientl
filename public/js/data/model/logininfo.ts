@@ -1,10 +1,10 @@
 //logininfo.ts
 //
-import {InfoElement} from '../infoelement';
+import {InfoElement} from '../utils/infoelement';
 import {Departement} from '../domain/departement';
 import {Person} from '../domain/person';
-import {ILoginInfo, IPerson, IDepartement, IAnnee, ISemestre,
-IUnite, IMatiere, IGroupe,IAdministrator,
+import {ILoginInfo, IPerson, IUserPerson, IDepBasePerson, IDepartement, IAnnee, ISemestre,
+IUnite, IMatiere, IGroupe, IAdministrator,
 IEnseignant, IEtudiant, IDatabaseManager} from 'infodata';
 //
 export class LoginInfo extends InfoElement implements ILoginInfo {
@@ -50,24 +50,32 @@ export class LoginInfo extends InfoElement implements ILoginInfo {
         let model: IPerson = new Person({ username: ss });
         let id = model.create_id();
         let self = this;
-        let pPers: IPerson = null;
+        let pPers = null;
         let emptyArray: string[] = [];
         let isAdmin: boolean = false;
         return service.dm_find_item_by_id(id).then((px: IPerson) => {
             if ((px !== undefined) && (px !== null)) {
                 if (self.check_password(passw, px.password)) {
-                    pPers = px;
-                    self._person = px;
+					if (px.is_prof) {
+						pPers = <IUserPerson>px;
+					} else if (px.is_admin) {
+						pPers = <IDepBasePerson>px;
+					} else if (px.is_etud) {
+						pPers = <IUserPerson> px;
+					} else {
+						pPers = px;
+					}
+                    self._person = pPers;
                     bRet = true;
                 }
             }
             return pPers;
-        }).then((xPers: IPerson) => {
+        }).then((xPers) => {
             if (xPers !== null) {
                 isAdmin = pPers.is_admin;
                 if (pPers.is_super) {
                     let model = new Departement();
-                    return service.dm_get_items(model.start_key(),model.end_key());
+                    return service.dm_get_items(model.start_key(), model.end_key());
                 } else {
                     return service.dm_find_items_array(pPers.departementids);
                 }
@@ -76,7 +84,7 @@ export class LoginInfo extends InfoElement implements ILoginInfo {
             }
         }).then((dd: IDepartement[]) => {
             if (pPers !== null) {
-                self.departements = dd;
+                self._departements = dd;
                 let xa: string[] = (isAdmin) ? emptyArray : pPers.anneeids;
                 return service.dm_find_items_array(xa);
             } else {
@@ -84,7 +92,7 @@ export class LoginInfo extends InfoElement implements ILoginInfo {
             }
         }).then((aa: IAnnee[]) => {
             if (pPers !== null) {
-                self.annees = aa;
+                self._annees = aa;
                 let xa: string[] = (isAdmin) ? emptyArray : pPers.semestreids;
                 return service.dm_find_items_array(xa);
             } else {
@@ -92,7 +100,7 @@ export class LoginInfo extends InfoElement implements ILoginInfo {
             }
         }).then((ss: ISemestre[]) => {
             if (pPers !== null) {
-                self.semestres = ss;
+                self._semestres = ss;
                 let xa: string[] = (isAdmin) ? emptyArray : pPers.uniteids;
                 return service.dm_find_items_array(xa);
             } else {
@@ -100,7 +108,7 @@ export class LoginInfo extends InfoElement implements ILoginInfo {
             }
         }).then((uu: IUnite[]) => {
             if (pPers !== null) {
-                self.unites = uu;
+                self._unites = uu;
                 let xa: string[] = (isAdmin) ? emptyArray : pPers.matiereids;
                 return service.dm_find_items_array(xa);
             } else {
@@ -108,7 +116,7 @@ export class LoginInfo extends InfoElement implements ILoginInfo {
             }
         }).then((mm: IMatiere[]) => {
             if (pPers !== null) {
-                self.matieres = mm;
+                self._matieres = mm;
                 let xa: string[] = (isAdmin) ? emptyArray : pPers.groupeids;
                 return service.dm_find_items_array(xa);
             } else {
@@ -116,7 +124,7 @@ export class LoginInfo extends InfoElement implements ILoginInfo {
             }
         }).then((gg: IGroupe[]) => {
             if (pPers !== null) {
-                self.groupes = gg;
+                self._groupes = gg;
                 let xa: string = null;
                 if ((pPers.administratorids !== undefined) && (pPers.administratorids !== null) &&
                     (pPers.administratorids.length > 0)) {
@@ -128,7 +136,7 @@ export class LoginInfo extends InfoElement implements ILoginInfo {
             }
         }).then((ff: IAdministrator) => {
             if (pPers !== null) {
-                self.administrator = ff;
+                self._administrator = ff;
                 let xa: string = null;
                 if ((pPers.enseignantids !== undefined) && (pPers.enseignantids !== null) &&
                     (pPers.enseignantids.length > 0)) {
@@ -140,7 +148,7 @@ export class LoginInfo extends InfoElement implements ILoginInfo {
             }
         }).then((fx: IEnseignant) => {
             if (pPers !== null) {
-                self.enseignant = fx;
+                self._enseignant = fx;
                 let xa: string = null;
                 if ((pPers.etudiantids !== undefined) && (pPers.etudiantids !== null) &&
                     (pPers.etudiantids.length > 0)) {
@@ -152,7 +160,7 @@ export class LoginInfo extends InfoElement implements ILoginInfo {
             }
         }).then((ee: IEtudiant) => {
             if (pPers !== null) {
-                self.etudiant = ee;
+                self._etudiant = ee;
             }
             return bRet;
         });

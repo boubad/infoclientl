@@ -1,6 +1,6 @@
 //intervalitem.ts
 //
-import {DepSigleNameItem} from './depsiglename';
+import {DepSigleNameItem} from './depsiglenameitem';
 import {IIntervalItem} from 'infodata';
 //
 export class IntervalItem extends DepSigleNameItem implements IIntervalItem {
@@ -10,21 +10,21 @@ export class IntervalItem extends DepSigleNameItem implements IIntervalItem {
         super(oMap);
         if ((oMap !== undefined) && (oMap !== null)) {
             if (oMap.startDate !== undefined) {
-                this.startDate = oMap.startDate;
+                this._start = oMap.startDate;
             }
             if (oMap.endDate !== undefined) {
-                this.endDate = oMap.endDate;
+                this._end = oMap.endDate;
             }
         } // oMap
     } // constructor
     public from_map(oMap: any): void {
         super.from_map(oMap);
         if ((oMap !== undefined) && (oMap !== null)) {
-            if (oMap.starDate !== undefined) {
-                this.startDate = oMap.startDate;
+			if (oMap.startDate !== undefined) {
+                this._start = oMap.startDate;
             }
             if (oMap.endDate !== undefined) {
-                this.endDate = oMap.endDate;
+                this._end = oMap.endDate;
             }
         }// oMap
     }

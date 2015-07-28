@@ -1,29 +1,29 @@
 //matiereworkitem.ts
 //
 import {WorkItem} from './workitem';
-import {IMatiereWorkItem, IPerson} from 'infodata';
+import {IMatiereWorkItem, IUserPerson} from 'infodata';
 //
 export class MatiereWorkItem extends WorkItem
     implements IMatiereWorkItem {
-    public uniteid: string = null;
-    public matiereid: string = null;
-    public matiereSigle: string = null;
-    public uniteSigle: string = null;
+    private _uniteid: string;
+    private _matiereid: string;
+    private _matiereSigle: string;
+    private _uniteSigle: string;
     //
     constructor(oMap?: any) {
         super(oMap);
         if ((oMap !== undefined) && (oMap !== null)) {
             if (oMap.uniteid !== undefined) {
-                this.uniteid = oMap.uniteid;
+                this._uniteid = oMap.uniteid;
             }
             if (oMap.matiereid !== undefined) {
-                this.matiereid = oMap.matiereid;
+                this._matiereid = oMap.matiereid;
             }
             if (oMap.uniteSigle !== undefined) {
-                this.uniteSigle = oMap.uniteSigle;
+                this._uniteSigle = oMap.uniteSigle;
             }
             if (oMap.matiereSigle !== undefined) {
-                this.matiereSigle = oMap.matiereSigle;
+                this._matiereSigle = oMap.matiereSigle;
             }
         } // oMap
     } // constructor
@@ -39,30 +39,48 @@ export class MatiereWorkItem extends WorkItem
     public from_map(oMap: any): void {
         super.from_map(oMap);
         if ((oMap !== undefined) && (oMap !== null)) {
-              if (oMap.uniteid !== undefined) {
-                  this.uniteid = oMap.uniteid;
-              }
-              if (oMap.matiereid !== undefined) {
-                  this.matiereid = oMap.matiereid;
-              }
-              if (oMap.uniteSigle !== undefined) {
-                  this.uniteSigle = oMap.uniteSigle;
-              }
-              if (oMap.matiereSigle !== undefined) {
-                  this.matiereSigle = oMap.matiereSigle;
-              }
+			if (oMap.uniteid !== undefined) {
+                this._uniteid = oMap.uniteid;
+            }
+            if (oMap.matiereid !== undefined) {
+                this._matiereid = oMap.matiereid;
+            }
+            if (oMap.uniteSigle !== undefined) {
+                this._uniteSigle = oMap.uniteSigle;
+            }
+            if (oMap.matiereSigle !== undefined) {
+                this._matiereSigle = oMap.matiereSigle;
+            }
         }
     }// from_map
-    public update_person<T extends IPerson>(pPers: T): void {
+	public get uniteid(): string {
+		return (this._uniteid !== undefined) ? this._uniteid : null;
+	}
+	public set uniteid(s: string) {
+		this._uniteid = (s !== undefined) ? s : null;
+	}
+	public get matiereid(): string {
+		return (this._matiereid !== undefined) ? this._matiereid : null;
+	}
+	public set matiereid(s: string) {
+		this._matiereid = (s !== undefined) ? s : null;
+	}
+	public get uniteSigle(): string {
+		return (this._uniteSigle !== undefined) ? this._uniteSigle : null;
+	}
+	public set uniteSigle(s: string) {
+		this._uniteSigle = (s !== undefined) ? s : null;
+	}
+	public get matiereSigle(): string {
+		return (this._matiereSigle !== undefined) ? this._matiereSigle : null;
+	}
+	public set matiereSigle(s: string) {
+		this._matiereSigle = (s !== undefined) ? s : null;
+	}
+    public update_person<T extends IUserPerson>(pPers: T): void {
         super.update_person(pPers);
         if ((pPers !== undefined) && (pPers !== null)) {
-            if ((pPers.uniteids === undefined) || (pPers.uniteids === null)) {
-                pPers.uniteids = [];
-            }
             this.add_id_to_array(pPers.uniteids, this.uniteid);
-            if ((pPers.matiereids === undefined) || (pPers.matiereids === null)) {
-                pPers.matiereids = [];
-            }
             this.add_id_to_array(pPers.matiereids, this.matiereid);
         }// pPers
     }// update_person

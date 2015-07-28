@@ -1,18 +1,18 @@
 //rootelement.ts
-import {InfoElement} from '../infoelement';
+import {InfoElement} from '../utils/infoelement';
 //
 import {IBaseItem, IDatabaseManager, IPerson, IUIManager, ILogManager, IMessageManager,
 IElementDesc, IObjectStore, ILoginInfo, IInfoMessage} from 'infodata';
-import {UIManager} from '../uimanager';
-import {LocalStore} from '../localstore';
-import {DatabaseManager} from '../services/databasemanager';
-import {InfoMessage} from '../infomessage';
+import {UIManager} from '../utils/uimanager';
+import {LocalStore} from '../utils/localstore';
+import {DatabaseManager} from '../services/pouchdb/databasemanager';
+import {InfoMessage} from '../utils/infomessage';
 //
 import {DEPARTEMENT_TYPE, ANNEE_TYPE, SEMESTRE_TYPE,
 UNITE_TYPE, MATIERE_TYPE, GROUPE_TYPE,
 MESSAGE_DOMAIN, INFO_MESSAGE, INFO_MESSAGE_CHANNEL,
 ERROR_MESSAGE, MESSAGE_LOGOUT, MESSAGE_NAVIGATE,
-MESSAGE_REFRESHALL, MESSAGE_REFRESH} from '../infoconstants';
+MESSAGE_REFRESHALL, MESSAGE_REFRESH} from '../utils/infoconstants';
 //
 export class RootElement extends InfoElement {
     private _uiManager: IUIManager;
@@ -30,8 +30,20 @@ export class RootElement extends InfoElement {
         super();
         let origin = window.location.origin;
         let pathname = window.location.pathname;
-        this.baseUrl = origin + pathname.toLowerCase().replace("index.html", "");
+        if (pathname.indexOf("infoapp.html") >= 0) {
+            this.baseUrl = origin + pathname.toLowerCase().replace("infoapp.html", "");
+        } else if (pathname.indexOf("index.html") >= 0) {
+            this.baseUrl = origin + pathname.toLowerCase().replace("index.html", "");
+        } else {
+            this.baseUrl = origin;
+        }
+        if (!this.baseUrl.endsWith("/")){
+          this.baseUrl = this.baseUrl + "/";
+        }
     }// constructor
+    public get images_dir():string {
+      return (this.baseUrl + "images/");
+    }
     protected get_logger_name(): string {
         return 'InfoLogger';
     }
@@ -90,17 +102,19 @@ export class RootElement extends InfoElement {
     protected perform_subscribe(): any {
         let self = this;
         if (this.messageManager !== null) {
-            this.messageManager.subscribe(INFO_MESSAGE_CHANNEL, (msg: IInfoMessage) => {
+            this.messageManager.subscribe(InfoMessage.Channel, (msg: IInfoMessage) => {
                 if ((msg.source !== undefined) && (msg.source !== self)) {
                     if (!self.is_in_message) {
                         self._inMessage = true;
                         try {
-                            self.message_received(msg);
+                            self.message_received(msg).then((x) => {
+                                self._inMessage = false;
+                            });
                         } catch (e) {
                             let ss = ((e !== undefined) && (e !== null)) ? e.toString() : 'Error';
                             self.error(ss);
+                            self._inMessage = false;
                         }
-                        self._inMessage = false;
                     }
                 }
             });
@@ -156,21 +170,15 @@ export class RootElement extends InfoElement {
     public publish_message(payload: IInfoMessage): any {
         if ((this.messageManager !== null) && (payload !== undefined) && (payload !== null)) {
             payload.source = this;
-            this.messageManager.publish(INFO_MESSAGE_CHANNEL, payload);
+            this.messageManager.publish(InfoMessage.Channel, payload);
         }
     }// publish
     public publish_string_message(mval: string): any {
-        let p = new InfoMessage();
-        p.type = MESSAGE_DOMAIN;
-        p.categ = mval;
-        p.value = mval;
+        let p = new InfoMessage({ type: MESSAGE_DOMAIN, categ: mval, value: mval });
         this.publish_message(p);
     }
     public publish_navigation_message(xroute: string): any {
-        let p = new InfoMessage();
-        p.type = MESSAGE_NAVIGATE;
-        p.categ = xroute;
-        p.value = xroute;
+        let p = new InfoMessage({ type: MESSAGE_NAVIGATE, categ: xroute, value: xroute });
         this.publish_message(p);
     }
     protected message_received(message: IInfoMessage): Promise<any> {
@@ -200,7 +208,7 @@ export class RootElement extends InfoElement {
             }
         } else if (message.type == MESSAGE_REFRESHALL) {
             return this.refreshAll();
-        }else if (message.type == MESSAGE_REFRESH) {
+        } else if (message.type == MESSAGE_REFRESH) {
             return this.refresh();
         }
         return Promise.resolve(true);
@@ -240,10 +248,20 @@ export class RootElement extends InfoElement {
             return Promise.resolve(item);
         }
         if (item.url !== null) {
-            this.revokeUrl(item.url);
-            item.url = null;
+            return Promise.resolve(item);
         }
-        return item.check_url(this.dataService, this.uiManager);
+        let id: string = item.avatardocid();
+        let attid: string = item.avatarid;
+        if ((id === null) || (attid === null)) {
+            return Promise.resolve(item);
+        }
+        let uman = this.uiManager;
+        return this.dataService.dm_find_attachment(id, attid).then((data) => {
+            if ((data !== undefined) && (data !== null)) {
+                item.url = uman.createUrl(data);
+            }
+            return item;
+        });
     }// rerieve_one_avatar
     protected retrieve_avatars(items: IElementDesc[]): Promise<IElementDesc[]> {
         if ((items === undefined) || (items === null)) {
@@ -259,10 +277,16 @@ export class RootElement extends InfoElement {
         }// p
         return Promise.all(pp);
     }// retrive_avatars
+    protected get_all_items(model: IBaseItem): Promise<IBaseItem[]> {
+        let start = model.start_key();
+        let end = model.end_key();
+        return this.dataService.dm_get_items(start, end);
+    }// get_all_items
     protected add_to_array(cont: IBaseItem[], item: IBaseItem): void {
         let bFound = false;
+        let sid = item.id;
         for (let x of cont) {
-            if (x.id == item.id) {
+            if (x.id == sid) {
                 bFound = true;
                 break;
             }
@@ -296,4 +320,21 @@ export class RootElement extends InfoElement {
             this.errorMessage = 'Erreur inconnue...';
         }
     } // set_error
+    protected sync_array<T extends IElementDesc>(cont: T[], id: string): T {
+        let pSel: T = null;
+        if ((cont !== undefined) && (cont !== null) && (cont.length > 0)) {
+            if ((id !== undefined) && (id !== null)) {
+                for (let x of cont) {
+                    if ((x !== null) && (x.id !== undefined) && (x.id == id)) {
+                        pSel = x;
+                        break;
+                    }
+                }// x
+            }// id
+            if (pSel === null) {
+                pSel = cont[0];
+            }
+        }// cont
+        return pSel;
+    }// sync_array
 }// RootElement

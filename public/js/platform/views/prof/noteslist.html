@@ -1,0 +1,78 @@
+<template>
+  <div class="container" if.bind="is_connected">
+    <user-bar></user-bar>
+    <table>
+      <tr>
+        <td style="text-align:center">
+          <sheader-bar></sheader-bar>
+        </td>
+      </tr>
+      <tr>
+        <td style="text-align:center">
+          <work-bar></work-bar>
+        </td>
+      </tr>
+      <tr if.bind="hasPages">
+        <td>
+          <table if.bind="hasPages">
+              <tr>
+                <td class="text-success">
+                  <strong>${pageStatus}</strong>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <ul class="pagination">
+                    <li>
+                      <a href="#" click.delegate="firstPage()" show.bind="canPrevPage">Début</a>
+                    </li>
+                    <li>
+                      <a href="#" click.delegate="prevPage()" show.bind="canPrevPage">Préc.</a>
+                    </li>
+                    <li>
+                      <a href="#" click.delegate="nextPage()" show.bind="canNextPage">Suivant</a>
+                    </li>
+                    <li>
+                      <a href="#" click.delegate="lastPage()" show.bind="canNextPage">Fin</a>
+                    </li>
+                  </ul>
+                </td>
+              </tr>
+          </table>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <table id="link-table">
+            <tr>
+              <th></th>
+              <th>Nom de famille</th>
+              <th>Prénom(s)</th>
+              <th>Groupe</th>
+              <th>Note</th>
+            </tr>
+            <tr repeat.for="note of items">
+              <td>
+                <div if.bind="note.has_url">
+                  <img src.bind="note.url" height="48"></img>
+                </div>
+              </td>
+              <td>
+                <a route-href="route: etud; params.bind: { id: note.personid }">${note.lastname}</a>
+              </td>
+              <td>
+                ${note.firstname}
+              </td>
+              <td>
+                ${note.groupeSigle}
+              </td>
+              <td>
+                ${note.note}
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </div>
+</template>

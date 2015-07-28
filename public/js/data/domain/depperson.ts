@@ -5,26 +5,25 @@ import {Person} from './person';
 import {AdministratorPerson} from './adminperson';
 import {EnseignantPerson} from './profperson';
 import {EtudiantPerson} from './etudperson';
-import {IElementDesc, IItemFactory, IPouchDoc,
-IPerson, IAdministratorPerson, IEnseignantPerson, IEtudiantPerson,
-IDepartementPerson, IDatabaseManager, IBaseItem, IUIManager} from 'infodata';
+import {IDepartementPerson, IDepBasePerson, IDatabaseManager, IBaseItem} from 'infodata';
 //
 export class DepartementPerson extends DepartementChildItem
     implements IDepartementPerson {
-    public personid: string = null;
-    public firstname: string = null;
-    public lastname: string = null;
+    private _personid: string;
+    private _firstname: string;
+    private _lastname: string;
+	//
     constructor(oMap?: any) {
         super(oMap);
         if ((oMap !== undefined) && (oMap !== null)) {
             if (oMap.personid !== undefined) {
-                this.personid = oMap.personid;
+                this._personid = oMap.personid;
             }
             if (oMap.firstname !== undefined) {
-                this.firstname = oMap.firstname;
+                this._firstname = oMap.firstname;
             }
             if (oMap.lastname !== undefined) {
-                this.lastname = oMap.lastname;
+                this._lastname = oMap.lastname;
             }
         } // oMap
     } // constructor
@@ -44,16 +43,35 @@ export class DepartementPerson extends DepartementChildItem
         super.from_map(oMap);
         if ((oMap !== undefined) && (oMap !== null)) {
             if (oMap.personid !== undefined) {
-                this.personid = oMap.personid;
+                this._personid = oMap.personid;
             }
             if (oMap.firstname !== undefined) {
-                this.firstname = oMap.firstname;
+                this._firstname = oMap.firstname;
             }
             if (oMap.lastname !== undefined) {
-                this.lastname = oMap.lastname;
+                this._lastname = oMap.lastname;
             }
         } // oMap
     }
+	//
+	public get personid(): string {
+		return (this._personid !== undefined) ? this._personid : null;
+	}
+	public set personid(s: string) {
+		this._personid = (s !== undefined) ? s : null;
+	}
+	public get firstname(): string {
+		return (this._firstname !== undefined) ? this._firstname : null;
+	}
+	public set firstname(s: string) {
+		this._firstname = (s !== undefined) ? s : null;
+	}
+	public get lastname(): string {
+		return (this._lastname !== undefined) ? this._lastname : null;
+	}
+	public set lastname(s: string) {
+		this._lastname = (s !== undefined) ? s : null;
+	}
     //
     public get fullname(): string {
         return ((this.lastname !== null) && (this.firstname !== null)) ?
@@ -68,13 +86,15 @@ export class DepartementPerson extends DepartementChildItem
             s = s + this.lastname.toUpperCase();
         }
         if ((s !== null) && (this.firstname !== null)) {
-            s = s + '-' + this.firstname.toUpperCase();
+            s = s + this.firstname.toUpperCase();
         }
         return s;
     } // create_id
-    public update_person<T extends IPerson>(pPers: T): void {
+    public update_person<T extends IDepBasePerson>(pPers: T): void {
         if ((pPers !== undefined) && (pPers !== null)) {
-            pPers.check_id();
+			if (pPers.id === null) {
+				pPers.check_id();
+			}
             if (pPers.password === null) {
                 pPers.reset_password();
             }
@@ -82,46 +102,32 @@ export class DepartementPerson extends DepartementChildItem
             this.firstname = pPers.firstname;
             this.lastname = pPers.lastname;
             this.avatarid = pPers.avatarid;
-            if ((pPers.departementids === undefined) || (pPers.departementids == null)) {
-                pPers.departementids = [];
-            }
+			this.check_id();
             this.add_id_to_array(pPers.departementids, this.departementid);
         }// pPers
-        if (this.id === null) {
-            this.id = this.create_id();
-        }
     }// update_person
-
     public save(service: IDatabaseManager): Promise<IBaseItem> {
-        if ((service === undefined) || (service === null) || (this.personid === null)) {
-            throw new Error('Item not storeable error (personid)');
+        if ((this.personid === null) || (this.departementid === null)) {
+			throw new Error('Item not storeable error (personid)');
         }
-        let pFact: IItemFactory = service.itemFactory;
-        if ((pFact === undefined) || (pFact === null)) {
-            throw new Error('Invalid service...');
-        }
-        let self = this;
-        return service.find_item_by_id(this.personid).then((oPers: IPouchDoc) => {
-            let pPers: IPerson = pFact.create_person(oPers);
-            self.update_person(pPers);
-            if (pPers !== null) {
-                let xmap: any = {};
-                pPers.to_map(xmap);
-                return service.maintains_doc(xmap);
-            } else {
-                return {};
-            }
-        }).then((x) => {
-            let ymap: any = {};
-            self.to_map(ymap);
-            return service.maintains_doc(ymap);
-        }).then((pz) => {
-            return self.load(service);
-        })
+		let self = this;
+		let pPers: IDepBasePerson = null;
+		return service.dm_find_item_by_id(this.personid).then((xPers: IDepBasePerson) => {
+			pPers = (xPers !== undefined) ? xPers : null;
+			if (pPers !== null) {
+				self.update_person(pPers);
+			} else {
+				throw new Error('Item not storeable error (personid)');
+			}
+			return service.dm_maintains_item(pPers);
+		}).then((x) => {
+			return service.dm_maintains_item(self);
+		}).then((r) => {
+			return self;
+		});
     }// save
     public is_storeable(): boolean {
-        return super.is_storeable() && (this.personid !== null) &&
-            (this.lastname !== null) && (this.firstname !== null);
+        return super.is_storeable() && (this.personid !== null);
     }
     protected get_text(): string {
         return this.fullname;

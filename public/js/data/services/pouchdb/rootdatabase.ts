@@ -1,13 +1,11 @@
 //rootdatabase.ts
-/// <reference path="../../../../../typings/pouchdb/pouchdb.d.ts"/>
+//import {PouchDB} from 'pouchdb';
+declare var PouchDB:IPouchDB;
 //
-import PouchDB = require('pouchdb');
+import {InfoElement} from '../../utils/infoelement';
+import {DATABASE_NAME} from '../../utils/infoconstants';
 //
-import {InfoElement} from '../../infoelement';
-import {IPouchDoc, IRootDatabaseManager} from 'infodata';
-import {DATABASE_NAME} from '../../infoconstants';
-//
-export class RootDatabase extends InfoElement implements IRootDatabaseManager {
+export class RootDatabase extends InfoElement {
     //
     private _url: string;
     private _db: IPouchDB;
@@ -50,7 +48,7 @@ export class RootDatabase extends InfoElement implements IRootDatabaseManager {
         });
     }// get_children_ids
     //
-    public maintains_design_doc(doc: IPouchDoc): Promise<PouchUpdateResponse> {
+    public maintains_design_doc(doc: IPouchDocument): Promise<PouchUpdateResponse> {
         if ((doc === undefined) || (doc === null)) {
             throw new Error('Invalid argument');
         }
@@ -61,7 +59,7 @@ export class RootDatabase extends InfoElement implements IRootDatabaseManager {
         return this.db.then((dx: IPouchDB) => {
             xdb = dx;
             return xdb.get(doc._id);
-        }).then((pOld:IPouchDoc) => {
+        }).then((pOld:IPouchDocument) => {
             doc._rev = pOld._rev;
             return xdb.put(doc);
         }, (ex: PouchError) => {
@@ -81,8 +79,8 @@ export class RootDatabase extends InfoElement implements IRootDatabaseManager {
         });
     }// maintains_design_doc
     //
-    public query_by_keys(viewName: string, startKey: string, endKey: string): Promise<IPouchDoc[]> {
-        let oRet: IPouchDoc[] = [];
+    public query_by_keys(viewName: string, startKey: string, endKey: string): Promise<IPouchDocument[]> {
+        let oRet: IPouchDocument[] = [];
         if ((viewName === undefined) || (viewName === null) ||
             (startKey === undefined) || (startKey === null) ||
             (endKey === undefined) || (endKey === null)) {
@@ -191,8 +189,8 @@ export class RootDatabase extends InfoElement implements IRootDatabaseManager {
     //
 
     //
-    protected internal_maintains_one_item(xdb: IPouchDB, oMap: IPouchDoc,
-        bCheck?: boolean): Promise<IPouchDoc> {
+    protected internal_maintains_one_item(xdb: IPouchDB, oMap: IPouchDocument,
+        bCheck?: boolean): Promise<IPouchDocument> {
         if ((oMap === undefined) || (oMap === null)) {
             throw new Error("Invalid doc");
         }
@@ -296,8 +294,8 @@ export class RootDatabase extends InfoElement implements IRootDatabaseManager {
         });
     }//get_ids
     //
-    public find_items_array(ids: string[]): Promise<IPouchDoc[]> {
-        let oRet: IPouchDoc[] = [];
+    public find_items_array(ids: string[]): Promise<IPouchDocument[]> {
+        let oRet: IPouchDocument[] = [];
         if ((ids === undefined) || (ids === null)) {
             return Promise.resolve(oRet);
         }
@@ -338,7 +336,7 @@ export class RootDatabase extends InfoElement implements IRootDatabaseManager {
         });
     }//get_items_array
     //
-    public maintains_items(items: IPouchDoc[]): Promise<IPouchDoc[]> {
+    public maintains_items(items: IPouchDocument[]): Promise<IPouchDocument[]> {
         if ((items === undefined) || (items === null)) {
             throw new Error('Invalid argument(s)');
         }
@@ -352,7 +350,7 @@ export class RootDatabase extends InfoElement implements IRootDatabaseManager {
             return Promise.all(pp);
         });
     }// maintains_items
-    public check_items(items: IPouchDoc[]): Promise<IPouchDoc[]> {
+    public check_items(items: IPouchDocument[]): Promise<IPouchDocument[]> {
         if ((items === undefined) || (items === null)) {
             throw new Error('Invalid argument(s)');
         }
@@ -367,7 +365,7 @@ export class RootDatabase extends InfoElement implements IRootDatabaseManager {
         });
     }// check_items
     //
-    public find_item_by_id(id: string, bAttach?: boolean): Promise<IPouchDoc> {
+    public find_item_by_id(id: string, bAttach?: boolean): Promise<IPouchDocument> {
         let vRet: any = null;
         if ((id === undefined) || (id === null)) {
             return Promise.resolve(vRet);
@@ -388,7 +386,7 @@ export class RootDatabase extends InfoElement implements IRootDatabaseManager {
         })
     }//find_item_by_id
     //
-    public maintains_doc(doc: IPouchDoc): Promise<PouchUpdateResponse> {
+    public maintains_doc(doc: IPouchDocument): Promise<PouchUpdateResponse> {
         if (!doc) {
             throw new Error('Invalid argument');
         }
@@ -429,6 +427,19 @@ export class RootDatabase extends InfoElement implements IRootDatabaseManager {
     public get url(): string {
         return this._url;
     }
+	//
+	public dm_destroy(): Promise<any> {
+		return new Promise((resolve,reject)=>{
+			PouchDB.destroy(DATABASE_NAME,(err)=>{
+				if ((err !== undefined) && (err !== null)){
+					reject(new Error(err.reason));
+				} else {
+					resolve(true);
+				}
+			});
+		})
+
+	}// dm_destroy
     //
     public get db(): Promise<IPouchDB> {
         if ((this._db !== undefined) && (this._db !== null)) {
