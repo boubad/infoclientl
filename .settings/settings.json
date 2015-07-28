@@ -6,6 +6,7 @@
 		"**/.git": true,
 		"**/.DS_Store": true,
 		"**/*.map":true,
+		"node_modules":true,
 		"**/*.js": { "when": "$(basename).ts"}
 	}
 }
