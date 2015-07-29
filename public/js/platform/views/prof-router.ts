@@ -4,9 +4,10 @@ import * as userinf from '../aureliainfouser';
 //
 const NOT_IMPLEMENTED: string = './not-implemented'
 //
-const GROUPEEVENTS_EDIT:string =  './prof/groupeevents';
-const GROUPEEVENTS_LIST:string =  './prof/groupeeventlist';
-const NOTES_LIST:string =  './prof/noteslist';
+const GROUPEEVENTS_EDIT: string = './prof/groupeevents';
+const GROUPEEVENTS_LIST: string = './prof/groupeeventlist';
+const NOTES_LIST: string = './prof/noteslist';
+const EVTS_SUM: string = './prof/semestre-events';
 //
 @autoinject
 export class ProfRouter {
@@ -20,8 +21,8 @@ export class ProfRouter {
     configureRouter(config, router: aurouter.Router) {
         config.map([
             { route: ['', 'welcome'], name: 'welcome', moduleId: './home', nav: true, title: 'Accueil' },
-            { route: 'evts-sum', name: 'evts-sum', moduleId: NOT_IMPLEMENTED, nav: true, title: 'Evts semestre' },
-            { route: 'notes-sum', name: 'notes-sum', moduleId:NOTES_LIST, nav: true, title: 'Notes semestre' },
+            { route: 'evts-sum', name: 'evts-sum', moduleId: EVTS_SUM, nav: true, title: 'Evts semestre' },
+            { route: 'notes-sum', name: 'notes-sum', moduleId: NOTES_LIST, nav: true, title: 'Notes semestre' },
             { route: 'groupeevents-views', name: 'groupeevents-views', moduleId: GROUPEEVENTS_LIST, nav: true, title: 'Liste devoirs' },
             { route: 'groupeevents', name: 'groupeevents', moduleId: GROUPEEVENTS_EDIT, nav: true, title: 'Edition devoirs' }
         ]);

@@ -30,7 +30,9 @@
                       />
                     </div>
                     <div class="btn-group">
-                      <button type="button" click.delegate="login()" disabled.bind="cannotConnect" class="btn btn-primary">Connecter</button>
+                      <a class="btn btn-primary" click.delegate="login()" href="#" show.bind="canConnect">
+                        <i class="fa fa-user"></i>Connecter
+                      </a>
                     </div>
                   </form>
                 </td>

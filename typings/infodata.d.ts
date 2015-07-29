@@ -239,6 +239,7 @@ declare module "infodata" {
         lastname: string;
         fullname: string;
         update_person<T extends IDepBasePerson>(pPers: T): void;
+        check_avatar?: (service: IDatabaseManager) => Promise<IDepartementPerson>;
     } // interface IDepartementPerson
     export interface IEnseignant extends IDepartementPerson {
 

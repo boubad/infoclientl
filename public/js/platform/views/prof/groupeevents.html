@@ -55,7 +55,7 @@
     <table if.bind="editMode">
       <tbody>
         <tr>
-          <td if.bind="hasItems">
+          <td style="vertical-align:top" if.bind="hasItems">
             <div style="text-align:center">
               <ul class="pagination">
                 <li show.bind="canPrevPage">
@@ -80,7 +80,7 @@
               <option repeat.for="elem of items" model.bind="elem">${elem.text}</option>
             </select>
           </td>
-          <td if.bind="canShowForm">
+          <td style="vertical-align:top" if.bind="canShowForm">
             <form role="form">
               <div class="form-group">
                 <div if.bind="hasAvatarUrl">

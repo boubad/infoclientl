@@ -271,30 +271,6 @@ export class GroupeEventModel extends BaseEditViewModel<GroupeEvent> {
                 self.etudEvtGenre = "ABSENCE1";
             }
             let userinfo = self.userInfo;
-            if ((userinfo.departementid === null) && (userinfo.departements.length > 0)) {
-                let x = userinfo.departements[0];
-                self.departement = x;
-            }
-            if ((userinfo.anneeid === null) && (userinfo.annees.length > 0)) {
-                let x = userinfo.annees[0];
-                self.annee = x;
-            }
-            if ((userinfo.uniteid === null) && (userinfo.unites.length > 0)) {
-                let x = userinfo.unites[0];
-                self.unite = x;
-            }
-            if ((userinfo.matiereid === null) && (userinfo.matieres.length > 0)) {
-                let x = userinfo.matieres[0];
-                self.matiere = x;
-            }
-            if ((userinfo.semestreid === null) && (userinfo.semestres.length > 0)) {
-                let x = userinfo.semestres[0];
-                self.semestre = x;
-            }
-            if ((userinfo.groupeid === null) && (userinfo.groupes.length > 0)) {
-                let x = userinfo.groupes[0];
-                self.groupe = x;
-            }
             if (self.allGenre === null) {
                 self.allGenre = 'TP';
             }

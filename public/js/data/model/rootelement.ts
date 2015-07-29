@@ -37,12 +37,12 @@ export class RootElement extends InfoElement {
         } else {
             this.baseUrl = origin;
         }
-        if (!this.baseUrl.endsWith("/")){
-          this.baseUrl = this.baseUrl + "/";
+        if (!this.baseUrl.endsWith("/")) {
+            this.baseUrl = this.baseUrl + "/";
         }
     }// constructor
-    public get images_dir():string {
-      return (this.baseUrl + "images/");
+    public get images_dir(): string {
+        return (this.baseUrl + "images/");
     }
     protected get_logger_name(): string {
         return 'InfoLogger';
@@ -244,24 +244,10 @@ export class RootElement extends InfoElement {
         return Promise.resolve(true);
     }
     protected retrieve_one_avatar(item: IElementDesc): Promise<IElementDesc> {
-        if ((item === undefined) || (item === null) || (this.dataService === null) || (this.uiManager === null)) {
+        if ((item === undefined) || (item === null)) {
             return Promise.resolve(item);
         }
-        if (item.url !== null) {
-            return Promise.resolve(item);
-        }
-        let id: string = item.avatardocid();
-        let attid: string = item.avatarid;
-        if ((id === null) || (attid === null)) {
-            return Promise.resolve(item);
-        }
-        let uman = this.uiManager;
-        return this.dataService.dm_find_attachment(id, attid).then((data) => {
-            if ((data !== undefined) && (data !== null)) {
-                item.url = uman.createUrl(data);
-            }
-            return item;
-        });
+        return item.check_url(this.dataService, this.uiManager);
     }// rerieve_one_avatar
     protected retrieve_avatars(items: IElementDesc[]): Promise<IElementDesc[]> {
         if ((items === undefined) || (items === null)) {

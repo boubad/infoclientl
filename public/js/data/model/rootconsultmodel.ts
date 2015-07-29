@@ -122,6 +122,24 @@ export class RootConsultViewModel<T extends IElementDesc> extends InfoBaseView {
         return true;
     }
     protected perform_activate(): Promise<any> {
+        if ((this.departement === null) && (this.departements.length > 0)) {
+            this.departement = this.departements[0];
+        }
+        if ((this.annee === null) && (this.annees.length > 0)) {
+            this.annee = this.annees[0];
+        }
+        if ((this.unite === null) && (this.unites.length > 0)) {
+            this.unite = this.unites[0];
+        }
+        if ((this.matiere === null) && (this.matieres.length > 0)) {
+            this.matiere = this.matieres[0];
+        }
+        if ((this.semestre === null) && (this.semestres.length > 0)) {
+            this.semestre = this.semestres[0];
+        }
+        if ((this.groupe === null) && (this.groupes.length > 0)) {
+            this.groupe = this.groupes[0];
+        }
         return Promise.resolve(true);
     }
     //

@@ -1,20 +1,21 @@
 //synchrpmodel.ts
 import {SYNC_IN, SYNC_OUT, SYNC_DATABASE, DATABASE_NAME,
 REMOTESERVERSLIST_KEY, SYNC_CHANNEL, SYNC_ERROR, SYNC_PAUSED,
-SYNC_CHANGED, SYNC_COMPLETED, SYNC_DENIED,INFO_MESSAGE_CHANNEL,
+SYNC_CHANGED, SYNC_COMPLETED, SYNC_DENIED, INFO_MESSAGE_CHANNEL,
 SYNC_STARTED, SYNC_RESUMED} from '../utils/infoconstants';
 import {SynchroManager} from './syncmanager';
-import {IInfoMessage,IMessageManager} from 'infodata';
+import {IInfoMessage, IMessageManager, IUIManager} from 'infodata';
 import {InfoMessage} from '../utils/infomessage';
 import {DatabaseManager} from '../services/pouchdb/databasemanager';
+import {UIManager} from '../utils/uimanager';
 //
 export class SynchroModel {
-	//
-	public title:string = null;
+    //
+    public title: string = null;
     //
     private manager: SynchroManager;
-		private _evt:IMessageManager;
-	private _dispose_func: ()=> void;
+    private _evt: IMessageManager;
+    private _dispose_func: () => void;
     //
     public outputString_In: string = null;
     public outputString_Out: string = null;
@@ -25,41 +26,52 @@ export class SynchroModel {
     private _currentIn: number = 0;
     private _currentOut: number = 0;
     private is_busy_update: boolean = false;
+    private _uimanager: IUIManager;
     //
-    constructor(evt:IMessageManager) {
-		 		this._evt = evt;
+    constructor(evt: IMessageManager) {
+        this._evt = evt;
         this.manager = new SynchroManager(evt);
         this.title = 'Synchro';
     }
-	public activate(params?: any, config?: any, instruction?: any): any {
+    public activate(params?: any, config?: any, instruction?: any): any {
         this.subscribe();
         return Promise.resolve(true);
     }// activate
-	//
-	private subscribe() :void {
-		if ((this._evt !== undefined) && (this._evt !== null)){
-			let self = this;
-			if ((this._dispose_func === undefined) || (this._dispose_func === null)){
-				  this._evt.subscribe(InfoMessage.Channel,(payload:IInfoMessage)=>{
-					self.message_received(payload);
-				});
-			}
-		}// evt
-	}// subscribe
-	private unsubscribe():void {
-		if ((this._dispose_func !== undefined) || (this._dispose_func !== null)){
-			this._dispose_func = null;
-		}
-	}
-	//
-	public destroy_database(): any {
-		let s = new DatabaseManager();
-		return s.dm_destroy().then((r)=>{
-			return true;
-		}).catch((err)=>{
-			return false;
-		});
-	}
+    private confirm(question: string): boolean {
+        if ((this._uimanager === undefined) || (this._uimanager === null)) {
+            this._uimanager = new UIManager();
+        }
+        return this._uimanager.confirm(question);
+    }
+    //
+    private subscribe(): void {
+        if ((this._evt !== undefined) && (this._evt !== null)) {
+            let self = this;
+            if ((this._dispose_func === undefined) || (this._dispose_func === null)) {
+                this._evt.subscribe(InfoMessage.Channel, (payload: IInfoMessage) => {
+                    self.message_received(payload);
+                });
+            }
+        }// evt
+    }// subscribe
+    private unsubscribe(): void {
+        if ((this._dispose_func !== undefined) || (this._dispose_func !== null)) {
+            this._dispose_func = null;
+        }
+    }
+    //
+    public destroy_database(): any {
+        let question = 'Voulez-vous vraiment supprimer la base de données locale?';
+        if (!this.confirm(question)) {
+            return false;
+        }
+        let s = new DatabaseManager();
+        return s.dm_destroy().then((r) => {
+            return true;
+        }).catch((err) => {
+            return false;
+        });
+    }
     //
     public get hasApplicationCache(): boolean {
         return ((window !== undefined) && (window !== null) &&
@@ -136,12 +148,12 @@ export class SynchroModel {
         }
     }// process_sync_message
     protected message_received(message: IInfoMessage): Promise<boolean> {
-		if ((message === undefined) || (message === null)){
-			return Promise.resolve(false);
-		}
+        if ((message === undefined) || (message === null)) {
+            return Promise.resolve(false);
+        }
         let direction = (message.categ !== undefined) ? message.categ : null;
         let type = (message.type !== undefined) ? message.type : null;
-        let info = (message.value !== undefined)? message.value : null;
+        let info = (message.info !== undefined) ? message.info : null;
         let error = (message.error !== undefined) ? message.error : null;
         this.process_sync_message(direction, type, info, error);
         return Promise.resolve(true);

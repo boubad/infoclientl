@@ -1,7 +1,7 @@
 // elementdesc.ts
 //
 import {InfoElement} from './infoelement';
-import {IElementDesc, IUIManager, IDatabaseManager} from 'infodata';
+import {IElementDesc, IPerson, IUIManager, IDatabaseManager} from 'infodata';
 //
 export class ElementDesc extends InfoElement implements IElementDesc {
     //
@@ -169,17 +169,38 @@ export class ElementDesc extends InfoElement implements IElementDesc {
             return Promise.resolve(this);
         }
         let id = this.avatardocid();
-        let attid = this.avatarid;
-        if ((id === null) || (attid === null)) {
+        if (id === null) {
             return Promise.resolve(this);
         }
+        let oData: Blob = null;
         let self = this;
-        return service.dm_find_attachment(id, attid).then((data) => {
-            if ((data !== undefined) && (data !== null)) {
-                self.url = man.createUrl(data);
-            }
-            return self;
-        });
+        let attid = this.avatarid;
+        if (attid !== null) {
+            return service.dm_find_attachment(id, attid).then((data) => {
+                if ((data !== undefined) && (data !== null)) {
+                    self.url = man.createUrl(data);
+                }
+                return self;
+            });
+        } else {
+            return service.dm_find_item_by_id(id).then((pPers: IPerson) => {
+                if ((pPers !== undefined) && (pPers !== null) && (pPers.avatarid !== null)) {
+                    self.avatarid = pPers.avatarid;
+                }
+                return self.avatarid;
+            }).then((x: string) => {
+                if ((x !== undefined) && (x !== null)) {
+                    return service.dm_find_attachment(id, x);
+                } else {
+                    return oData;
+                }
+            }).then((data: Blob) => {
+                if ((data !== undefined) && (data !== null)) {
+                    self.url = man.createUrl(data);
+                }
+                return self;
+            });
+        }
     }
 } // class ElementDesc
 //

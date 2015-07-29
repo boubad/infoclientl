@@ -23,17 +23,21 @@
             <tr>
               <td>
                 <ul class="pagination">
-                  <li>
-                    <a href="#" click.delegate="firstPage()" show.bind="canPrevPage">Début</a>
+                  <li show.bind="canPrevPage">
+                    <a href="#" click.delegate="firstPage()">
+                      <i class="fa fa-fast-backward fa-fw"></i>Début</a>
                   </li>
-                  <li>
-                    <a href="#" click.delegate="prevPage()" show.bind="canPrevPage">Préc.</a>
+                  <li show.bind="canPrevPage">
+                    <a href="#" click.delegate="prevPage()">
+                      <i class="fa fa-step-backward fa-fw"></i>Préc.</a>
                   </li>
-                  <li>
-                    <a href="#" click.delegate="nextPage()" show.bind="canNextPage">Suivant</a>
+                  <li show.bind="canNextPage">
+                    <a href="#" click.delegate="nextPage()">
+                      <i class="fa fa-step-forward fa-fw"></i>Suivant</a>
                   </li>
-                  <li>
-                    <a href="#" click.delegate="lastPage()" show.bind="canNextPage">Fin</a>
+                  <li show.bind="canNextPage">
+                    <a href="#" click.delegate="lastPage()">
+                      <i class="fa fa-fast-forward fa-fw"></i>Fin</a>
                   </li>
                 </ul>
               </td>
@@ -56,8 +60,8 @@
             <tr repeat.for="evt of items">
               <td>
                 <div if.bind="evt.has_url">
-                <img src.bind="evt.url" height="48"></img>
-              </div>
+                  <img src.bind="evt.url" height="48"></img>
+                </div>
               </td>
               <td>${evt.dateString}</td>
               <td>${evt.genre}</td>

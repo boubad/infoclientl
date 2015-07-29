@@ -21,7 +21,6 @@ export class DisplayEtudiant extends ElementDesc implements IDisplayEtudiant {
     public absencesCount: number = 0;
     public retardsCount: number = 0;
     public miscCount: number = 0;
-	public avatarid:string = null;
     //
     private _count: number = 0;
     private _sumcoefs: number = 0;

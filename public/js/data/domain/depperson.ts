@@ -5,14 +5,14 @@ import {Person} from './person';
 import {AdministratorPerson} from './adminperson';
 import {EnseignantPerson} from './profperson';
 import {EtudiantPerson} from './etudperson';
-import {IDepartementPerson, IDepBasePerson, IDatabaseManager, IBaseItem} from 'infodata';
+import {IDepartementPerson, IDepBasePerson, IDatabaseManager, IBaseItem, IUIManager, IElementDesc, IPerson} from 'infodata';
 //
 export class DepartementPerson extends DepartementChildItem
     implements IDepartementPerson {
     private _personid: string;
     private _firstname: string;
     private _lastname: string;
-	//
+    //
     constructor(oMap?: any) {
         super(oMap);
         if ((oMap !== undefined) && (oMap !== null)) {
@@ -53,25 +53,25 @@ export class DepartementPerson extends DepartementChildItem
             }
         } // oMap
     }
-	//
-	public get personid(): string {
-		return (this._personid !== undefined) ? this._personid : null;
-	}
-	public set personid(s: string) {
-		this._personid = (s !== undefined) ? s : null;
-	}
-	public get firstname(): string {
-		return (this._firstname !== undefined) ? this._firstname : null;
-	}
-	public set firstname(s: string) {
-		this._firstname = (s !== undefined) ? s : null;
-	}
-	public get lastname(): string {
-		return (this._lastname !== undefined) ? this._lastname : null;
-	}
-	public set lastname(s: string) {
-		this._lastname = (s !== undefined) ? s : null;
-	}
+    //
+    public get personid(): string {
+        return (this._personid !== undefined) ? this._personid : null;
+    }
+    public set personid(s: string) {
+        this._personid = (s !== undefined) ? s : null;
+    }
+    public get firstname(): string {
+        return (this._firstname !== undefined) ? this._firstname : null;
+    }
+    public set firstname(s: string) {
+        this._firstname = (s !== undefined) ? s : null;
+    }
+    public get lastname(): string {
+        return (this._lastname !== undefined) ? this._lastname : null;
+    }
+    public set lastname(s: string) {
+        this._lastname = (s !== undefined) ? s : null;
+    }
     //
     public get fullname(): string {
         return ((this.lastname !== null) && (this.firstname !== null)) ?
@@ -92,9 +92,9 @@ export class DepartementPerson extends DepartementChildItem
     } // create_id
     public update_person<T extends IDepBasePerson>(pPers: T): void {
         if ((pPers !== undefined) && (pPers !== null)) {
-			if (pPers.id === null) {
-				pPers.check_id();
-			}
+            if (pPers.id === null) {
+                pPers.check_id();
+            }
             if (pPers.password === null) {
                 pPers.reset_password();
             }
@@ -102,29 +102,68 @@ export class DepartementPerson extends DepartementChildItem
             this.firstname = pPers.firstname;
             this.lastname = pPers.lastname;
             this.avatarid = pPers.avatarid;
-			this.check_id();
+            this.check_id();
             this.add_id_to_array(pPers.departementids, this.departementid);
         }// pPers
     }// update_person
+    public check_avatar(service: IDatabaseManager): Promise<IDepartementPerson> {
+        if (this.avatarid !== null) {
+            return Promise.resolve(this);
+        }
+        if (this.personid === null) {
+            return Promise.resolve(this);
+        }
+        let self = this;
+        return service.dm_find_item_by_id(this.personid).then((pPers: IPerson) => {
+            if ((pPers !== undefined) && (pPers !== null) && (pPers.avatarid !== null)) {
+                self.avatarid = pPers.avatarid;
+            }
+            return self;
+        });
+    }//check_avatar
+    public check_url(service: IDatabaseManager, man: IUIManager): Promise<IElementDesc> {
+        if (this.url !== null) {
+            return Promise.resolve(this);
+        }
+        let id = this.avatardocid();
+        let attid = this.avatarid;
+        if ((id !== null) && (attid !== null)) {
+            return super.check_url(service, man);
+        }
+        if (this.personid === null) {
+            return Promise.resolve(this);
+        }
+        let self = this;
+        return service.dm_find_item_by_id(this.personid).then((pPers: IPerson) => {
+            if ((pPers !== undefined) && (pPers !== null)) {
+                self.avatarid = pPers.avatarid;
+            }
+            if (self.avatarid !== null) {
+                return super.check_url(service, man);
+            } else {
+                return self;
+            }
+        });
+    }//check_url
     public save(service: IDatabaseManager): Promise<IBaseItem> {
         if ((this.personid === null) || (this.departementid === null)) {
-			throw new Error('Item not storeable error (personid)');
+            throw new Error('Item not storeable error (personid)');
         }
-		let self = this;
-		let pPers: IDepBasePerson = null;
-		return service.dm_find_item_by_id(this.personid).then((xPers: IDepBasePerson) => {
-			pPers = (xPers !== undefined) ? xPers : null;
-			if (pPers !== null) {
-				self.update_person(pPers);
-			} else {
-				throw new Error('Item not storeable error (personid)');
-			}
-			return service.dm_maintains_item(pPers);
-		}).then((x) => {
-			return service.dm_maintains_item(self);
-		}).then((r) => {
-			return self;
-		});
+        let self = this;
+        let pPers: IDepBasePerson = null;
+        return service.dm_find_item_by_id(this.personid).then((xPers: IDepBasePerson) => {
+            pPers = (xPers !== undefined) ? xPers : null;
+            if (pPers !== null) {
+                self.update_person(pPers);
+            } else {
+                throw new Error('Item not storeable error (personid)');
+            }
+            return service.dm_maintains_item(pPers);
+        }).then((x) => {
+            return service.dm_maintains_item(self);
+        }).then((r) => {
+            return self;
+        });
     }// save
     public is_storeable(): boolean {
         return super.is_storeable() && (this.personid !== null);

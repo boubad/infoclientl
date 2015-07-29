@@ -23,23 +23,23 @@
             <tr>
               <td>
                 <ul class="pagination">
-                  <li show.bind="canPrevPage">
-                    <a href="#" click.delegate="firstPage()">
-                      <i class="fa fa-fast-backward fa-fw"></i>Début</a>
-                  </li>
-                  <li show.bind="canPrevPage">
-                    <a href="#" click.delegate="prevPage()">
-                      <i class="fa fa-step-backward fa-fw"></i>Préc.</a>
-                  </li>
-                  <li show.bind="canNextPage">
-                    <a href="#" click.delegate="nextPage()">
-                      <i class="fa fa-step-forward fa-fw"></i>Suivant</a>
-                  </li>
-                  <li show.bind="canNextPage">
-                    <a href="#" click.delegate="lastPage()">
-                      <i class="fa fa-fast-forward fa-fw"></i>Fin</a>
-                  </li>
-                </ul>
+      						<li show.bind="canPrevPage">
+      							<a href="#" click.delegate="firstPage()" >
+      								<i class="fa fa-fast-backward fa-fw"></i>Début</a>
+      						</li>
+      						<li  show.bind="canPrevPage">
+      							<a href="#" click.delegate="prevPage()">
+      								<i class="fa fa-step-backward fa-fw"></i>Préc.</a>
+      						</li>
+      						<li  show.bind="canNextPage">
+      							<a href="#" click.delegate="nextPage()">
+      								<i class="fa fa-step-forward fa-fw"></i>Suivant</a>
+      						</li>
+      						<li show.bind="canNextPage">
+      							<a href="#" click.delegate="lastPage()" >
+      								<i class="fa fa-fast-forward fa-fw"></i>Fin</a>
+      						</li>
+      					</ul>
               </td>
             </tr>
           </table>
@@ -53,7 +53,10 @@
               <th>Nom de famille</th>
               <th>Prénom(s)</th>
               <th>Groupe</th>
-              <th>Note</th>
+              <th>Abs.</th>
+              <th>Ret.</th>
+              <th>Autres</th>
+              <th>Observations</th>
             </tr>
             <tr repeat.for="note of items">
               <td>
@@ -64,15 +67,12 @@
               <td>
                 <a route-href="route: etud; params.bind: { id: note.personid }">${note.lastname}</a>
               </td>
-              <td>
-                ${note.firstname}
-              </td>
-              <td>
-                ${note.groupeSigle}
-              </td>
-              <td>
-                ${note.note}
-              </td>
+              <td>${note.firstname}</td>
+              <td>${note.groupeSigle}</td>
+              <td>${note.absenceString}</td>
+              <td>${note.retardString}</td>
+              <td>${note.miscString}</td>
+              <td>${note.description}</td>
             </tr>
           </table>
         </td>
