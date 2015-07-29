@@ -7,5 +7,4 @@ public/**/*.map
 !public/javascripts/**/*.js
 # special files
 .DS_STORE
-.c9
 .zedstate

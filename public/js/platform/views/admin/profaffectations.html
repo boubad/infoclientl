@@ -26,63 +26,91 @@
 						</div>
 					</td>
 				</tr>
-				<tr>
-					<td if.bind="canShowForm">
+				<tr if.bind="canShowForm" style="vertical-align:top">
+					<td style="vertical-align:top">
 						<table>
 							<tbody>
 								<tr>
-									<td style="text-align:center">
-										<div class="form-group">
-											<label class="form-label" for="persons">Enseignants</label>
-											<select id="persons" multiple value.bind="currentPersons" size="16">
-												<option repeat.for="pers of persons" model.bind="pers">${pers.text}</option>
-											</select>
-										</div>
+									<td>
+										<table>
+											<tr style="vertical-align:top">
+												<td style="text-align:center">
+													<h4>Enseignants</h4>
+												</td>
+											</tr>
+											<tr>
+												<td style="vertical-align:top">
+													<select id="persons" multiple value.bind="currentPersons" size="16">
+														<option repeat.for="pers of persons" model.bind="pers">${pers.text}</option>
+													</select>
+												</td>
+											</tr>
+										</table>
 									</td>
-									<td style="text-align:center">
+									<td>&nbsp;&nbsp;</td>
+									<td style="vertical-align:top">
 										<div>
 											<div>
-												<button type="button" click.delegate="refreshAll()" class="btn btn-primary">Rafraîchir</button>
+												<a class="btn btn-primary" click.delegate="refreshAll()" href="#">
+	<i class="fa fa-refresh fa-fw"></i>Rafraîchir
+</a>
 											</div>
 											<div class="form-group">
 												<label class="form-label" for="startDate">Date de début</label>
-												<input class="form-control" type="date" id="startDate" value.bind="allStartDate" min.bind="minDate"
-												max.bind="maxDate" required></input>
+												<input class="form-control" type="date" id="startDate" value.bind="allStartDate" min.bind="minDate" max.bind="maxDate" required></input>
 											</div>
 											<div class="form-group">
 												<label class="form-label" for="endDate">Date de fin</label>
-												<input class="form-control" type="date" id="endDate" value.bind="allEndDate" min.bind="minDate" max.bind="maxDate"
-												required></input>
+												<input class="form-control" type="date" id="endDate" value.bind="allEndDate" min.bind="minDate" max.bind="maxDate" required></input>
 											</div>
 											<div class="btn-group">
-												<button type="button" click.delegate="save()" class="btn btn-primary">Ajouter</button>
-												<button type="button" disabled.bind="cannotRemove" click.delegate="remove()" class="btn btn-primary">Supprimer</button>
+												<a class="btn btn-primary" click.delegate="save()" href="#" show.bind="canSave">
+													<i class="fa fa-plus fa-fw"></i>Ajouter
+												</a>
+												<a class="btn btn-danger" click.delegate="remove()" href="#" show.bind="canRemove">
+													<i class="fa fa-trash-o fa-fw"></i>Supprimer
+												</a>
 											</div>
 										</div>
 									</td>
-									<td style="text-align:center">
-										<div>
-											<ul class="pagination" if.bind="hasPages">
-												<li>
-													<a href="#" click.delegate="firstPage()" show.bind="canPrevPage">Début</a>
-												</li>
-												<li>
-													<a href="#" click.delegate="prevPage()" show.bind="canPrevPage">Préc.</a>
-												</li>
-												<li>
-													<a href="#" click.delegate="nextPage()" show.bind="canNextPage">Suivant</a>
-												</li>
-												<li>
-													<a href="#" click.delegate="lastPage()" show.bind="canNextPage">Fin</a>
-												</li>
-											</ul>
-											<div class="form-group">
-												<label class="form-label" for="affectations">Affectations</label>
-												<select id="affectations" multiple value.bind="currentAffectations" size="16">
-													<option repeat.for="elem of items" model.bind="elem">${elem.text}</option>
-												</select>
-											</div>
-										</div>
+									<td>&nbsp;&nbsp;</td>
+									<td style="vertical-align:top">
+										<table>
+											<tr>
+												<td style="text-align:center">
+													<h4>Affectations</h4>
+												</td>
+											</tr>
+											<tr style="vertical-align:top">
+												<td>
+													<ul class="pagination" if.bind="hasPages">
+														<li show.bind="canPrevPage">
+															<a href="#" click.delegate="firstPage()">
+																<i class="fa fa-fast-backward fa-fw"></i>Début</a>
+														</li>
+														<li show.bind="canPrevPage">
+															<a href="#" click.delegate="prevPage()">
+																<i class="fa fa-step-backward fa-fw"></i>Préc.</a>
+														</li>
+														<li show.bind="canNextPage">
+															<a href="#" click.delegate="nextPage()">
+																<i class="fa fa-step-forward fa-fw"></i>Suivant</a>
+														</li>
+														<li show.bind="canNextPage">
+															<a href="#" click.delegate="lastPage()">
+																<i class="fa fa-fast-forward fa-fw"></i>Fin</a>
+														</li>
+													</ul>
+												</td>
+											</tr>
+											<tr>
+												<td style="vertical-align:top">
+													<select id="affectations" multiple value.bind="currentAffectations" size="16">
+														<option repeat.for="elem of items" model.bind="elem">${elem.text}</option>
+													</select>
+												</td>
+											</tr>
+										</table>
 									</td>
 								</tr>
 							</tbody>
