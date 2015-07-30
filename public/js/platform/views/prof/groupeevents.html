@@ -57,24 +57,7 @@
         <tr>
           <td style="vertical-align:top" if.bind="hasItems">
             <div style="text-align:center">
-              <ul class="pagination">
-                <li show.bind="canPrevPage">
-                  <a href="#" click.delegate="firstPage()">
-                    <i class="fa fa-fast-backward fa-fw"></i>Début</a>
-                </li>
-                <li show.bind="canPrevPage">
-                  <a href="#" click.delegate="prevPage()">
-                    <i class="fa fa-step-backward fa-fw"></i>Préc.</a>
-                </li>
-                <li show.bind="canNextPage">
-                  <a href="#" click.delegate="nextPage()">
-                    <i class="fa fa-step-forward fa-fw"></i>Suivant</a>
-                </li>
-                <li show.bind="canNextPage">
-                  <a href="#" click.delegate="lastPage()">
-                    <i class="fa fa-fast-forward fa-fw"></i>Fin</a>
-                </li>
-              </ul>
+              <pagination-bar></pagination-bar>
             </div>
             <select value.bind="currentItem" size="16">
               <option repeat.for="elem of items" model.bind="elem">${elem.text}</option>
@@ -83,17 +66,7 @@
           <td style="vertical-align:top" if.bind="canShowForm">
             <form role="form">
               <div class="form-group">
-                <div if.bind="hasAvatarUrl">
-                  <img src.bind="avatarUrl" height="128"></img>
-                  <button type="button" class="btn btn-primary" click.delegate="removeAvatar()">Supprimer</button>
-                </div>
-                <div>
-                  <input type="file" id="fileToUpload" accept="image/png, image/jpeg" change.delegate="avatarFileChanged($event)"></input>
-                </div>
-                <div show.bind="hasWorkingUrl">
-                  <img src.bind="workingUrl" height="128"></img>
-                  <button type="button" class="btn btn-primary" click.delegate="saveAvatar()">Modifier</button>
-                </div>
+                <avatar-bar></avatar-bar>
               </div>
               <div class="form-group">
                 <label class="form-label" for="genre">Genre</label>
@@ -135,12 +108,7 @@
                 <label class="form-label" for="description">Description</label>
                 <textarea class="form-control" id="description" value.bind="description"></textarea>
               </div>
-              <div class="btn-group">
-                <button type="button" show.bind="canAdd" click.delegate="addNew()" class="btn btn-primary">Nouveau</button>
-                <button type="button" show.bind="canCancel" click.delegate="cancel_add()" class="btn btn-primary">Annuler</button>
-                <button type="button" show.bind="canSave" click.delegate="save()" class="btn btn-primary">Enregistrer</button>
-                <button type="button" show.bind="canRemove" click.delegate="remove()" class="btn btn-primary">Supprimer</button>
-              </div>
+              <command-bar></command-bar>
             </form>
           </td>
         </tr>

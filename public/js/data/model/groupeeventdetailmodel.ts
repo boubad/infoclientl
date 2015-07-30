@@ -40,6 +40,7 @@ export class GroupeEventDetailModel extends BaseDetailModel {
     }).then((p: IGroupeEvent) => {
       if (p !== null) {
         self.currentItem = p;
+        self.title = p.name;
       }
       return self.retrieve_one_avatar(self.currentItem);
     }).then((xx) => {

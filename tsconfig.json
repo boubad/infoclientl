@@ -117,6 +117,7 @@
         "./public/js/platform/resources/elements-bar.ts",
         "./public/js/platform/resources/index.ts",
         "./public/js/platform/resources/nav-bar.ts",
+        "./public/js/platform/resources/pagination-bar.ts",
         "./public/js/platform/resources/person-bar.ts",
         "./public/js/platform/resources/sheader-bar.ts",
         "./public/js/platform/resources/siglename-bar.ts",

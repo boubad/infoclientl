@@ -12,37 +12,9 @@
           <work-bar></work-bar>
         </td>
       </tr>
-      <tr if.bind="hasPages">
+      <tr>
         <td>
-          <table if.bind="hasPages">
-            <tr>
-              <td class="text-success">
-                <strong>${pageStatus}</strong>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <ul class="pagination">
-                  <li show.bind="canPrevPage">
-                    <a href="#" click.delegate="firstPage()">
-                      <i class="fa fa-fast-backward fa-fw"></i>Début</a>
-                  </li>
-                  <li show.bind="canPrevPage">
-                    <a href="#" click.delegate="prevPage()">
-                      <i class="fa fa-step-backward fa-fw"></i>Préc.</a>
-                  </li>
-                  <li show.bind="canNextPage">
-                    <a href="#" click.delegate="nextPage()">
-                      <i class="fa fa-step-forward fa-fw"></i>Suivant</a>
-                  </li>
-                  <li show.bind="canNextPage">
-                    <a href="#" click.delegate="lastPage()">
-                      <i class="fa fa-fast-forward fa-fw"></i>Fin</a>
-                  </li>
-                </ul>
-              </td>
-            </tr>
-          </table>
+          <pagination-bar></pagination-bar>
         </td>
       </tr>
       <tr>
