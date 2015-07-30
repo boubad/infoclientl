@@ -12,6 +12,10 @@ export class SiglenameBar {
         this._parent = s;
     }
     //
+    public get isReadOnly():boolean {
+      return (this.parent !== null) ? this.parent.isReadOnly : true;
+    }
+    //
     protected get parent(): SigleNameViewModel<SigleNameItem> {
         return (this._parent !== undefined) ? this._parent : null;
     }
@@ -31,5 +35,12 @@ export class SiglenameBar {
             this.parent.name = s;
         }
     }
-
+    public get description(): string {
+        return (this.parent !== null) ? this.parent.description : null;
+    }
+    public set description(s: string) {
+        if (this.parent !== null) {
+            this.parent.description = s;
+        }
+    }
 }

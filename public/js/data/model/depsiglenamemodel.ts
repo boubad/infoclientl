@@ -8,15 +8,12 @@ export class DepSigleNameViewModel<T extends IDepartementSigleNameItem>
     //
     constructor(userinfo: InfoUserInfo) {
         super(userinfo);
-        this.choose_departement = true;
     }
     //
     protected perform_activate(): Promise<any> {
         let self = this;
         return super.perform_activate().then((r) => {
-            if ((self.departement === null) && (self.departements.length > 0)) {
-                self.departement = self.departements[0];
-            }
+            self.choose_departement = true;
             return true;
         });
     }

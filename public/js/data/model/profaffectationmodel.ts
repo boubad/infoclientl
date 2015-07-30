@@ -28,6 +28,21 @@ export class ProfaffectationModel extends AffectationViewModel<ProfAffectation, 
         return this.is_storeable();
     }
     public set canSave(b: boolean) { }
+    protected update_from_userinfo(): void {
+      let userinfo = this.userInfo;
+      this.modelItem.uniteid = userinfo.uniteid;
+      this.modelItem.matiereid = userinfo.matiereid;
+    }
+    protected perform_activate(): Promise<any> {
+        let self = this;
+        let userinfo = this.userInfo;
+        return super.perform_activate().then((r) => {
+            self.choose_unite = true;
+            self.choose_matiere = true;
+            self.update_from_userinfo();
+            return self.fill_persons();
+        });
+    }
     protected create_item(): ProfAffectation {
         let p = new ProfAffectation({
             departementid: this.departementid,

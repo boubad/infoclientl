@@ -1,27 +1,4 @@
 <template>
-  <div if.bind="isEditItem">
-    <div>
-      <a class="btn btn-primary"  click.delegate="reset_password()" href="#">
-        <i class="fa fa-lock fa-fw"></i>Réinitialiser mot de passe
-      </a>
-    </div>
-    <div if.bind="hasAvatarUrl">
-      <img src.bind="avatarUrl" height="128"></img>
-      <a class="btn btn-danger" show.bind="canRemoveAvatar"  click.delegate="removeAvatar()" href="#">
-        <i class="fa fa-remove fa-fw"></i>Supprimer
-      </a>
-    </div>
-    <div>
-      <i class="fa fa-user fa-fw"></i>
-      <input type="file" id="fileToUpload" show.bind="isEditable" accept="image/png, image/jpeg" change.delegate="avatarFileChanged($event)"></input>
-    </div>
-    <div show.bind="hasWorkingUrl">
-      <img src.bind="workingUrl" height="128"></img>
-      <a class="btn btn-primary"  click.delegate="saveAvatar()" href="#"  show.bind="canSaveAvatar">
-        <i class="fa fa-save fa-fw"></i>Modifier
-      </a>
-    </div>
-  </div>
   <div class="form-group">
     <label class="form-label" for="username">Identifiant</label>
     <input class="form-control" type="text" id="username" value.bind="username" placeholder="Identifiant" readonly.bind="isReadOnly"></input>

@@ -9,18 +9,7 @@
       </tr>
       <tr>
         <td style="text-align:center">
-          <table>
-            <tr>
-              <td style="text-align:center">
-                <div class="form-group">
-                  <label class="form-label" for="departements">Dép.</label>
-                  <select id="departements" value.bind="departement">
-                    <option repeat.for="depelem of departements" model.bind="depelem">${depelem.text}</option>
-                  </select>
-                </div>
-              </td>
-            </tr>
-          </table>
+          <depart-bar></depart-bar>
         </td>
       </tr>
       <tr if.bind="canShowForm">
@@ -30,6 +19,7 @@
         <td>&nbsp;&nbsp;</td>
         <td style="vertical-align:top">
           <form role="form">
+            <avatar-bar></avatar-bar>
             <person-bar></person-bar>
             <command-bar></command-bar>
           </form>

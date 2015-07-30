@@ -44,32 +44,21 @@ export class AffectationViewModel<T extends IAffectation, P extends IDepartement
     public set currentPersons(s: P[]) {
         this._currentPersons = s;
     }
+    protected update_from_userinfo(): void {
+      let userinfo = this.userInfo;
+      this.modelItem.departementid = userinfo.departementid;
+      this.modelItem.anneeid = userinfo.anneeid;
+      this.modelItem.semestreid = userinfo.semestreid;
+      this.modelItem.groupeid = userinfo.groupeid;
+    }
     protected perform_activate(): Promise<any> {
         let self = this;
-        let userinfo = this.userInfo;
         return super.perform_activate().then((r) => {
-            if ((self.departement == null) && (self.departements.length > 0)) {
-                self.departement = self.departements[0];
-            }
-            if ((self.annee == null) && (self.annees.length > 0)) {
-                self.annee = self.annees[0];
-            }
-            if ((self.unite == null) && (self.unites.length > 0)) {
-                self.unite = self.unites[0];
-            }
-            if ((self.matiere == null) && (self.matieres.length > 0)) {
-                self.matiere = self.matieres[0];
-            }
-            if ((self.semestre === null) && (self.semestres.length > 0)) {
-                self.semestre = self.semestres[0];
-            }
-            if ((self.groupe == null) && (self.groupes.length > 0)) {
-                self.groupe = self.groupes[0];
-            }
-            self.modelItem.departementid = userinfo.departementid;
-            self.modelItem.anneeid = userinfo.anneeid;
-            self.modelItem.semestreid = userinfo.semestreid;
-            self.modelItem.groupeid = userinfo.groupeid;
+            self.choose_departement = true;
+            self.choose_annee = true;
+            self.choose_semestre = true;
+            self.choose_groupe = true;
+            self.update_from_userinfo();
             return self.fill_persons();
         });
     }

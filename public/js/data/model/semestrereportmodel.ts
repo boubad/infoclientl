@@ -11,15 +11,22 @@ export class SemestreReportBase extends RootConsultViewModel<IDisplayEtudiant> {
     //
     constructor(userinfo: InfoUserInfo) {
         super(userinfo);
-        this.choose_departement = true;
-        this.choose_annee = true;
-        this.choose_semestre = true;
+
     }// constructor
     protected post_change_semestre(): Promise<any> {
         return this.refreshAll();
     }
     protected is_refresh(): boolean {
         return (this.semestreid !== null);
+    }
+    protected perform_activate(): Promise<any> {
+        let self = this;
+        return super.perform_activate().then((r) => {
+          self.choose_departement = true;
+          self.choose_annee = true;
+          self.choose_semestre = true;
+          return true;
+        });
     }
     public activate(params?: any, config?: any, instruction?: any): any {
         let self = this;

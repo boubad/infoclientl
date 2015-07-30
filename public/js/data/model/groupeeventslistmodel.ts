@@ -20,6 +20,18 @@ export class GroupeEventListModel extends RootConsultViewModel<GroupeEvent> {
         return (this.semestreid !== null) && (this.matiereid !== null) &&
 		(this.groupeid !== null);
     }
+    protected perform_activate(): Promise<any> {
+        let self = this;
+        return super.perform_activate().then((r) => {
+          self.choose_departement = true;
+          self.choose_annee = true;
+          self.choose_semestre = true;
+          self.choose_unite = true;
+          self.choose_matiere = true;
+          self.choose_groupe = true;
+          return true;
+        });
+    }
     protected create_item(): GroupeEvent {
         let p = new GroupeEvent({
             annneid: this.anneeid,

@@ -9,26 +9,7 @@
       </tr>
       <tr>
         <td style="text-align:center">
-          <table>
-            <tr>
-              <td style="text-align:center">
-                <div class="form-group">
-                  <label class="form-label" for="departements">Dép.</label>
-                  <select id="departements" value.bind="departement">
-                    <option repeat.for="depelem of departements" model.bind="depelem">${depelem.text}</option>
-                  </select>
-                </div>
-              </td>
-              <td style="text-align:center">
-                <div class="form-group">
-                  <label class="form-label" for="unites">Unité</label>
-                  <select id="unites" value.bind="unite">
-                    <option repeat.for="unelem of unites" model.bind="unelem">${unelem.text}</option>
-                  </select>
-                </div>
-              </td>
-            </tr>
-          </table>
+          <work-bar></work-bar>
         </td>
       </tr>
       <tr if.bind="canShowForm">
@@ -36,7 +17,7 @@
           <elements-bar></elements-bar>
         </td>
         <td>&nbsp;&nbsp;</td>
-      <td style="vertical-align:top">
+        <td style="vertical-align:top">
           <form role="form">
             <avatar-bar></avatar-bar>
             <siglename-bar></siglename-bar>

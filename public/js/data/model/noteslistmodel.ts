@@ -3,8 +3,8 @@
 import {InfoUserInfo} from './infouserinfo';
 import {RootConsultViewModel} from './rootconsultmodel';
 import {EtudEvent} from '../domain/etudevent';
-import {DisplayEtudiant,DisplayEtudiantsArray} from '../utils/displayetudiant';
-import {IDisplayEtudiant,IEtudEvent} from 'infodata';
+import {DisplayEtudiant, DisplayEtudiantsArray} from '../utils/displayetudiant';
+import {IDisplayEtudiant, IEtudEvent} from 'infodata';
 //
 export class NoteListModel extends RootConsultViewModel<IDisplayEtudiant> {
     //
@@ -20,6 +20,18 @@ export class NoteListModel extends RootConsultViewModel<IDisplayEtudiant> {
         this.choose_matiere = true;
         this.choose_semestre = true;
     }// constructor
+    protected perform_activate(): Promise<any> {
+        let self = this;
+        return super.perform_activate().then((r) => {
+            self.choose_departement = true;
+            self.choose_annee = true;
+            self.choose_semestre = true;
+            self.choose_unite = true;
+            self.choose_matiere = true;
+            self.choose_groupe = true;
+            return true;
+        });
+    }
     protected post_change_semestre(): Promise<any> {
         return this.refreshAll();
     }
@@ -33,7 +45,7 @@ export class NoteListModel extends RootConsultViewModel<IDisplayEtudiant> {
         this.perform_activate();
         let self = this;
         return super.activate(params, config, instruction).then((r) => {
-          return self.refreshAll();
+            return self.refreshAll();
         });
     }// activate
     protected prepare_refresh(): void {
@@ -98,7 +110,7 @@ export class NoteListModel extends RootConsultViewModel<IDisplayEtudiant> {
             oRet.push(p);
         }// i
         let self = this;
-        return this.retrieve_avatars(oRet).then((pp:IDisplayEtudiant[]) => {
+        return this.retrieve_avatars(oRet).then((pp: IDisplayEtudiant[]) => {
             self.items = pp;
             return true;
         })

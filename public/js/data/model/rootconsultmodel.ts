@@ -122,25 +122,28 @@ export class RootConsultViewModel<T extends IElementDesc> extends InfoBaseView {
         return true;
     }
     protected perform_activate(): Promise<any> {
-        if ((this.departement === null) && (this.departements.length > 0)) {
-            this.departement = this.departements[0];
-        }
-        if ((this.annee === null) && (this.annees.length > 0)) {
-            this.annee = this.annees[0];
-        }
-        if ((this.unite === null) && (this.unites.length > 0)) {
-            this.unite = this.unites[0];
-        }
-        if ((this.matiere === null) && (this.matieres.length > 0)) {
-            this.matiere = this.matieres[0];
-        }
-        if ((this.semestre === null) && (this.semestres.length > 0)) {
-            this.semestre = this.semestres[0];
-        }
-        if ((this.groupe === null) && (this.groupes.length > 0)) {
-            this.groupe = this.groupes[0];
-        }
-        return Promise.resolve(true);
+        let self = this;
+        return super.perform_activate().then((x) => {
+            if ((self.departement === null) && (self.departements.length > 0)) {
+                self.departement = self.departements[0];
+            }
+            if ((self.annee === null) && (self.annees.length > 0)) {
+                self.annee = self.annees[0];
+            }
+            if ((self.unite === null) && (self.unites.length > 0)) {
+                self.unite = self.unites[0];
+            }
+            if ((self.matiere === null) && (self.matieres.length > 0)) {
+                self.matiere = self.matieres[0];
+            }
+            if ((self.semestre === null) && (self.semestres.length > 0)) {
+                self.semestre = self.semestres[0];
+            }
+            if ((self.groupe === null) && (self.groupes.length > 0)) {
+                self.groupe = self.groupes[0];
+            }
+            return true;
+        });
     }
     //
     public get canShowForm(): boolean {
@@ -158,9 +161,11 @@ export class RootConsultViewModel<T extends IElementDesc> extends InfoBaseView {
             return self.refreshAll();
         }).then((x) => {
             self._in_activate = false;
+            return true;
         }).catch((err) => {
             self.set_error(err);
             self._in_activate = false;
+            return false;
         });
     }// activate
     public refresh(): Promise<any> {
