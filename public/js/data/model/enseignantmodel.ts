@@ -17,7 +17,4 @@ export class EnseignantModel extends PersonViewModel<Enseignant, EnseignantPerso
         let p = new Enseignant({ departementid: this.departementid });
         return p;
     }
-    public canActivate(params?: any, config?: any, instruction?: any): any {
-		return this.is_admin;
-    }// activate
 }// class Enseignants

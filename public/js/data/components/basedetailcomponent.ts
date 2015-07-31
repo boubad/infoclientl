@@ -1,10 +1,11 @@
 //basedetailcompoenet.ts
 //
 import {BaseComponent} from './basecomponent';
+import {InfoBaseView} from '../model/infobaseview';
 import {BaseEditViewModel} from '../model/baseeditmodel';
 import {IBaseItem} from 'infodata';
 //
-export class BaseDetailComponent<T extends IBaseItem> extends BaseComponent<BaseEditViewModel<T> > {
+export class BaseDetailComponent<T extends IBaseItem> extends BaseComponent<BaseEditViewModel<T>> {
     //
     constructor() {
         super();
@@ -15,16 +16,16 @@ export class BaseDetailComponent<T extends IBaseItem> extends BaseComponent<Base
     public get currentItem(): T {
         return (this.parent !== null) ? this.parent.currentItem : null;
     }
-    public set currentItem(s:T){
-      if (this.parent !== null){
-        this.parent.currentItem = s;
-      }
+    public set currentItem(s: T) {
+        if (this.parent !== null) {
+            this.parent.currentItem = s;
+        }
     }
     public get isEditable(): boolean {
         return (this.parent !== null) ? this.parent.isEditable : false;
     }
     public get isReadOnly(): boolean {
-        return (!this.isEditable);
+        return (this.parent !== null) ? this.parent.isReadOnly : true;
     }
 
     public get isEditItem(): boolean {
@@ -72,11 +73,11 @@ export class BaseDetailComponent<T extends IBaseItem> extends BaseComponent<Base
         return (this.parent !== null) ? this.parent.remove() : Promise.resolve(false);
     }// remove
     public get description(): string {
-        return (this.currentItem !== null) ? this.currentItem.description : null;
+        return (this.parent !== null) ? this.parent.description : null;
     }
     public set description(s: string) {
-        if (this.currentItem !== null) {
-            this.currentItem.description = s;
+        if (this.parent !== null) {
+            this.parent.description = s;
         }
     }
 }// class BaseListComponent

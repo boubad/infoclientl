@@ -12,8 +12,6 @@ export class ProfaffectationModel extends AffectationViewModel<ProfAffectation, 
         super(userinfo);
         this.title = 'Affectations enseignants';
         this._genre = null;
-        this.choose_unite = true;
-        this.choose_matiere = true;
     }
     //
     protected create_person(): Enseignant {

@@ -1,6 +1,5 @@
 <template>
   <div class="container">
-    <user-bar></user-bar>
     <table>
       <tr>
         <td style="text-align:center">
@@ -9,7 +8,26 @@
       </tr>
       <tr>
         <td style="text-align:center">
-          <work-bar></work-bar>
+          <table>
+            <tr>
+              <td>
+                <div class="form-group">
+                  <label class="form-label" for="departements">Dép.</label>
+                  <select id="departements" value.bind="departement">
+                    <option repeat.for="depelem of departements" model.bind="depelem">${depelem.text}</option>
+                  </select>
+                </div>
+              </td>
+              <td>
+                <div class="form-group">
+                  <label class="form-label" for="unites">Unité</label>
+                  <select id="unites" value.bind="unite">
+                    <option repeat.for="unelem of unites" model.bind="unelem">${unelem.text}</option>
+                  </select>
+                </div>
+              </td>
+            </tr>
+          </table>
         </td>
       </tr>
       <tr if.bind="canShowForm">
@@ -23,7 +41,7 @@
             <siglename-bar></siglename-bar>
             <div class="form-group">
               <label class="form-label" for="genre">Genre</label>
-              <select class="form-control" id="genre" value.bind="genre">
+              <select class="form-control" id="genre" value.bind="genre" disabled.bind="isReadOnly">
                 <option>Genre...</option>
                 <option value="PRATIQUE">Pratique</option>
                 <option value="THEORIE">Théorie</option>
@@ -32,15 +50,15 @@
             </div>
             <div class="form-group">
               <label class="form-label" for="mat_module">Module</label>
-              <input class="form-control" type="text" id="mat_module" value.bind="mat_module" placeholder="Module"></input>
+              <input class="form-control" type="text" id="mat_module" value.bind="mat_module" placeholder="Module" disabled.bind="isReadOnly"></input>
             </div>
             <div class="form-group">
               <label class="form-label" for="coefficient">Coefficient</label>
-              <input class="form-control" type="text" id="coefficient" value.bind="coefficient" placeholder="Coefficient"></input>
+              <input class="form-control" type="text" id="coefficient" value.bind="coefficient" placeholder="Coefficient" disabled.bind="isReadOnly"></input>
             </div>
             <div class="form-group">
               <label class="form-label" for="ecs">ECS</label>
-              <input class="form-control" type="text" id="ecs" value.bind="ecs" placeholder="ECS"></input>
+              <input class="form-control" type="text" id="ecs" value.bind="ecs" placeholder="ECS" disabled.bind="isReadOnly"></input>
             </div>
             <command-bar></command-bar>
           </form>

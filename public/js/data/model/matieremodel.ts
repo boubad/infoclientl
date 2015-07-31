@@ -22,6 +22,7 @@ export class MatiereModel extends DepSigleNameViewModel<Matiere> {
         });
     }
     public post_change_unite(): Promise<any> {
+        this.modelItem.departementid = this.departementid;
         this.modelItem.uniteid = this.uniteid;
         this.currentItem = this.create_item();
         return this.refreshAll();
@@ -67,7 +68,4 @@ export class MatiereModel extends DepSigleNameViewModel<Matiere> {
             x.ecs = ((d !== null) && (d > 0)) ? d : null;
         }
     }
-    public canActivate(params?: any, config?: any, instruction?: any): any {
-        return this.is_admin;
-    }// activate
 }// class Matieres

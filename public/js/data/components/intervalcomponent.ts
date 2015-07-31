@@ -1,11 +1,11 @@
-//siglenamecompoenet.ts
+//intervalcompoenet.ts
 //
 import {BaseComponent} from './basecomponent';
 import {BaseDetailComponent} from './basedetailcomponent';
-import {SigleNameViewModel} from '../model/siglenamemodel';
-import {ISigleNameItem} from 'infodata';
+import {IntervalViewModel} from '../model/intervalmodel';
+import {IIntervalItem} from 'infodata';
 //
-export class SigleNameComponent<T extends ISigleNameItem > extends BaseComponent<SigleNameViewModel<T>> {
+export class IntervalComponent<T extends IIntervalItem > extends BaseComponent<IntervalViewModel<T>> {
     //
     constructor() {
         super();
@@ -43,7 +43,7 @@ export class SigleNameComponent<T extends ISigleNameItem > extends BaseComponent
     public get isReadOnly(): boolean {
         return (this.parent !== null) ? this.parent.isReadOnly : true;
     }
-
+    public set isReadOnly(s:boolean){}
     public get isEditItem(): boolean {
         return (this.parent !== null) ? this.parent.isEditItem : false;
     }
@@ -95,5 +95,27 @@ export class SigleNameComponent<T extends ISigleNameItem > extends BaseComponent
         if (this.parent !== null) {
             this.parent.description = s;
         }
+    }
+    public get minDate():  string {
+          return (this.parent !== null) ? this.parent.minDate : null;
+    }
+    public get maxDate():  string {
+          return (this.parent !== null) ? this.parent.maxDate : null;
+    }
+    public get startDate(): string {
+            return (this.parent !== null) ? this.parent.startDate : null;
+    }
+    public set startDate(s: string) {
+          if (this.parent !== null) {
+                this.parent.startDate = s;
+          }
+    }
+    public get endDate(): string {
+          return (this.parent !== null) ? this.parent.endDate : null;
+    }
+    public set endDate(s: string) {
+          if (this.parent !== null) {
+                this.parent.endDate = s;
+          }
     }
 }// SigleNameComponen

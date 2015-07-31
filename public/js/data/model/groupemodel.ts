@@ -13,7 +13,4 @@ export class GroupeModel extends DepSigleNameViewModel<Groupe> {
 			departementid: this.departementid
 		});
     }
-    public canActivate(params?: any, config?: any, instruction?: any): any {
-        return  this.is_admin;
-    }// activate
 }// class GroupeModel

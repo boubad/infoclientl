@@ -32,7 +32,7 @@ export class BaseEditViewModel<T extends IBaseItem> extends RootConsultViewModel
     public get isEditable(): boolean {
         return this.is_admin;
     }
-    public set isEditeable(s: boolean) { }
+    public set isEditable(s:boolean){}
     public get isReadOnly(): boolean {
         return (!this.isEditable);
     }

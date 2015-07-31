@@ -55,13 +55,19 @@ export class GroupeEventModel extends BaseEditViewModel<GroupeEvent> {
         this.noteMode = false;
         this.editMode = true;
         this._bBusy = false;
-        this.choose_departement = true;
-        this.choose_annee = true;
-        this.choose_unite = true;
-        this.choose_groupe = true;
-        this.choose_matiere = true;
-        this.choose_semestre = true;
     }// constructor
+    protected perform_activate(): Promise<any> {
+        let self = this;
+        return super.perform_activate().then((r) => {
+          self.choose_departement = true;
+            self.choose_unite = true;
+            self.choose_matiere = true;
+            self.choose_annee = true;
+            self.choose_semestre = true;
+            self.choose_groupe = true;
+            return true;
+        });
+    }
     public get isEditable(): boolean {
         return (this.currentProfAffectation !== null) && (this.personid !== null) &&
             (this.currentProfAffectation.personid == this.personid);

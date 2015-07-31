@@ -1,24 +1,42 @@
 <template>
   <div if.bind="is_connected">
-      <user-bar></user-bar>
-    <ul class="pagination">
-      <li>
-        <a href="#" click.delegate="set_profil()">Profil</a>
-      </li>
-      <li>
-        <a href="#" click.delegate="set_password()">Mot de passe</a>
-      </li>
-      <li>
-        <a href="#" click.delegate="set_avatar()">Avatar</a>
-      </li>
-    </ul>
-    <h3 show.bind="hasErrorMessage" class="text-danger">${errorMessage}</h3>
-    <h3 show.bind="hasInfoMessage" class="text-success">${infoMessage}</h3>
-    <div if.bind="profilMode">
-      <h2>Profil utilisateur</h2>
-      <div class="row">
-        <div class="col-sm-1">&nbsp;</div>
-        <div class="col-sm-4">
+    <table>
+      <tr style="text-align:center">
+        <td>&nbsp;&nbsp;</td>
+        <td style="text-align:center">
+          <ul class="pagination">
+            <li if.bind="canProfil">
+              <a class="btn btn-primary" click.delegate="set_profil()" href="#">
+                <i class="fa fa-user fa-fw"></i>Profil
+              </a>
+            </li>
+            <li if.bind="canPassword">
+              <a class="btn btn-primary" click.delegate="set_password()" href="#">
+                <i class="fa fa-lock fa-fw"></i>Mot de passe
+              </a>
+            </li>
+            <li if.bind="canAvatar">
+              <a class="btn btn-primary" click.delegate="set_avatar()" href="#">
+                <i class="fa fa-image fa-fw"></i>Avatar
+              </a>
+            </li>
+          </ul>
+        </td>
+      </tr>
+      <tr if.bind="hasErrorMessage" class="text-danger"  style="text-align:center">
+        <td style="text-align:center">
+          <h3>${errorMessage}</h3>
+        </td>
+      </tr>
+      <tr if.bind="hasInfoMessage" class="text-success"  style="text-align:center">
+        <td style="text-align:center">
+          <h3>${infoMessage}</h3>
+        </td>
+      </tr>
+      <tr if.bind="profilMode"  style="text-align:center">
+        <td>&nbsp;&nbsp;</td>
+        <td style="text-align:center">
+          <h3>Profil utilisateur</h3>
           <form role="form">
             <div class="form-group">
               <label class="form-label" for="lastname">Nom de famille</label>
@@ -41,37 +59,40 @@
               <textarea class="form-control" id="description" value.bind="description"></textarea>
             </div>
             <div class="btn-group">
-              <button type="button" class="btn btn-primary" show.bind="canSaveData" click.delegate="saveData()">Modifier</button>
+              <a class="btn btn-primary" click.delegate="saveData()" href="#" show.bind="canSaveData">
+                <i class="fa fa-save fa-fw"></i>Modifier
+              </a>
             </div>
           </form>
-        </div>
-      </div>
-    </div>
-    <div if.bind="avatarMode">
-      <div class="row">
-        <div class="col-sm-1">&nbsp;</div>
-        <div class="col-sm-4">
+        </td>
+      </tr>
+      <tr if.bind="avatarMode"  style="text-align:center">
+        <td>&nbsp;&nbsp;</td>
+        <td style="text-align:center">
           <h2>Avatar</h2>
           <div if.bind="hasOldUrl">
             <img src.bind="oldUrl" height="128"></img>
-            <button type="button" show.bind="canRemove" class="btn btn-primary" click.delegate="remove()">Supprimer</button>
+            <a class="btn btn-danger"  click.delegate="remove()" href="#" show.bind="canRemove">
+              <i class="fa fa-trash-o fa-fw"></i>Supprimer
+            </a>
           </div>
           <form role="form">
             <div class="form-group">
+              <i class="fa fa-user fa-fw"></i>
               <input type="file" id="fileToUpload" accept="image/png, image/jpeg" change.delegate="fileChanged($event)"></input>
             </div>
           </form>
           <div if.bind="hasUrl">
             <img src.bind="url" height="128"></img>
-            <button type="button" show.bind="canSave" class="btn btn-primary" click.delegate="save()">Enregistrer</button>
+            <a class="btn btn-primary"  click.delegate="save()" href="#" show.bind="canSave">
+              <i class="fa fa-save fa-fw"></i>Enregistrer
+            </a>
           </div>
-        </div>
-      </div>
-    </div>
-    <div if.bind="passwordMode">
-      <div class="row">
-        <div class="col-sm-1">&nbsp;</div>
-        <div class="col-sm-4">
+        </td>
+      </tr>
+      <tr if.bind="passwordMode"  style="text-align:center">
+        <td>&nbsp;&nbsp;</td>
+        <td style="text-align:center">
           <h2>Mot de passe</h2>
           <form role="form">
             <div class="form-group">
@@ -83,12 +104,13 @@
               <input type="password" class="form-control" id="confirmpwd" value.bind="confirmPassword" placeholder="Confirmation mot de passe" />
             </div>
             <div class="btn-group">
-              <button type="button" class="btn btn-primary" show.bind="canChangePwd" click.delegate="changePwd">Changer mot de passe</button>
+              <a class="btn btn-primary"  click.delegate="changePwd()" href="#" show.bind="canChangePwd">
+                <i class="fa fa-save fa-fw"></i>Changer mot de passe
+              </a>
             </div>
           </form>
-        </div>
-        </row>
-      </div>
-    </div>
+        </td>
+      </tr>
+    </table>
   </div>
 </template>

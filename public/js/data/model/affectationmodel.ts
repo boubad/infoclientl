@@ -22,10 +22,6 @@ export class AffectationViewModel<T extends IAffectation, P extends IDepartement
         this._person_model = this.create_person();
         this._start = null;
         this._end = null;
-        this.choose_departement = true;
-        this.choose_annee = true;
-        this.choose_semestre = true;
-        this.choose_groupe = true;
     }
 
     public get persons(): P[] {
@@ -69,18 +65,6 @@ export class AffectationViewModel<T extends IAffectation, P extends IDepartement
     protected is_refresh(): boolean {
         return (this.semestreid !== null) && (this.groupeid !== null);
     }
-    protected post_change_departement(): Promise<any> {
-        let self = this;
-        return super.post_change_departement().then((r) => {
-            return self.fill_persons();
-        }).then((x) => {
-            self.modelItem.departementid = self.departementid;
-            self.modelItem.anneeid = self.anneeid;
-            self.modelItem.semestreid = self.semestreid;
-            self.modelItem.groupeid = self.groupeid;
-            return self.refreshAll();
-        });
-    }// post_change_departement
     protected post_change_groupe(): Promise<any> {
         let self = this;
         return super.post_change_groupe().then((r) => {
@@ -143,7 +127,7 @@ export class AffectationViewModel<T extends IAffectation, P extends IDepartement
         return (!isNaN(t1)) && (!isNaN(t2)) && (t1 <= t2);
     }
     public get canSave(): boolean {
-        return this.is_storeable();
+        return this.isEditable && this.is_storeable();
     }
     public set canSave(b: boolean) { }
     //
@@ -225,7 +209,7 @@ export class AffectationViewModel<T extends IAffectation, P extends IDepartement
         this._currentAffectations = s;
     }
     public get canRemove(): boolean {
-        return ((this.currentAffectations !== null) && (this.currentAffectations.length > 0));
+        return this.isEditable && ((this.currentAffectations !== null) && (this.currentAffectations.length > 0));
     }// canRemove
     public set canRemove(s: boolean) { }
     public remove(): any {

@@ -1,6 +1,5 @@
 <template>
   <div class="container" if.bind="is_connected">
-    <user-bar></user-bar>
     <table>
       <tbody>
         <tr>
@@ -109,7 +108,7 @@
                         ${evt.matiereSigle}
                       </td>
                       <td>
-                        ${evt.groupeEventName}
+                        <a route-href="route: grpevt; params.bind: { id: evt.groupeeventid }">${evt.groupeEventName}</a>
                       </td>
                       <td>
                         ${evt.description}

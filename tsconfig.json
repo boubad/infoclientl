@@ -23,6 +23,7 @@
         "./public/js/data/components/basedetailcomponent.ts",
         "./public/js/data/components/baselistcomponent.ts",
         "./public/js/data/components/commanddetail.ts",
+        "./public/js/data/components/intervalcomponent.ts",
         "./public/js/data/components/siglenamecomponent.ts",
         "./public/js/data/domain/administrator.ts",
         "./public/js/data/domain/adminperson.ts",

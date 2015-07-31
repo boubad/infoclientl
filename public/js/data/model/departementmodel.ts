@@ -11,9 +11,6 @@ export class DepartementModel extends SigleNameViewModel<Departement> {
     protected create_item(): Departement {
         return new Departement();
     }
-    public canActivate(params?: any, config?: any, instruction?: any): any {
-        return this.is_admin;
-    }// activate
 	protected get_all_ids(): Promise<string[]> {
 		if (this.is_super) {
 			return super.get_all_ids();

@@ -109,7 +109,7 @@ export class EtudEventDetailModel extends BaseDetailModel {
     public set is_event(s: boolean) { }
     //
     public get canSave(): boolean {
-        return this.currentItem.is_storeable();
+        return (this.currentItem.is_storeable() && this.canEdit);
     }
     public set canSave(s: boolean) { }
     public get cannotSave(): boolean {
@@ -135,6 +135,10 @@ export class EtudEventDetailModel extends BaseDetailModel {
         return this._canedit;
     }
     public set canEdit(s: boolean) { }
+    public get cannotEdit():boolean {
+      return (!this.canEdit);
+    }
+    public set cannotEdit(s:boolean){}
     //
     public get groupeEventName(): string {
         return (this._groupeevent !== null) ? this._groupeevent.name : null;

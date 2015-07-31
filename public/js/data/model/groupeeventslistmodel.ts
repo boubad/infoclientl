@@ -9,12 +9,6 @@ export class GroupeEventListModel extends RootConsultViewModel<GroupeEvent> {
     constructor(userinfo: InfoUserInfo) {
         super(userinfo);
         this.title = "Devoirs";
-        this.choose_departement = true;
-        this.choose_annee = true;
-        this.choose_unite = true;
-        this.choose_groupe = true;
-        this.choose_matiere = true;
-        this.choose_semestre = true;
     }// constructor
     protected is_refresh(): boolean {
         return (this.semestreid !== null) && (this.matiereid !== null) &&

@@ -17,7 +17,4 @@ export class AdministratorModel extends PersonViewModel<Administrator, Administr
         let p = new Administrator({ departementid: this.departementid });
         return p;
     }
-    public canActivate(params?: any, config?: any, instruction?: any): any {
-		return this.is_super;
-    }// activate
 }// class Administrators

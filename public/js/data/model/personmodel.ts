@@ -4,11 +4,6 @@ import {BaseEditViewModel} from './baseeditmodel';
 import {EMPTY_STRING} from '../utils/infoconstants';
 import {IPerson, IDepartementPerson, IDepBasePerson, IUIManager} from 'infodata';
 //
-interface MyEvent extends EventTarget {
-    target: { files: any, result: any };
-}
-//
-//
 export class PersonViewModel<T extends IDepartementPerson, V extends IDepBasePerson>
     extends BaseEditViewModel<T> {
     //
@@ -22,9 +17,7 @@ export class PersonViewModel<T extends IDepartementPerson, V extends IDepBasePer
     protected perform_activate(): Promise<any> {
         let self = this;
         return super.perform_activate().then((r) => {
-            if ((self.departement === null) && (self.departements.length > 0)) {
-                self.departement = self.departements[0];
-            }
+            self.choose_departement = true;
             return true;
         });
     }
@@ -34,11 +27,7 @@ export class PersonViewModel<T extends IDepartementPerson, V extends IDepBasePer
         return super.post_change_departement().then((r) => {
             self.modelItem.departementid = self.departementid;
             self.currentItem = this.create_item();
-            if (!self.is_in_activate) {
-                return self.refreshAll();
-            } else {
-                return true;
-            }
+            return self.refreshAll();
         });
     }
     public get isEditItem(): boolean {

@@ -1,6 +1,5 @@
 <template>
   <div class="container">
-    <user-bar></user-bar>
     <table>
       <tr>
         <td style="text-align:center">
@@ -30,41 +29,41 @@
             <div class="form-group">
               <label class="form-label">Sexe</label>
               <label class="radio-inline">
-                <input type="radio" name="optsexe" value.bind="sexe">MASCULIN</label>
+                <input type="radio" name="optsexe" value.bind="sexe" disabled.bind="isReadOnly">MASCULIN</label>
               <label class="radio-inline">
-                <input type="radio" name="optsexe" value.bind="sexe">FEMININ</label>
+                <input type="radio" name="optsexe" value.bind="sexe" disabled.bind="isReadOnly">FEMININ</label>
             </div>
             <div class="form-group">
               <label class="form-label" for="birthDate">Date de naissance</label>
-              <input class="form-control" type="date" id="birthDate" value.bind="birthDate"></input>
+              <input class="form-control" type="date" id="birthDate" value.bind="birthDate" disabled.bind="isReadOnly"></input>
             </div>
             <div class="form-group">
               <label class="form-label" for="dossier">Dossier</label>
-              <input class="form-control" type="text" id="dossier" value.bind="dossier" placeholder="Dossier" readonly.bind="isReadOnly"></input>
+              <input class="form-control" type="text" id="dossier" value.bind="dossier" placeholder="Dossier" disabled.bind="isReadOnly" readonly.bind="isReadOnly"></input>
             </div>
             <div class="form-group">
               <label class="form-label" for="etablissement">Etablissement</label>
-              <input class="form-control" type="text" id="etablissement" value.bind="etablissement" placeholder="Etablissement" readonly.bind="isReadOnly"></input>
+              <input class="form-control" type="text" id="etablissement" value.bind="etablissement" placeholder="Etablissement" disabled.bind="isReadOnly" readonly.bind="isReadOnly"></input>
             </div>
             <div class="form-group">
               <label class="form-label" for="ville">Ville</label>
-              <input class="form-control" type="text" id="ville" value.bind="ville" placeholder="Ville" readonly.bind="isReadOnly"></input>
+              <input class="form-control" type="text" id="ville" value.bind="ville" placeholder="Ville" disabled.bind="isReadOnly" readonly.bind="isReadOnly"></input>
             </div>
             <div class="form-group">
               <label class="form-label" for="seriebac">Série bac</label>
-              <input class="form-control" type="text" id="seriebac" value.bind="serieBac" placeholder="Série bac" readonly.bind="isReadOnly"></input>
+              <input class="form-control" type="text" id="seriebac" value.bind="serieBac" placeholder="Série bac" disabled.bind="isReadOnly" readonly.bind="isReadOnly"></input>
             </div>
             <div class="form-group">
               <label class="form-label" for="optionbac">Option bac</label>
-              <input class="form-control" type="text" id="optionbac" value.bind="optionBac" placeholder="Option bac" readonly.bind="isReadOnly"></input>
+              <input class="form-control" type="text" id="optionbac" value.bind="optionBac" placeholder="Option bac" disabled.bind="isReadOnly" readonly.bind="isReadOnly"></input>
             </div>
             <div class="form-group">
               <label class="form-label" for="mentionbac">Mention bac</label>
-              <input class="form-control" type="text" id="mentionbac" value.bind="mentionBac" placeholder="Mention bac" readonly.bind="isReadOnly"></input>
+              <input class="form-control" type="text" id="mentionbac" value.bind="mentionBac" placeholder="Mention bac" disabled.bind="isReadOnly" readonly.bind="isReadOnly"></input>
             </div>
             <div class="form-group">
               <label class="form-label" for="sup">Etudes supérieures</label>
-              <input class="form-control" type="text" id="sup" value.bind="etudesSuperieures" placeholder="Etudes supérieures" readonly.bind="isReadOnly"></input>
+              <input class="form-control" type="text" id="sup" value.bind="etudesSuperieures" placeholder="Etudes supérieures" disabled.bind="isReadOnly" readonly.bind="isReadOnly"></input>
             </div>
           </form>
         </td>

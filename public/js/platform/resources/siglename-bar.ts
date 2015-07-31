@@ -11,14 +11,14 @@ export class SiglenameBar {
     public bind(s: SigleNameViewModel<SigleNameItem>) {
         this._parent = s;
     }
+    protected get parent(): SigleNameViewModel<SigleNameItem> {
+        return (this._parent !== undefined) ? this._parent : null;
+    }
     //
     public get isReadOnly():boolean {
       return (this.parent !== null) ? this.parent.isReadOnly : true;
     }
-    //
-    protected get parent(): SigleNameViewModel<SigleNameItem> {
-        return (this._parent !== undefined) ? this._parent : null;
-    }
+    public set isReadOnly(s:boolean){}
     public get sigle(): string {
         return (this.parent !== null) ? this.parent.sigle : null;
     }

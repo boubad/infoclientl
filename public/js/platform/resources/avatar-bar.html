@@ -7,7 +7,7 @@
           <i class="fa fa-remove fa-fw"></i>Supprimer
         </a>
 			</td>
-			<td style="text-align:center">
+			<td style="text-align:center" if.bind="isEditable">
 				<i class="fa fa-user fa-fw"></i>
 				<input type="file" id="fileToUpload"  accept="image/png, image/jpeg" change.delegate="avatarFileChanged($event)"></input>
 			</td>

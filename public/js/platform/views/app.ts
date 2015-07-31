@@ -4,16 +4,20 @@ import {autoinject} from 'aurelia-framework';
 import * as aurouter from 'aurelia-router';
 import * as evtagg from 'aurelia-event-aggregator';
 import {IInfoMessage} from 'infodata';
+import {InfoMessage} from '../../data/utils/infomessage';
+import * as userinf from '../aureliainfouser';
 import {HOME_ROUTE, ADMIN_ROUTE, PROF_ROUTE, INFO_MESSAGE_CHANNEL, MESSAGE_LOGOUT, MESSAGE_NAVIGATE} from '../../data/utils/infoconstants';
 //
 @autoinject
 export class App {
     public router: aurouter.Router = null;
     public eventAggregator: evtagg.EventAggregator = null;
+    private _info:userinf.AureliaInfoUser = null;
     private _inMessage: boolean;
     //
-    constructor(evt: evtagg.EventAggregator) {
+    constructor(evt: evtagg.EventAggregator,userinfo:userinf.AureliaInfoUser) {
         this.eventAggregator = evt;
+        this._info = userinfo;
         this._inMessage = false;
     }
     //
@@ -75,5 +79,27 @@ export class App {
             this.router.navigateToRoute(xroute,{});
         }
         return Promise.resolve(true);
+    }
+    public get userInfo(): userinf.AureliaInfoUser {
+        return (this._info !== undefined) ? this._info : null;
+    }
+    public get is_connected(): boolean {
+        return (this.userInfo !== null) ? this.userInfo.is_connected : false;
+    }
+    public get fullname(): string {
+        return (this.userInfo !== null) ? this.userInfo.fullname : null;
+    }
+    public get url(): string {
+        return (this.userInfo !== null) ? this.userInfo.photoUrl : null;
+    }
+    public get has_url(): boolean {
+        return (this.url !== null);
+    }
+    public logout(): void {
+        if (this.userInfo !== null) {
+            this.userInfo.logout();
+            let msg = new InfoMessage({type:MESSAGE_LOGOUT,categ:MESSAGE_LOGOUT,value:MESSAGE_LOGOUT});
+            this.userInfo.publish_message(msg);
+        }
     }
 }

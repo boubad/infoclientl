@@ -1,6 +1,5 @@
 <template>
   <div class="container" if.bind="is_connected">
-    <user-bar></user-bar>
     <table>
       <tr>
         <td>
@@ -44,11 +43,11 @@
           <form role="form">
             <div class="form-group">
               <label class="form-label" for="eventDate">Date</label>
-              <input class="form-control" type="date" id="eventDate" value.bind="eventDate" min.bind="minDate" max.bind="maxDate" required></input>
+              <input class="form-control" type="date" id="eventDate" value.bind="eventDate" disabled.bind="cannotEdit" min.bind="minDate" max.bind="maxDate" required></input>
             </div>
             <div class="form-group" if.bind="is_event">
               <label class="form-label" for="etudevtgenre">Genre</label>
-              <select id="etudevtgenre" value.bind="genre">
+              <select id="etudevtgenre" value.bind="genre" disabled.bind="cannotEdit">
                 <option value='ABSENCE1'>ABSENCE 1</option>
                 <option value='ABSENCE2'>ABSENCE 2</option>
                 <option value='RETARD1'>RETARD 1</option>
@@ -58,11 +57,11 @@
             </div>
             <div class="form-group" if.bind="is_note">
               <label class="form-label" for="note">Note</label>
-              <input class="form-control" type="text" id="note" value.bind="note"></input>
+              <input class="form-control" type="text" id="note" value.bind="note" disabled.bind="cannotEdit"></input>
             </div>
             <div class="form-group">
               <label class="form-label" for="description">observations</label>
-              <textarea class="form-control" id="description" value.bind="observations"></textarea>
+              <textarea class="form-control" id="description" value.bind="observations" disabled.bind="cannotEdit"></textarea>
             </div>
             <div class="btn-group" show.bind="canSave">
               <a class="btn btn-primary"  click.delegate="save()" href="#">

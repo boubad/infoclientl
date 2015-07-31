@@ -24,9 +24,6 @@ export class EtudiantModel extends PersonViewModel<Etudiant, EtudiantPerson> {
 			});
         return p;
     }
-    public canActivate(params?: any, config?: any, instruction?: any): any {
-        return this.is_admin;
-    }// activate
     protected post_change_item(): Promise<any> {
         let self = this;
         return super.post_change_item().then((r) => {

@@ -6,6 +6,5 @@ import * as userinf from '../../aureliainfouser';
 export class Matieres extends MatiereModel {
     constructor(userinfo: userinf.AureliaInfoUser) {
         super(userinfo);
-        this.choose_annee = false;
     }
 }

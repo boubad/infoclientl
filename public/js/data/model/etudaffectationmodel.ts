@@ -36,7 +36,4 @@ export class EtudaffectationModel extends AffectationViewModel<EtudAffectation, 
         a.check_id();
         return a;
     }
-    public canActivate(params?: any, config?: any, instruction?: any): any {
-        return this.is_admin;
-    }// activate
 }// class EtudAffViewModel

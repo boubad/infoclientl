@@ -7,8 +7,6 @@ export class SemestreModel extends IntervalViewModel<Semestre> {
     constructor(userinfo: InfoUserInfo) {
         super(userinfo);
         this.title = 'Semestres';
-        this.choose_departement = true;
-        this.choose_annee = true;
     }// constructor
     protected perform_activate(): Promise<any> {
         let self = this;
@@ -25,6 +23,7 @@ export class SemestreModel extends IntervalViewModel<Semestre> {
         });
     }
     public post_change_annee(): Promise<any> {
+        this.modelItem.departementid = this.departementid;
         this.modelItem.anneeid = this.anneeid;
         this.currentItem = this.create_item();
         this.minDate = null;
@@ -75,11 +74,4 @@ export class SemestreModel extends IntervalViewModel<Semestre> {
         return (t1 >= t01) && (t1 <= t02) && (t2 >= t01) && (t2 <= t02) &&
             (t1 <= t2);
     }
-    public canActivate(params?: any, config?: any, instruction?: any): any {
-        return this.is_admin;
-    }// activate
-    public get choose_annee(): boolean {
-        return true;
-    }
-    public set choose_annee(s: boolean) { }
 }// class AnneeModel

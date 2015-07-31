@@ -34,12 +34,29 @@ export class ProfilModel extends InfoBaseView {
   public activate(params?: any, config?: any, instruction?: any): any {
     let self = this;
     return  super.activate(params,config,instruction).then((x)=>{
+      self.profilMode = true;
+      self.passwordMode = false;
+      self.avatarMode = false;
       self.clear_error();
       self.fileDesc.clear();
       self.retrieve_userData();
       return true;
       });
   }// activate
+  public get canProfil():boolean {
+    return (!this.profilMode);
+  }
+  public set canProfil(s:boolean){
+
+  }
+  public get canPassword():boolean {
+    return (!this.passwordMode);
+  }
+  public set canPassword(s:boolean){}
+  public get canAvatar():boolean {
+    return (!this.avatarMode);
+  }
+  public set canAvatar(s:boolean){}
   protected retrieve_userData(): any {
     let px = this.userInfo.person;
     this.fileDesc.clear();
