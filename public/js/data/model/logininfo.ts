@@ -36,6 +36,81 @@ export class LoginInfo extends InfoElement implements ILoginInfo {
         this._enseignant = null;
         this._etudiant = null;
     }// clear
+	public re_login(service: IDatabaseManager): Promise<any> {
+		if ((this.person === undefined) || (this.person === null)) {
+			return Promise.resolve(false);
+		}
+		let px = this.person;
+		let pPers = null;
+		if (px.is_prof) {
+			pPers = <IUserPerson>px;
+		} else if (px.is_admin) {
+			pPers = <IDepBasePerson>px;
+		} else if (px.is_etud) {
+			pPers = <IUserPerson> px;
+		} else {
+			pPers = px;
+		}
+		let self = this;
+		let emptyArray: string[] = [];
+		let isAdmin: boolean = false;
+		return Promise.resolve(true).then((xPers) => {
+			isAdmin = pPers.is_admin;
+			if (pPers.is_super) {
+				let model = new Departement();
+				return service.dm_get_items(model.start_key(), model.end_key());
+			} else {
+				return service.dm_find_items_array(pPers.departementids);
+			}
+        }).then((dd: IDepartement[]) => {
+			self._departements = dd;
+			let xa: string[] = (isAdmin) ? emptyArray : pPers.anneeids;
+			return service.dm_find_items_array(xa);
+        }).then((aa: IAnnee[]) => {
+			self._annees = aa;
+			let xa: string[] = (isAdmin) ? emptyArray : pPers.semestreids;
+			return service.dm_find_items_array(xa);
+        }).then((ss: ISemestre[]) => {
+			self._semestres = ss;
+			let xa: string[] = (isAdmin) ? emptyArray : pPers.uniteids;
+			return service.dm_find_items_array(xa);
+        }).then((uu: IUnite[]) => {
+			self._unites = uu;
+			let xa: string[] = (isAdmin) ? emptyArray : pPers.matiereids;
+			return service.dm_find_items_array(xa);
+        }).then((mm: IMatiere[]) => {
+			self._matieres = mm;
+			let xa: string[] = (isAdmin) ? emptyArray : pPers.groupeids;
+			return service.dm_find_items_array(xa);
+        }).then((gg: IGroupe[]) => {
+			self._groupes = gg;
+			let xa: string = null;
+			if ((pPers.administratorids !== undefined) && (pPers.administratorids !== null) &&
+				(pPers.administratorids.length > 0)) {
+				xa = pPers.administratorids[0];
+			}
+			return service.dm_find_item_by_id(xa);
+        }).then((ff: IAdministrator) => {
+			self._administrator = ff;
+			let xa: string = null;
+			if ((pPers.enseignantids !== undefined) && (pPers.enseignantids !== null) &&
+				(pPers.enseignantids.length > 0)) {
+				xa = pPers.enseignantids[0];
+			}
+			return service.dm_find_item_by_id(xa);
+        }).then((fx: IEnseignant) => {
+			self._enseignant = fx;
+			let xa: string = null;
+			if ((pPers.etudiantids !== undefined) && (pPers.etudiantids !== null) &&
+				(pPers.etudiantids.length > 0)) {
+				xa = pPers.etudiantids[0];
+			}
+			return service.dm_find_item_by_id(xa);
+        }).then((ee: IEtudiant) => {
+			self._etudiant = ee;
+            return true;
+        });
+	}// relogin
     public login(username: string, passw: string, service: IDatabaseManager): Promise<boolean> {
         let bRet: boolean = false;
         this.clear();

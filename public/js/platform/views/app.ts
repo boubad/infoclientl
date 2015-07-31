@@ -6,22 +6,22 @@ import * as evtagg from 'aurelia-event-aggregator';
 import {IInfoMessage} from 'infodata';
 import {InfoMessage} from '../../data/utils/infomessage';
 import * as userinf from '../aureliainfouser';
-import {HOME_ROUTE, ADMIN_ROUTE, PROF_ROUTE, INFO_MESSAGE_CHANNEL, MESSAGE_LOGOUT, MESSAGE_NAVIGATE} from '../../data/utils/infoconstants';
+import {HOME_ROUTE, ADMIN_ROUTE, PROF_ROUTE, INFO_MESSAGE_CHANNEL, SYNC_COMPLETED, SYNC_PAUSED, MESSAGE_LOGOUT, MESSAGE_NAVIGATE} from '../../data/utils/infoconstants';
 //
 @autoinject
 export class App {
     public router: aurouter.Router = null;
     public eventAggregator: evtagg.EventAggregator = null;
-    private _info:userinf.AureliaInfoUser = null;
+    private _info: userinf.AureliaInfoUser = null;
     private _inMessage: boolean;
     //
-    constructor(evt: evtagg.EventAggregator,userinfo:userinf.AureliaInfoUser) {
+    constructor(evt: evtagg.EventAggregator, userinfo: userinf.AureliaInfoUser) {
         this.eventAggregator = evt;
         this._info = userinfo;
         this._inMessage = false;
     }
     //
-    configureRouter(config, router:aurouter.Router) {
+    configureRouter(config, router: aurouter.Router) {
         config.title = 'InfoApp';
         config.map([
             { route: ['', 'welcome'], name: 'welcome', moduleId: './home', nav: true, title: 'Accueil' },
@@ -29,9 +29,9 @@ export class App {
             { route: 'prof-router', name: 'prof-router', moduleId: './prof-router', nav: true, title: 'Consultation' },
             { route: 'admin-router', name: 'admin-router', moduleId: './admin-router', nav: true, title: 'Admin' },
             { route: 'synchro', name: 'synchro', moduleId: './synchro', nav: true, title: 'Sync.' },
-            { route: 'etud/:id',name:'etud', moduleId: './prof/etudiantdetail', nav: false },
-            { route: 'grpevt/:id',name:'grpevt', moduleId: './prof/groupeeventdetail', nav: false },
-            { route: 'etudevt/:id',name:'etudevt', moduleId: './prof/etudeventdetail', nav: false }
+            { route: 'etud/:id', name: 'etud', moduleId: './prof/etudiantdetail', nav: false },
+            { route: 'grpevt/:id', name: 'grpevt', moduleId: './prof/groupeeventdetail', nav: false },
+            { route: 'etudevt/:id', name: 'etudevt', moduleId: './prof/etudeventdetail', nav: false }
         ]);
         this.router = router;
         this.perform_subscribe();
@@ -63,9 +63,18 @@ export class App {
             if ((s !== undefined) && (s !== null)) {
                 return this.perform_navigate(s);
             }
-        }
+        } else if ((message.type == SYNC_PAUSED) || (message.type == SYNC_COMPLETED)) {
+			return this.perform_sync();
+		}
         return Promise.resolve(true);
     }// message_received
+	protected perform_sync(): Promise<any> {
+		if (this.userInfo !== null) {
+			return this.userInfo.re_login();
+		} else {
+			return Promise.resolve(true);
+		}
+	}
     protected perform_logout(): Promise<any> {
         if ((this.router !== undefined) && (this.router !== null)) {
             this.router.navigate(HOME_ROUTE, {});
@@ -76,7 +85,7 @@ export class App {
         if ((this.router !== undefined) && (this.router !== null) &&
             (xroute !== undefined) && (xroute !== null)) {
             //this.router.navigate(xroute, {});
-            this.router.navigateToRoute(xroute,{});
+            this.router.navigateToRoute(xroute, {});
         }
         return Promise.resolve(true);
     }
@@ -98,7 +107,7 @@ export class App {
     public logout(): void {
         if (this.userInfo !== null) {
             this.userInfo.logout();
-            let msg = new InfoMessage({type:MESSAGE_LOGOUT,categ:MESSAGE_LOGOUT,value:MESSAGE_LOGOUT});
+            let msg = new InfoMessage({ type: MESSAGE_LOGOUT, categ: MESSAGE_LOGOUT, value: MESSAGE_LOGOUT });
             this.userInfo.publish_message(msg);
         }
     }

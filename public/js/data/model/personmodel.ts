@@ -13,6 +13,13 @@ export class PersonViewModel<T extends IDepartementPerson, V extends IDepBasePer
         super(userinfo);
         this._current_person = this.create_person();
     }
+	public canActivate(params, routeConfig, navigationInstruction): any {
+		let bRet = false;
+		if (super.canActivate(params, routeConfig, navigationInstruction)) {
+			bRet = (this.departements.length > 0);
+		}
+		return bRet;
+	}// canActivate
     //
     protected perform_activate(): Promise<any> {
         let self = this;
@@ -229,19 +236,19 @@ export class PersonViewModel<T extends IDepartementPerson, V extends IDepBasePer
             x.phone = s;
         }
     }
-    public save(): any {
+    public save(): Promise<any> {
         let pPers = this.currentPerson;
         if ((this.departementid === null) || (pPers === null)) {
-            return;
+             return Promise.resolve(false);
         }
         if (!pPers.is_storeable()) {
-            return;
+            return Promise.resolve(false);
         }
         let item = this.currentItem;
         if (item === null) {
             item = this.create_item();
             if (item === null) {
-                return;
+                return Promise.resolve(false);
             }
         }
         if (pPers.password === null) {

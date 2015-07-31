@@ -184,13 +184,13 @@ export class BaseEditViewModel<T extends IBaseItem> extends RootConsultViewModel
         return (!this.canSave);
     }
     //
-    public save(): any {
+    public save(): Promise<any> {
         let item = this.currentItem;
         if (item === null) {
-            return false;
+             return Promise.resolve(false);
         }
         if (!item.is_storeable()) {
-            return false;
+             return Promise.resolve(false);
         }
         var self = this;
         this.clear_error();
@@ -201,23 +201,25 @@ export class BaseEditViewModel<T extends IBaseItem> extends RootConsultViewModel
             return false;
         });
     }// save
-    public remove(): any {
+    public remove(): Promise<any> {
         let item = this.currentItem;
         if (item === null) {
-            return false;
+            return Promise.resolve(false);
         }
         if ((item.id === null) || (item.rev === null)) {
-            return false;
+             return Promise.resolve(false);
         }
         if (this.confirm('Voulez-vous vraiment supprimer ' + item.id + '?')) {
             let self = this;
             this.clear_error();
             return item.remove(this.dataService).then((r) => {
-                self.refreshAll();
+                return self.refreshAll();
             }, (err) => {
-                self.set_error(err);
+                return self.set_error(err);
             });
-        }
+        } else {
+			 return Promise.resolve(false);
+		}
     }// remove
     public get description(): string {
         return (this.currentItem !== null) ? this.currentItem.description : null;

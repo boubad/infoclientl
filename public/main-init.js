@@ -2,7 +2,7 @@
 //
 var origin = window.location.origin;
 var pathname = window.location.pathname;
-var baseUrl='/';
+var baseUrl = origin + pathname.toLowerCase().replace("index.html", "");
 require.config({
 	baseUrl: baseUrl,
 	paths: {
@@ -19,8 +19,8 @@ require.config({
 	},
 	shim: {
 		"bootstrap": {
-					 deps:["jquery"]
-			 },
+			deps: ["jquery"]
+		},
 		"pouchdb": {
 			exports: "PouchDB"
 		},

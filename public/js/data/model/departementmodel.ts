@@ -22,4 +22,22 @@ export class DepartementModel extends SigleNameViewModel<Departement> {
 		}
 		return Promise.resolve(oRet);
     }// get_all_ids
+	public save(): Promise<any> {
+		let self = this;
+		return super.save().then((x) => {
+			return self.userInfo.re_login();
+		}).catch((err) => {
+			self.set_error(err);
+			return false;
+		})
+	}
+	public remove(): Promise<any> {
+		let self = this;
+		return super.remove().then((x) => {
+			return self.userInfo.re_login();
+		}).catch((err) => {
+			self.set_error(err);
+			return false;
+		})
+	}
 }// class DepartementModel

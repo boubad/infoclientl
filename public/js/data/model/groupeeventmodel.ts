@@ -720,16 +720,16 @@ export class GroupeEventModel extends BaseEditViewModel<GroupeEvent> {
             return false;
         });
     }// saveNotes
-    public remove(): any {
+    public remove(): Promise<any> {
         let item = this.currentItem;
         if (item === null) {
-            return false;
+             return Promise.resolve(false);
         }
         if ((item.id === null) || (item.rev === null)) {
-            return false;
+             return Promise.resolve(false);
         }
         if (!this.confirm('Voulez-vous vraiment supprimer ' + item.id + '?')) {
-            return false;
+            return Promise.resolve(false);
         }
         let model = this.eventModel;
         model.groupeeventid = item.id;

@@ -28,4 +28,11 @@ export class DepSigleNameViewModel<T extends IDepartementSigleNameItem>
             return this.refreshAll();
         });
     }
+	public canActivate(params, routeConfig, navigationInstruction): any {
+		let bRet = false;
+		if (super.canActivate(params, routeConfig, navigationInstruction)) {
+			bRet = (this.departements.length > 0);
+		}
+		return bRet;
+	}// canActivate
 }// class BaseEditViewModel

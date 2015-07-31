@@ -30,13 +30,7 @@ export class RootElement extends InfoElement {
         super();
         let origin = window.location.origin;
         let pathname = window.location.pathname;
-        if (pathname.indexOf("infoapp.html") >= 0) {
-            this.baseUrl = origin + pathname.toLowerCase().replace("infoapp.html", "");
-        } else if (pathname.indexOf("index.html") >= 0) {
-            this.baseUrl = origin + pathname.toLowerCase().replace("index.html", "");
-        } else {
-            this.baseUrl = origin;
-        }
+		this.baseUrl = origin + pathname.toLowerCase().replace("index.html", "");
         if (!this.baseUrl.endsWith("/")) {
             this.baseUrl = this.baseUrl + "/";
         }

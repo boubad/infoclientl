@@ -203,6 +203,9 @@ export class UserInfo extends RootElement {
     public logout(): void {
         this.clear_data();
     }// logout
+	public re_login():Promise<any> {
+		return this.loginInfo.re_login(this.dataService);
+	}
     private post_login(): Promise<any> {
         if (this.loginInfo.departements.length > 0) {
             this.departement = this.loginInfo.departements[0];

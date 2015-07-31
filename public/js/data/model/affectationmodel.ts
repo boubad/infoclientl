@@ -212,15 +212,15 @@ export class AffectationViewModel<T extends IAffectation, P extends IDepartement
         return this.isEditable && ((this.currentAffectations !== null) && (this.currentAffectations.length > 0));
     }// canRemove
     public set canRemove(s: boolean) { }
-    public remove(): any {
+    public remove(): Promise<any> {
         if (this.currentAffectations === null) {
-            return false;
+            return Promise.resolve(false);
         }
         if (this.currentAffectations.length < 1) {
-            return false;
+            return Promise.resolve(false);
         }
         if (!this.confirm('Voulez-vous vraiment supprimer?')) {
-            return false;
+            return Promise.resolve(false);
         }
         this.clear_error();
         let pp: Promise<any>[] = [];
@@ -235,6 +235,7 @@ export class AffectationViewModel<T extends IAffectation, P extends IDepartement
             return self.refreshAll();
         }).catch((err) => {
             self.set_error(err);
+			return false;
         });
     }// remove
     protected compose_item(p: P): T {
@@ -255,13 +256,13 @@ export class AffectationViewModel<T extends IAffectation, P extends IDepartement
         }// persons
         return oRet;
     }// retrieve_add_items
-    public save(): any {
+    public save(): Promise<any> {
         if (!this.is_storeable()) {
-            return false;
+             return Promise.resolve(false);
         }
         let oItems = this.retrieve_add_items();
         if (oItems.length < 1) {
-            return false;
+             return Promise.resolve(false);
         }
         let self = this;
         this.clear_error();
@@ -275,6 +276,14 @@ export class AffectationViewModel<T extends IAffectation, P extends IDepartement
             return self.refreshAll();
         }).catch((err) => {
             self.set_error(err);
+			return false;
         });
     }// save
+	public canActivate(params, routeConfig, navigationInstruction): any {
+		let bRet = false;
+		if (super.canActivate(params, routeConfig, navigationInstruction)) {
+			bRet = (this.departements.length > 0) && this.is_admin;
+		}
+		return bRet;
+	}// canActivate
 }// class AffectationViewModel
