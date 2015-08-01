@@ -42,6 +42,6 @@ export class AdminRouter {
     }
     public canActivate(params?: any, config?: any, instruction?: any): any {
         return (this.userInfo !== undefined) && (this.userInfo !== null) &&
-            this.userInfo.is_connected;
+            this.userInfo.is_connected && (!this.userInfo.is_etud);
     }// activate
 }

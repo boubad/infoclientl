@@ -151,6 +151,7 @@ export class BaseEditViewModel<T extends IBaseItem> extends RootConsultViewModel
     public get canAdd(): boolean {
         return (!this.addMode) && this.isEditable;
     }
+	public set canAdd(s:boolean){}
     public addNew(): any {
         this.oldItem = this.currentItem;
         this.currentItem = this.create_item();

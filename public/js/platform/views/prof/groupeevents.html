@@ -31,20 +31,20 @@
         <td style="text-align:center">
           <ul class="pagination">
             <li show.bind="isNotEditMode">
-              <a class="btn btn-default" click.delegate="edit_mode()" href="#">
+              <a class="btn btn-primary" click.delegate="edit_mode()" href="#">
                 <i class="fa fa-pencil fa-fw"></i>Edition
               </a>
             </li>
             <li show.bind="isNotEvtMode">
-              <a href="#" click.delegate="evt_mode()">
+              <a class="btn btn-primary" href="#" click.delegate="evt_mode()">
                 <i class="fa fa-user-times fa-fw"></i>Evènements</a>
             </li>
             <li show.bind="isNotNoteMode">
-              <a href="#" click.delegate="note_mode()">
+              <a class="btn btn-primary" href="#" click.delegate="note_mode()">
                 <i class="fa fa-signal fa-fw"></i>Notes</a>
             </li>
             <li show.bind="noteMode">
-              <a href="#" click.delegate="saveNotes()">
+              <a class="btn btn-primary" href="#" click.delegate="saveNotes()">
                 <i class="fa fa-save fa-fw"></i>Enregistrer notes</a>
             </li>
           </ul>

@@ -40,4 +40,12 @@ export class DepartementModel extends SigleNameViewModel<Departement> {
 			return false;
 		})
 	}
+	public get canAdd(): boolean {
+        return (!this.addMode) && this.isEditable && this.is_super;
+    }
+	public set canAdd(s:boolean){}
+	public get canRemove(): boolean {
+        return this.isEditItem && this.isEditable && this.is_super;
+    }
+    public set canRemove(s: boolean) { }
 }// class DepartementModel

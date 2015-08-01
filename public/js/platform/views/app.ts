@@ -27,8 +27,8 @@ export class App {
             { route: ['', 'welcome'], name: 'welcome', moduleId: './home', nav: true, title: 'Accueil' },
             { route: 'profil', name: 'profil', moduleId: './profil', nav: true, title: 'Profil' },
             { route: 'prof-router', name: 'prof-router', moduleId: './prof-router', nav: true, title: 'Consultation' },
-            { route: 'admin-router', name: 'admin-router', moduleId: './admin-router', nav: true, title: 'Admin' },
-            { route: 'synchro', name: 'synchro', moduleId: './synchro', nav: true, title: 'Sync.' },
+            { route: 'admin-router', name: 'admin-router', moduleId: './admin-router', nav: true, title: 'Etablissement' },
+            { route: 'synchro', name: 'synchro', moduleId: './synchro', nav: true, title: 'Admin' },
             { route: 'etud/:id', name: 'etud', moduleId: './prof/etudiantdetail', nav: false },
             { route: 'grpevt/:id', name: 'grpevt', moduleId: './prof/groupeeventdetail', nav: false },
             { route: 'etudevt/:id', name: 'etudevt', moduleId: './prof/etudeventdetail', nav: false }
