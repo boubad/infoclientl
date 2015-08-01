@@ -142,7 +142,7 @@ export class BaseEditViewModel<T extends IBaseItem> extends RootConsultViewModel
     protected set oldItem(s: T) {
         this._old_item = (s !== undefined) ? s : null;
     }
-    protected get AddMode(): boolean {
+    protected get addMode(): boolean {
         return this._add_mode;
     }
     protected set addMode(b: boolean) {

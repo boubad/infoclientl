@@ -15,6 +15,16 @@ export class PersonBar {
     protected get parent(): PersonViewModel<DepartementPerson, DepartementBasePerson> {
         return (this._parent !== undefined) ? this._parent : null;
     }
+    //
+    public get canImport(): boolean {
+        return (this.parent !== null) ? this.parent.canImport : false;
+    }
+    public importFileChanged(event: any): any{
+        if (this.parent !== null){
+          this.parent.importFileChanged(event);
+        }
+      }
+    //
     public get isReadOnly():boolean{
       return (this.parent !== null) ? this.parent.isReadOnly : false;
     }

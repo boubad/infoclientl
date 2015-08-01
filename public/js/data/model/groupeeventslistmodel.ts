@@ -8,7 +8,7 @@ export class GroupeEventListModel extends RootConsultViewModel<GroupeEvent> {
     //
     constructor(userinfo: InfoUserInfo) {
         super(userinfo);
-        this.title = "Devoirs";
+        this.title = "Liste Devoirs";
     }// constructor
     protected is_refresh(): boolean {
         return (this.semestreid !== null) && (this.matiereid !== null) &&

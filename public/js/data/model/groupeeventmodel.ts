@@ -36,7 +36,7 @@ export class GroupeEventModel extends BaseEditViewModel<GroupeEvent> {
     //
     constructor(userinfo: InfoUserInfo) {
         super(userinfo);
-        this.title = "Devoirs";
+        this.title = "Edition Devoirs";
         this._profaffectations = [];
         this._current_affectation = null;
         this._zgenre = null;

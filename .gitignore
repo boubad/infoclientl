@@ -1,4 +1,5 @@
 # Logs
+dist
 node_modules
 public/**/*.js
 public/**/*.map

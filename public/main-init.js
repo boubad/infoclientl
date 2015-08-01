@@ -7,20 +7,14 @@ require.config({
 	baseUrl: baseUrl,
 	paths: {
 		aurelia: baseUrl + "javascripts/aurelia",
-		jquery: baseUrl + "javascripts/jquery/jquery-2.1.4.min",
-		bootstrap: baseUrl + "javascripts/bootstrap/js/bootstrap.min",
-		webcomponentsjs: baseUrl + "javascripts/webcomponentsjs",
+		webcomponentsjs: baseUrl + "javascripts/webcomponentsjs/webcomponentsjs.min",
 		js: baseUrl + "js",
-		/*views: baseUrl + 'js/platform/views',*/
 		resources: baseUrl + 'js/platform/resources',
 		bluebird: baseUrl + "javascripts/bluebird/bluebird",
 		pouchdb: baseUrl + "javascripts/pouchdb/pouchdb.min",
 		papaparse: baseUrl + "javascripts/papaparse/papaparse"
 	},
 	shim: {
-		"bootstrap": {
-			deps: ["jquery"]
-		},
 		"pouchdb": {
 			exports: "PouchDB"
 		},

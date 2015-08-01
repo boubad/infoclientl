@@ -2,24 +2,100 @@
 import {InfoUserInfo} from './infouserinfo';
 import {BaseEditViewModel} from './baseeditmodel';
 import {EMPTY_STRING} from '../utils/infoconstants';
+import {CSVImporter} from '../utils/csvimporter';
 import {IPerson, IDepartementPerson, IDepBasePerson, IUIManager} from 'infodata';
+//
+interface MyEvent extends EventTarget {
+    target: { files: any, result: any };
+}
 //
 export class PersonViewModel<T extends IDepartementPerson, V extends IDepBasePerson>
     extends BaseEditViewModel<T> {
     //
     private _current_person: V = null;
+    private _importer: CSVImporter;
     //
     constructor(userinfo: InfoUserInfo) {
         super(userinfo);
         this._current_person = this.create_person();
     }
-	public canActivate(params, routeConfig, navigationInstruction): any {
-		let bRet = false;
-		if (super.canActivate(params, routeConfig, navigationInstruction)) {
-			bRet = (this.departements.length > 0);
-		}
-		return bRet;
-	}// canActivate
+    public canActivate(params, routeConfig, navigationInstruction): any {
+        let bRet = false;
+        if (super.canActivate(params, routeConfig, navigationInstruction)) {
+            bRet = (this.departements.length > 0);
+        }
+        return bRet;
+    }// canActivate
+    public get canImport(): boolean {
+        return (this.departementid !== null);
+    }
+    public importFileChanged(event: MyEvent): any {
+        let self = this;
+        let files = event.target.files;
+        if ((files !== undefined) && (files !== null) && (files.length > 0)) {
+            let file = files[0];
+            if ((this._importer === undefined) || (this._importer === null)) {
+                this._importer = new CSVImporter(this.dataService.itemFactory);
+            }
+            let stype = this.currentPerson.type();
+            this._importer.transform_file(file, stype).then((dd: V[]) => {
+                self.import_persons(dd);
+            }).catch((err) => {
+                self.set_error(err);
+            });
+        }// files
+    }// fileChanged
+    protected import_persons(dd: V[]): Promise<boolean> {
+        let depid = this.departementid;
+        if ((dd === undefined) || (dd === null) || (depid === null)) {
+            return Promise.resolve(false);
+        }
+        let pp: V[] = [];
+        for (let x of dd) {
+            if ((x !== undefined) && (x !== null)) {
+                if ((x.username === undefined) || (x.username === null)) {
+                    x.username = this.create_username(x.lastname, x.firstname);
+                }
+                if (x.id === null) {
+                    x.id = x.create_id();
+                }
+                if ((x.departementids === undefined) || (x.departementids === null)) {
+                    x.departementids = [];
+                }
+                this.add_id_to_array(x.departementids, depid);
+                if (x.is_storeable()) {
+                    pp.push(x);
+                }
+            }
+        }// x
+        if (pp.length < 1) {
+            return Promise.resolve(false);
+        }
+        let service = this.dataService;
+        let self = this;
+        return service.dm_check_items(pp).then((zz: IPerson[]) => {
+            let ppp: T[] = [];
+            for (let z of zz) {
+                let p: T = self.create_item();
+                p.departementid = depid;
+                p.personid = z.id;
+                p.firstname = z.firstname;
+                p.lastname = z.lastname;
+                ppp.push(p);
+            }// z
+            if (ppp.length > 0) {
+                return service.dm_check_items(ppp);
+            } else {
+                return [];
+            }
+        }).then((w) => {
+            self.refreshAll();
+            return true;
+        }).catch((err) => {
+            self.set_error(err);
+            return false;
+        })
+    }// import_persons
     //
     protected perform_activate(): Promise<any> {
         let self = this;
@@ -239,7 +315,7 @@ export class PersonViewModel<T extends IDepartementPerson, V extends IDepBasePer
     public save(): Promise<any> {
         let pPers = this.currentPerson;
         if ((this.departementid === null) || (pPers === null)) {
-             return Promise.resolve(false);
+            return Promise.resolve(false);
         }
         if (!pPers.is_storeable()) {
             return Promise.resolve(false);

@@ -11,6 +11,11 @@
           <depart-bar></depart-bar>
         </td>
       </tr>
+      <tr if.bind="isEditable">
+        <td style="text-align:center">
+          <import-bar></import-bar>
+        </td>
+      </tr>
       <tr if.bind="canShowForm">
         <td style="vertical-align:top">
           <elements-bar></elements-bar>

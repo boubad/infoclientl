@@ -9,6 +9,7 @@ export class ComandDetailComponent<T extends IBaseItem> extends BaseComponent<Ba
     constructor() {
         super();
     }
+  
     public get isEditable(): boolean {
         return (this.parent !== null) ? this.parent.isEditable : false;
     }
