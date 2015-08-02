@@ -52,26 +52,6 @@ export class SemestreReportBase extends RootConsultViewModel<IDisplayEtudiant> {
     protected get_initial_events(): Promise<IEtudEvent[]> {
         return Promise.resolve([]);
     }
-    protected filter_events(input: IEtudEvent[]): IEtudEvent[] {
-        let oRet: IEtudEvent[] = [];
-        if ((input === undefined) || (input === null)) {
-            return oRet;
-        }
-        if (input.length < 1) {
-            return oRet;
-        }
-        if (!this.is_etud) {
-            oRet = input;
-        } else {
-            let id = this.personid;
-            for (let x of input) {
-                if (x.personid == id) {
-                    oRet.push(x);
-                }
-            }// x
-        }
-        return oRet;
-    }// filter_events
     public refreshAll(): Promise<any> {
         this.prepare_refresh();
         if (!this.is_refresh()) {
@@ -80,7 +60,7 @@ export class SemestreReportBase extends RootConsultViewModel<IDisplayEtudiant> {
         let nc = this.itemsPerPage;
         let self = this;
         return this.get_initial_events().then((pp: IEtudEvent[]) => {
-            let xx = self.filter_events(pp);
+            let xx = self.filter_etudevents(pp);
             return self.transform_data(xx);
         }).then((zz: IDisplayEtudiant[]) => {
             self._all_data = zz;

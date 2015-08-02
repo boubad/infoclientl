@@ -79,7 +79,8 @@ export class GroupeEventDetailModel extends BaseDetailModel {
       return self.retrieve_avatars(rx);
     }).then((ee: IEtudEvent[]) => {
       if ((ee !== undefined) && (ee !== null)) {
-        for (let x of ee) {
+        let xee = self.filter_etudevents(ee);
+        for (let x of xee) {
           if (x.genre.toLowerCase() == 'note') {
             self.add_to_array(self.notes, x);
           } else {

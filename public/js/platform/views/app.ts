@@ -6,7 +6,10 @@ import * as evtagg from 'aurelia-event-aggregator';
 import {IInfoMessage} from 'infodata';
 import {InfoMessage} from '../../data/utils/infomessage';
 import * as userinf from '../aureliainfouser';
-import {HOME_ROUTE, ADMIN_ROUTE, PROF_ROUTE, INFO_MESSAGE_CHANNEL, SYNC_COMPLETED, SYNC_PAUSED, MESSAGE_LOGOUT, MESSAGE_NAVIGATE} from '../../data/utils/infoconstants';
+import {HOME_ROUTE, ADMIN_ROUTE, PROF_ROUTE, INFO_MESSAGE_CHANNEL, SYNC_COMPLETED,
+SYNC_PAUSED, MESSAGE_LOGOUT, MESSAGE_NAVIGATE, MESSAGE_LOGIN} from '../../data/utils/infoconstants';
+//
+const ETUDDETAIL_ROUTE:string = 'etud';
 //
 @autoinject
 export class App {
@@ -29,7 +32,7 @@ export class App {
             { route: 'prof-router', name: 'prof-router', moduleId: './prof-router', nav: true, title: 'Consultation' },
             { route: 'admin-router', name: 'admin-router', moduleId: './admin-router', nav: true, title: 'Etablissement' },
             { route: 'synchro', name: 'synchro', moduleId: './synchro', nav: true, title: 'Admin' },
-            { route: 'etud/:id', name: 'etud', moduleId: './prof/etudiantdetail', nav: false },
+            { route: 'etud/:id', name: ETUDDETAIL_ROUTE, moduleId: './prof/etudiantdetail', nav: false },
             { route: 'grpevt/:id', name: 'grpevt', moduleId: './prof/groupeeventdetail', nav: false },
             { route: 'etudevt/:id', name: 'etudevt', moduleId: './prof/etudeventdetail', nav: false }
         ]);
@@ -56,7 +59,9 @@ export class App {
         }
     }// perform_subscribe
     protected message_received(message: IInfoMessage): Promise<any> {
-        if (message.type == MESSAGE_LOGOUT) {
+        if (message.type == MESSAGE_LOGIN) {
+            return this.perform_login();
+        } else if (message.type == MESSAGE_LOGOUT) {
             return this.perform_logout();
         } else if (message.type == MESSAGE_NAVIGATE) {
             let s = message.categ;
@@ -64,17 +69,27 @@ export class App {
                 return this.perform_navigate(s);
             }
         } else if ((message.type == SYNC_PAUSED) || (message.type == SYNC_COMPLETED)) {
-			return this.perform_sync();
-		}
+            return this.perform_sync();
+        }
         return Promise.resolve(true);
     }// message_received
-	protected perform_sync(): Promise<any> {
-		if (this.userInfo !== null) {
-			return this.userInfo.re_login();
-		} else {
-			return Promise.resolve(true);
-		}
-	}
+    protected perform_sync(): Promise<any> {
+        if (this.userInfo !== null) {
+            return this.userInfo.re_login();
+        } else {
+            return Promise.resolve(true);
+        }
+    }
+    protected perform_login(): Promise<any> {
+        let id = (this.userInfo !== null) ? this.userInfo.personid : null;
+        if (id === null) {
+            return Promise.resolve(false);
+        }
+        if ((this.router !== undefined) && (this.router !== null)) {
+            this.router.navigateToRoute(ETUDDETAIL_ROUTE, { id });
+        }
+        return Promise.resolve(true);
+    }
     protected perform_logout(): Promise<any> {
         if ((this.router !== undefined) && (this.router !== null)) {
             this.router.navigate(HOME_ROUTE, {});

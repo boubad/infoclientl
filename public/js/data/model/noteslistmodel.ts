@@ -50,7 +50,8 @@ export class NoteListModel extends RootConsultViewModel<IDisplayEtudiant> {
         let oRet: IDisplayEtudiant[] = [];
         if ((pp !== undefined) && (pp !== null)) {
             let grp: DisplayEtudiantsArray = new DisplayEtudiantsArray();
-            for (let p of pp) {
+            let ppx = this.filter_etudevents(pp);
+            for (let p of ppx) {
                 grp.add_event(p);
             }
             oRet = grp.get_etudiantdisplays();

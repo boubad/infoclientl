@@ -11,7 +11,7 @@ import {InfoMessage} from '../utils/infomessage';
 import {DEPARTEMENT_TYPE, ANNEE_TYPE, SEMESTRE_TYPE,
 UNITE_TYPE, MATIERE_TYPE, GROUPE_TYPE,
 MESSAGE_DOMAIN, INFO_MESSAGE, INFO_MESSAGE_CHANNEL,
-ERROR_MESSAGE, MESSAGE_LOGOUT, MESSAGE_NAVIGATE,
+ERROR_MESSAGE, MESSAGE_LOGOUT, MESSAGE_NAVIGATE,MESSAGE_LOGIN,
 MESSAGE_REFRESHALL, MESSAGE_REFRESH} from '../utils/infoconstants';
 //
 export class RootElement extends InfoElement {
@@ -173,6 +173,14 @@ export class RootElement extends InfoElement {
     }
     public publish_navigation_message(xroute: string): any {
         let p = new InfoMessage({ type: MESSAGE_NAVIGATE, categ: xroute, value: xroute });
+        this.publish_message(p);
+    }
+    public publish_login_message(): any {
+        let p = new InfoMessage({ type: MESSAGE_LOGIN, categ: MESSAGE_LOGIN, value:  MESSAGE_LOGIN });
+        this.publish_message(p);
+    }
+    public publish_logout_message(): any {
+        let p = new InfoMessage({ type: MESSAGE_LOGOUT, categ: MESSAGE_LOGOUT, value:  MESSAGE_LOGOUT });
         this.publish_message(p);
     }
     protected message_received(message: IInfoMessage): Promise<any> {

@@ -2,6 +2,7 @@
 //
 import {InfoRootElement} from './inforootelement';
 import {InfoUserInfo} from './infouserinfo';
+import {IEtudEvent} from 'infodata';
 //
 export class InfoBaseView extends InfoRootElement {
     //
@@ -35,4 +36,19 @@ export class InfoBaseView extends InfoRootElement {
     public deactivate(): any {
         this.perform_detach();
     }
+    protected filter_etudevents(init:IEtudEvent[]) : IEtudEvent[] {
+      let oRet:IEtudEvent[] = [];
+      if ((init === undefined) || (init === null)){
+        return oRet;
+      }
+      if (this.is_etud){
+        let id = this.personid;
+        for (let x of init){
+          if (x.personid == id){
+            oRet.push(x);
+          }
+        }// x
+      }
+      return oRet;
+    }//filter_etudevents
 }// class InfoUserInfo

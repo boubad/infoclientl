@@ -2,13 +2,13 @@
 //
 import {InfoUserInfo} from './infouserinfo';
 import {InfoBaseView} from './infobaseview';
-import {ADMIN_ROUTE, PROF_ROUTE} from '../utils/infoconstants';
+import {ADMIN_ROUTE, PROF_ROUTE, MESSAGE_LOGIN} from '../utils/infoconstants';
 //
 export class HomeModel extends InfoBaseView {
     //
     public username: string = null;
     public password: string = null;
-    public splashImage:string = null;
+    public splashImage: string = null;
     //
     constructor(userinfo: InfoUserInfo) {
         super(userinfo);
@@ -20,24 +20,24 @@ export class HomeModel extends InfoBaseView {
     public get cannotConnect(): boolean {
         return (!this.canConnect);
     }
-    public get loginImage():string {
-      return this.images_dir + "login.jpg";
+    public get loginImage(): string {
+        return this.images_dir + "login.jpg";
     }
-    public get hasSplashImage():boolean {
-      return ((this.splashImage !== undefined) && (this.splashImage !== null));
+    public get hasSplashImage(): boolean {
+        return ((this.splashImage !== undefined) && (this.splashImage !== null));
     }
-    private homeImage():string {
-      if (this.is_super){
-        return this.images_dir + "admin.jpg";
-      } else if (this.is_admin) {
-        return this.images_dir + "oper.jpg";
-      } else if (this.is_prof){
-        return this.images_dir + "home.jpg";
-      } else if (this.is_etud){
-        return this.images_dir + "etudiant.jpg";
-      } else {
-        return this.loginImage;
-      }
+    private homeImage(): string {
+        if (this.is_super) {
+            return this.images_dir + "admin.jpg";
+        } else if (this.is_admin) {
+            return this.images_dir + "oper.jpg";
+        } else if (this.is_prof) {
+            return this.images_dir + "home.jpg";
+        } else if (this.is_etud) {
+            return this.images_dir + "etudiant.jpg";
+        } else {
+            return this.loginImage;
+        }
     }
     public login(): Promise<any> {
         if (!this.canConnect) {
@@ -50,8 +50,10 @@ export class HomeModel extends InfoBaseView {
             self.password = null;
             let pPers = self.userInfo.person;
             if ((pPers !== null) && (pPers.id !== null)) {
-              self.splashImage = self.homeImage();
-                if (pPers.is_admin) {
+                self.splashImage = self.homeImage();
+                if (pPers.is_etud) {
+                    self.userInfo.publish_login_message();
+                } else if (pPers.is_admin) {
                     self.userInfo.publish_navigation_message(ADMIN_ROUTE);
                 } else {
                     self.userInfo.publish_navigation_message(PROF_ROUTE);
