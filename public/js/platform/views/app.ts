@@ -34,7 +34,8 @@ export class App {
             { route: 'synchro', name: 'synchro', moduleId: './synchro', nav: true, title: 'Admin' },
             { route: 'etud/:id', name: ETUDDETAIL_ROUTE, moduleId: './prof/etudiantdetail', nav: false },
             { route: 'grpevt/:id', name: 'grpevt', moduleId: './prof/groupeeventdetail', nav: false },
-            { route: 'etudevt/:id', name: 'etudevt', moduleId: './prof/etudeventdetail', nav: false }
+            { route: 'etudevt/:id', name: 'etudevt', moduleId: './prof/etudeventdetail', nav: false },
+            { route: 'etudnotes/:id', name: 'etudnotes', moduleId: './prof/etudiant-notes', nav: false }
         ]);
         this.router = router;
         this.perform_subscribe();

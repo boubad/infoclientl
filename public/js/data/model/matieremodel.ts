@@ -48,6 +48,16 @@ export class MatiereModel extends DepSigleNameViewModel<Matiere> {
             x.mat_module = s;
         }
     }
+    public get order(): string {
+        return (this.currentItem !== null) ? this.number_to_string(this.currentItem.order) : null;
+    }
+    public set order(s: string) {
+        let x = this.currentItem;
+        if (x !== null) {
+            let d = this.string_to_number(s);
+            x.order = ((d !== null) && (d > 0)) ? d : null;
+        }
+    }
     public get coefficient(): string {
         return (this.currentItem !== null) ? this.number_to_string(this.currentItem.coefficient) : null;
     }

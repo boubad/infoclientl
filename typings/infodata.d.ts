@@ -127,6 +127,16 @@ declare module "infodata" {
         retardString: string;
         miscString: string;
         sortCriteria: number;
+        matiereSigle:string;
+        uniteSigle:string;
+        description:string;
+        matiereCoefficient:number;
+        uniteCoefficient:number;
+        order:number;
+        //
+        _count?: number;
+        _sumcoefs?: number;
+        _sumdata?: number;
     }// interface IDisplayEtudiant
     export interface IBaseItem extends IElementDesc {
 
@@ -151,7 +161,7 @@ declare module "infodata" {
         departementid: string;
     }
     export interface IUnite extends IDepartementSigleNameItem {
-
+        coefficient?:number;
     }
     export interface IMatiere extends IDepartementSigleNameItem {
         uniteid: string;
@@ -159,6 +169,7 @@ declare module "infodata" {
         mat_module?: string;
         coefficient?: number;
         ecs?: number;
+        order?:number;
     } // interface IMatiere
     export interface IGroupe extends IDepartementSigleNameItem {
 
@@ -297,6 +308,9 @@ declare module "infodata" {
         note: number;
         groupeEventName?: string;
         coefficient?: number;
+        matiereCoefficient?:number;
+        uniteCoefficient?:number;
+        order?:number;
     }
     export interface IItemFactory {
         create: (oMap: any, stype?: string) => IBaseItem;

@@ -12,10 +12,16 @@ export class EtudEvent extends MatiereWorkItem
     private _coefficient: number;
     private _note: number;
     private _etudiantid: string;
+    private _matiereCoefficient: number;
+    private _uniteCoefficient: number;
+    private _order: number;
     //
     constructor(oMap?: any) {
         super(oMap);
         if ((oMap !== undefined) && (oMap !== null)) {
+            if (oMap.order !== undefined) {
+                this.order = oMap.order;
+            }
             if (oMap.groupeeventid !== undefined) {
                 this.groupeeventid = oMap.groupeeventid;
             }
@@ -33,42 +39,75 @@ export class EtudEvent extends MatiereWorkItem
             }
             if (oMap.etudiantid !== undefined) {
                 this.etudiantid = oMap.etudiantid;
+            }
+            if (oMap.matiereCoefficient !== undefined) {
+                this.matiereCoefficient = oMap.matiereCoefficient;
+            }
+            if (oMap.uniteCoefficient !== undefined) {
+                this.uniteCoefficient = oMap.uniteCoefficient;
             }
         } // oMap
     } // constructor
-	public get etudiantid(): string {
-		return (this._etudiantid !== undefined) ? this._etudiantid : null;
-	}
-	public set etudiantid(s: string) {
-		this._etudiantid = (s !== undefined) ? s : null;
-	}
-	public get coefficient(): number {
-		return (this._coefficient !== undefined) ? this._coefficient : null;
-	}
-	public set coefficient(s: number) {
-		this._coefficient = (s !== undefined) ? s : null;
-	}
-	public get etudaffectationid(): string {
-		return (this._etudaffectationid !== undefined) ? this._etudaffectationid : null;
-	}
-	public set etudaffectationid(s: string) {
-		this._etudaffectationid = (s !== undefined) ? s : null;
-	}
-	public get groupeEventName(): string {
-		return (this._groupeEventName !== undefined) ? this._groupeEventName : null;
-	}
-	public set groupeEventName(s: string) {
-		this._groupeEventName = (s !== undefined) ? s : null;
-	}
-	public get groupeeventid(): string {
-		return (this._groupeeventid !== undefined) ? this._groupeeventid : null;
-	}
-	public set groupeeventid(s: string) {
-		this._groupeeventid = (s !== undefined) ? s : null;
-	}
+    public get order(): number {
+        return ((this._order !== undefined) && (this._order !== null) &&
+            (this._order > 0)) ? this._order : 0;
+    }
+    public set oder(s: number) {
+        this._order = ((s !== undefined) && (s !== null) &&
+            (s > 0)) ? s : 0;
+    }
+    public get matiereCoefficient(): number {
+        return ((this._matiereCoefficient !== undefined) && (this._matiereCoefficient !== null) &&
+            (this._matiereCoefficient > 0)) ? this._matiereCoefficient : 1.0;
+    }
+    public set matiereCoefficient(s: number) {
+        this._matiereCoefficient = ((s !== undefined) && (s !== null) &&
+            (s > 0)) ? s : 1.0;
+    }
+    public get uniteCoefficient(): number {
+        return ((this._uniteCoefficient !== undefined) && (this._uniteCoefficient !== null) &&
+            (this._uniteCoefficient > 0)) ? this._uniteCoefficient : 1.0;
+    }
+    public set uniteCoefficient(s: number) {
+        this._uniteCoefficient = ((s !== undefined) && (s !== null) &&
+            (s > 0)) ? s : 1.0;
+    }
+    public get etudiantid(): string {
+        return (this._etudiantid !== undefined) ? this._etudiantid : null;
+    }
+    public set etudiantid(s: string) {
+        this._etudiantid = (s !== undefined) ? s : null;
+    }
+    public get coefficient(): number {
+        return (this._coefficient !== undefined) ? this._coefficient : null;
+    }
+    public set coefficient(s: number) {
+        this._coefficient = (s !== undefined) ? s : null;
+    }
+    public get etudaffectationid(): string {
+        return (this._etudaffectationid !== undefined) ? this._etudaffectationid : null;
+    }
+    public set etudaffectationid(s: string) {
+        this._etudaffectationid = (s !== undefined) ? s : null;
+    }
+    public get groupeEventName(): string {
+        return (this._groupeEventName !== undefined) ? this._groupeEventName : null;
+    }
+    public set groupeEventName(s: string) {
+        this._groupeEventName = (s !== undefined) ? s : null;
+    }
+    public get groupeeventid(): string {
+        return (this._groupeeventid !== undefined) ? this._groupeeventid : null;
+    }
+    public set groupeeventid(s: string) {
+        this._groupeeventid = (s !== undefined) ? s : null;
+    }
     public from_map(oMap: any): void {
         super.from_map(oMap);
         if ((oMap !== undefined) && (oMap !== null)) {
+            if (oMap.order !== undefined) {
+                this.order = oMap.order;
+            }
             if (oMap.groupeeventid !== undefined) {
                 this.groupeeventid = oMap.groupeeventid;
             }
@@ -86,6 +125,12 @@ export class EtudEvent extends MatiereWorkItem
             }
             if (oMap.etudiantid !== undefined) {
                 this.etudiantid = oMap.etudiantid;
+            }
+            if (oMap.matiereCoefficient !== undefined) {
+                this.matiereCoefficient = oMap.matiereCoefficient;
+            }
+            if (oMap.uniteCoefficient !== undefined) {
+                this.uniteCoefficient = oMap.uniteCoefficient;
             }
         } // oMap
     }
@@ -98,6 +143,9 @@ export class EtudEvent extends MatiereWorkItem
             oMap.etudaffectationid = this.etudaffectationid;
             oMap.coefficient = this.coefficient;
             oMap.etudiantid = this.etudiantid;
+            oMap.matiereCoefficient = this.matiereCoefficient;
+            oMap.uniteCoefficient = this.uniteCoefficient;
+            oMap.order = this.order;
         }
     } // toInsertMap
     public is_storeable(): boolean {

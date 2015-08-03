@@ -17,6 +17,9 @@ export class EtudDetailModel extends BaseDetailModel {
         super(userinfo);
         this.title = "Détails Etudiant";
     }
+    public get current_etudiantid():string {
+      return (this.currentPerson !== null) ? this.currentPerson.id : '';
+    }
     public activate(params?: any, config?: any, instruction?: any): any {
         let self = this;
         this.currentPerson = new EtudiantPerson();
