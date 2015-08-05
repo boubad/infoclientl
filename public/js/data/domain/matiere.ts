@@ -146,6 +146,8 @@ export class Matiere extends DepSigleNameItem implements IMatiere {
         if (!this.is_storeable()) {
             throw new Error('Item not storeable error (personid)');
         }
+		this.check_id();
+		let id = this.id;
         let self = this;
         let start = this.start_key();
         let end = this.end_key();
@@ -160,10 +162,13 @@ export class Matiere extends DepSigleNameItem implements IMatiere {
         }).then((mm: IMatiere[]) => {
             if ((mm !== undefined) && (mm !== null)) {
                 for (let x of mm) {
+					if (x.id !== id){
                     sum += x.coefficient;
+					}
                 }
             }
-            pUnite.coefficient = (sum > 0) ? sum : 1.0;
+			sum = sum + self.coefficient;
+			pUnite.coefficient = (sum > 0) ? sum : 1.0;
             return pUnite.save(service);
         }).then((x) => {
             return super.save(service);
