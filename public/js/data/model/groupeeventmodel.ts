@@ -59,7 +59,7 @@ export class GroupeEventModel extends BaseEditViewModel<GroupeEvent> {
     protected perform_activate(): Promise<any> {
         let self = this;
         return super.perform_activate().then((r) => {
-          self.choose_departement = true;
+			self.choose_departement = true;
             self.choose_unite = true;
             self.choose_matiere = true;
             self.choose_annee = true;
@@ -378,6 +378,19 @@ export class GroupeEventModel extends BaseEditViewModel<GroupeEvent> {
     protected set profAffectations(s: IProfAffectation[]) {
         this._profaffectations = ((s !== undefined) && (s !== null)) ? s : [];
     }
+	protected get_tp_affectation(grpid: string): Promise<IEtudAffectation[]> {
+		let model = this.etudAffectationModel;
+		model.semestreid = this.semestreid;
+		model.groupeid = grpid;
+        let self = this;
+        return this.dataService.dm_get_items(model.start_key(), model.end_key()).then((aa: IEtudAffectation[]) => {
+            let rr = ((aa !== undefined) && (aa !== null)) ? aa : [];
+            return self.retrieve_avatars(rr);
+        }).then((ff: IEtudAffectation[]) => {
+            return ff;
+        });
+
+	}// get_one_affectation
     protected fill_etudaffectations(): Promise<any> {
         for (let a of this.etudAffectations) {
             let x = a.url;
@@ -388,18 +401,36 @@ export class GroupeEventModel extends BaseEditViewModel<GroupeEvent> {
         }
         this.currentEtudAffectations = [];
         this.etudAffectations = [];
-        let model = this.etudAffectationModel;
-        if ((model.semestreid === null) || (model.groupeid === null)) {
+        if ((this.semestreid === null) || (this.groupe === null)) {
             return Promise.resolve(true);
         }
+		let oRet: IEtudAffectation[] = [];
         let self = this;
-        return this.dataService.dm_get_items(model.start_key(), model.end_key()).then((aa: IEtudAffectation[]) => {
-            let rr = ((aa !== undefined) && (aa !== null)) ? aa : [];
-            return self.retrieve_avatars(rr);
-        }).then((ff: IEtudAffectation[]) => {
-            this.etudAffectations = ff;
-            return true;
-        });
+		return this.groupe.get_tp_ids(this.dataService).then((ids) => {
+			let pp: Promise<IEtudAffectation[]>[] = [];
+			if ((ids !== undefined) && (ids !== null)) {
+				for (let id of ids) {
+					let p = self.get_tp_affectation(id);
+					pp.push(p);
+				}
+			}
+			return Promise.all(pp);
+		}).then((dd) => {
+			for (let xx of dd) {
+				for (let x of xx) {
+					oRet.push(x);
+				}
+			}// xx
+			if (oRet.length > 1) {
+				let a = oRet[0];
+				let pf = a.sort_func;
+				if ((pf !== undefined) && (pf !== null)) {
+					oRet.sort(pf);
+				}
+			}
+			self.etudAffectations = oRet;
+			return true;
+		});
     }// fill_etudaffectations
     protected fill_notes(): Promise<any> {
         this._notes = [];
@@ -729,10 +760,10 @@ export class GroupeEventModel extends BaseEditViewModel<GroupeEvent> {
     public remove(): Promise<any> {
         let item = this.currentItem;
         if (item === null) {
-             return Promise.resolve(false);
+			return Promise.resolve(false);
         }
         if ((item.id === null) || (item.rev === null)) {
-             return Promise.resolve(false);
+			return Promise.resolve(false);
         }
         if (!this.confirm('Voulez-vous vraiment supprimer ' + item.id + '?')) {
             return Promise.resolve(false);

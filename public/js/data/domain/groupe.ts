@@ -102,7 +102,28 @@ export class Groupe extends DepSigleNameItem implements IGroupe {
 		}
 		return bRet;
 	}// add_child_groupe
-    public remove(service: IDatabaseManager): Promise<any> {
+	public get_tp_ids(service: IDatabaseManager):Promise<string[]>{
+	 let oRet:string[] = [];
+	 if (this.genre == GROUPE_GENRE_TP){
+		 oRet.push(this.id);
+		 return Promise.resolve(oRet);
+		} else if (this.genre = GROUPE_GENRE_TD){
+			oRet = this.childrenids;
+			return Promise.resolve(oRet);
+		}
+		return service.dm_find_items_array(this.childrenids).then((dd:IGroupe[])=>{
+			if ((dd !== undefined) && (dd !== null)){
+				for (let td of dd){
+					let xi = td.childrenids;
+					for (let y of xi){
+						oRet.push(y);
+					}
+				}// dd
+			}// dd
+			return oRet;
+		});
+	}// get_tp_ids
+	public remove(service: IDatabaseManager): Promise<any> {
         if ((this.id === null) || (this.rev === null)) {
             throw new Error('Item not removeable error');
         }

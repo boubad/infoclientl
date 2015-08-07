@@ -177,6 +177,7 @@ declare module "infodata" {
     export interface IGroupe extends IDepartementSigleNameItem {
 		genre?:string;
 		childrenids?:string[];
+		get_tp_ids: (service: IDatabaseManager)=>Promise<string[]>;
     }
     export interface IIntervalItem extends IDepartementSigleNameItem {
         startDate: Date;
