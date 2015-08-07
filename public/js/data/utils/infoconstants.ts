@@ -124,3 +124,4 @@ export const NOTE_GENRE:string = 'note';
 export const GROUPE_GENRE_TP:string='TP';
 export const GROUPE_GENRE_TD:string='TD';
 export const GROUPE_GENRE_COURS:string='COURS';
+export const ETUDEVT_GENRE_ABSENCE:string='ABSENCE';

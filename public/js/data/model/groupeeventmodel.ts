@@ -5,6 +5,8 @@ import {BaseEditViewModel} from './baseeditmodel';
 import {GroupeEvent} from '../domain/groupeevent';
 import {EtudEvent} from '../domain/etudevent';
 import {EtudAffectation} from '../domain/etudaffectation';
+import {EventGenre} from '../utils/eventgenre';
+import {NOTE_GENRE,GROUPE_GENRE_TP,ETUDEVT_GENRE_ABSENCE} from '../utils/infoconstants';
 import {IProfAffectation, IEtudAffectation,
 IGroupeEvent, IEtudEvent, IUIManager, IBaseItem, IUserPerson} from 'infodata';
 //
@@ -14,10 +16,10 @@ export class GroupeEventModel extends BaseEditViewModel<GroupeEvent> {
     //
     private _profaffectations: IProfAffectation[];
     private _current_affectation: IProfAffectation;
-    private _zgenre: string;
     private _etud_affectations: IEtudAffectation[];
     private _current_etudaffectations: IEtudAffectation[];
     private _etudaffectation_model: IEtudAffectation;
+	private _allGenre:EventGenre;
     private _notes: IEtudEvent[];
     private _evts: IEtudEvent[];
     private _evt_model: IEtudEvent;
@@ -39,7 +41,6 @@ export class GroupeEventModel extends BaseEditViewModel<GroupeEvent> {
         this.title = "Edition Devoirs";
         this._profaffectations = [];
         this._current_affectation = null;
-        this._zgenre = null;
         this._etud_affectations = [];
         this._current_etudaffectations = null;
         this._etudaffectation_model = null;
@@ -55,7 +56,18 @@ export class GroupeEventModel extends BaseEditViewModel<GroupeEvent> {
         this.noteMode = false;
         this.editMode = true;
         this._bBusy = false;
+		this._allGenre = this.groupeEventTypes[0];
     }// constructor
+	public get allGenre():EventGenre {
+		return this._allGenre;
+	}
+	public set allGenre(s:EventGenre){
+		let ss = ((s !== undefined) && (s !== null)) ? s:this.groupeEventTypes[0]; 
+		this._allGenre = ss;
+		if (this.currentItem !== null){
+			this.currentItem.genre = ss.id;
+		} 
+	}
     protected perform_activate(): Promise<any> {
         let self = this;
         return super.perform_activate().then((r) => {
@@ -192,21 +204,6 @@ export class GroupeEventModel extends BaseEditViewModel<GroupeEvent> {
     public set currentEtudAffectations(s: IEtudAffectation[]) {
         this._current_etudaffectations = ((s !== undefined) && (s !== null)) ? s : [];
     }
-    public get allGenre(): string {
-        return (this._zgenre !== undefined) ? this._zgenre : null;
-    }
-    public set allGenre(s: string) {
-        this._zgenre = (s !== undefined) ? s : null;
-    }
-    public get genre(): string {
-        return (this.currentItem !== null) ? this.currentItem.genre : EMPTY_STRING;
-    }
-    public set genre(s: string) {
-        let x = this.currentItem;
-        if (x !== null) {
-            x.genre = s;
-        }
-    }
     public get name(): string {
         return (this.currentItem !== null) ? this.currentItem.name : EMPTY_STRING;
     }
@@ -274,12 +271,9 @@ export class GroupeEventModel extends BaseEditViewModel<GroupeEvent> {
         let self = this;
         return super.activate(params, config, instruction).then((r) => {
             if (self.etudEvtGenre === null) {
-                self.etudEvtGenre = "ABSENCE1";
+                self.etudEvtGenre = ETUDEVT_GENRE_ABSENCE;
             }
             let userinfo = self.userInfo;
-            if (self.allGenre === null) {
-                self.allGenre = 'TP';
-            }
             self.modelItem.departementid = userinfo.departementid;
             self.modelItem.anneeid = userinfo.anneeid;
             self.modelItem.semestreid = userinfo.semestreid;
@@ -310,7 +304,7 @@ export class GroupeEventModel extends BaseEditViewModel<GroupeEvent> {
             semestreid: this.semestreid,
             groupeid: this.groupeid,
             uniteid: this.uniteid,
-            genre: this.allGenre,
+            genre: (this.allGenre !== null) ? this.allGenre.id: GROUPE_GENRE_TP,
             personid: this.personid,
             departementid: this.departementid,
             uniteCoefficient: this.unite.coefficient,
@@ -318,18 +312,18 @@ export class GroupeEventModel extends BaseEditViewModel<GroupeEvent> {
             order: this.matiere.order,
             lastname: lastname,
             firstname: firstname,
-            departementSigle: (this.departement !== null) ? this.departement.sigle : null,
-            uniteSigle: (this.unite !== null) ? this.unite.sigle : null,
-            matiereSigle: (this.matiere !== null) ? this.matiere.sigle : null,
-            groupeSigle: (this.groupe !== null) ? this.groupe.sigle : null,
-            anneeSigle: (this.annee !== null) ? this.annee.sigle : null,
-            semestreSigle: (this.semestre !== null) ? this.semestre.sigle : null,
+            departementSigle: (this.departement !== null) ? this.departement.text : null,
+            uniteSigle: (this.unite !== null) ? this.unite.text : null,
+            matiereSigle: (this.matiere !== null) ? this.matiere.text : null,
+            groupeSigle: (this.groupe !== null) ? this.groupe.text : null,
+            anneeSigle: (this.annee !== null) ? this.annee.text : null,
+            semestreSigle: (this.semestre !== null) ? this.semestre.text : null,
         });
         return p;
     }// create_item
     protected is_storeable(): boolean {
         if (this.currentItem !== null) {
-            this.currentItem.genre = (this.allGenre !== null) ? this.allGenre : 'TP';
+            this.currentItem.genre = (this.allGenre !== null) ? this.allGenre.id : GROUPE_GENRE_TP;
         }
         return super.is_storeable();
     }
@@ -340,11 +334,7 @@ export class GroupeEventModel extends BaseEditViewModel<GroupeEvent> {
         this.update_profaffectation();
         let self = this;
         return this.fill_etudaffectations().then((r) => {
-            if (!self.is_in_activate) {
                 return self.refreshAll();
-            } else {
-                return true;
-            }
         });
     }
     protected post_change_semestre(): Promise<any> {
@@ -353,21 +343,13 @@ export class GroupeEventModel extends BaseEditViewModel<GroupeEvent> {
         this.update_profaffectation();
         let self = this;
         return this.fill_etudaffectations().then((r) => {
-            if (!self.is_in_activate) {
                 return self.refreshAll();
-            } else {
-                return true;
-            };
         });
     }
     protected post_change_matiere(): Promise<any> {
         this.modelItem.matiereid = this.matiereid;
         this.update_profaffectation();
-        if (!this.is_in_activate) {
             return this.refreshAll();
-        } else {
-            return Promise.resolve(true);
-        }
     }
     protected get profAffectations(): IProfAffectation[] {
         if (this._profaffectations === null) {
@@ -451,7 +433,7 @@ export class GroupeEventModel extends BaseEditViewModel<GroupeEvent> {
                 let oRet1: IEtudEvent[] = [];
                 let oRet2: IEtudEvent[] = [];
                 for (let x of ee) {
-                    if (x.genre.toLowerCase() == 'note') {
+                    if (x.genre == NOTE_GENRE) {
                         self.add_to_array(oRet1, x);
                     } else {
                         self.add_to_array(oRet2, x);
@@ -493,12 +475,12 @@ export class GroupeEventModel extends BaseEditViewModel<GroupeEvent> {
                         n.eventDate = item.eventDate;
                     }
                     n.groupeEventName = this.name;
-                    n.departementSigle = (this.departement !== null) ? this.departement.sigle : null;
-                    n.uniteSigle = (this.unite !== null) ? this.unite.sigle : null;
-                    n.matiereSigle = (this.matiere !== null) ? this.matiere.sigle : null;
-                    n.groupeSigle = (this.groupe !== null) ? this.groupe.sigle : null;
-                    n.anneeSigle = (this.annee !== null) ? this.annee.sigle : null;
-                    n.semestreSigle = (this.semestre !== null) ? this.semestre.sigle : null;
+                    n.departementSigle = (this.departement !== null) ? this.departement.text : null;
+                    n.uniteSigle = (this.unite !== null) ? this.unite.text : null;
+                    n.matiereSigle = (this.matiere !== null) ? this.matiere.text : null;
+                    n.groupeSigle = (this.groupe !== null) ? this.groupe.text : null;
+                    n.anneeSigle = (this.annee !== null) ? this.annee.text : null;
+                    n.semestreSigle = (this.semestre !== null) ? this.semestre.text : null;
                     this.add_to_array(oRet, n);
                 }
             }// n
@@ -507,7 +489,7 @@ export class GroupeEventModel extends BaseEditViewModel<GroupeEvent> {
                     coefficient: this.currentItem.coefficient,
                     etudiantid: a.etudiantid,
                     groupeeventid: id,
-                    genre: 'note',
+                    genre: NOTE_GENRE,
                     etudaffectationid: a.id,
                     groupeid: a.groupeid,
                     semestreid: a.semestreid,
@@ -524,12 +506,12 @@ export class GroupeEventModel extends BaseEditViewModel<GroupeEvent> {
                     firstname: a.firstname,
                     lastname: a.lastname,
                     groupeEventName: this.name,
-                    departementSigle: (this.departement !== null) ? this.departement.sigle : null,
-                    uniteSigle: (this.unite !== null) ? this.unite.sigle : null,
-                    matiereSigle: (this.matiere !== null) ? this.matiere.sigle : null,
-                    groupeSigle: (this.groupe !== null) ? this.groupe.sigle : null,
-                    anneeSigle: (this.annee !== null) ? this.annee.sigle : null,
-                    semestreSigle: (this.semestre !== null) ? this.semestre.sigle : null,
+                    departementSigle: (this.departement !== null) ? this.departement.text : null,
+                    uniteSigle: (this.unite !== null) ? this.unite.text : null,
+                    matiereSigle: (this.matiere !== null) ? this.matiere.text : null,
+                    groupeSigle: (this.groupe !== null) ? this.groupe.text : null,
+                    anneeSigle: (this.annee !== null) ? this.annee.text : null,
+                    semestreSigle: (this.semestre !== null) ? this.semestre.text : null,
                 });
                 x.url = a.url;
                 x.check_id();
@@ -541,6 +523,16 @@ export class GroupeEventModel extends BaseEditViewModel<GroupeEvent> {
     protected post_change_item(): Promise<any> {
         let self = this;
         return super.post_change_item().then((r) => {
+			let id = self.currentItem.genre;
+			let aa = self.groupeEventTypes;
+			let p:EventGenre = null;
+			for (let x of aa){
+				if (x.id == id){
+					p = x;
+					break;
+				}
+			}
+			self.allGenre = p;
             return self.fill_notes();
         });
     }// post_change_item
@@ -702,12 +694,12 @@ export class GroupeEventModel extends BaseEditViewModel<GroupeEvent> {
                     firstname: a.firstname,
                     lastname: a.lastname,
                     groupeEventName: this.name,
-                    departementSigle: (this.departement !== null) ? this.departement.sigle : null,
-                    uniteSigle: (this.unite !== null) ? this.unite.sigle : null,
-                    matiereSigle: (this.matiere !== null) ? this.matiere.sigle : null,
-                    groupeSigle: (this.groupe !== null) ? this.groupe.sigle : null,
-                    anneeSigle: (this.annee !== null) ? this.annee.sigle : null,
-                    semestreSigle: (this.semestre !== null) ? this.semestre.sigle : null
+                    departementSigle: (this.departement !== null) ? this.departement.text : null,
+                    uniteSigle: (this.unite !== null) ? this.unite.text : null,
+                    matiereSigle: (this.matiere !== null) ? this.matiere.text : null,
+                    groupeSigle: (this.groupe !== null) ? this.groupe.text : null,
+                    anneeSigle: (this.annee !== null) ? this.annee.text : null,
+                    semestreSigle: (this.semestre !== null) ? this.semestre.text : null
                 });
                 x.check_id();
                 oRet.push(x);
@@ -781,6 +773,16 @@ export class GroupeEventModel extends BaseEditViewModel<GroupeEvent> {
         });
     }// remove
     public canActivate(params?: any, config?: any, instruction?: any): any {
-        return this.is_prof;
+		let bRet:boolean = false;
+		let userinfo = this.userInfo;
+		if (userinfo !== null){
+			let pPers = userinfo.person;
+			bRet = (pPers !== null) && pPers.is_prof;
+			if (bRet){
+				let p:IUserPerson = <IUserPerson>pPers;
+				bRet = (p.affectationids.length > 0);
+			}
+		}
+		return bRet;		
     }// activate
 }// class Profgroupeevents

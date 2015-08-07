@@ -1,7 +1,8 @@
 // eventgenre.ts
 //
 import {MenuDesc} from './menudesc';
-import {GROUPE_GENRE_COURS, GROUPE_GENRE_TD,GROUPE_GENRE_TP} from './infoconstants';
+import {GROUPE_GENRE_COURS, 
+	ETUDEVT_GENRE_ABSENCE,GROUPE_GENRE_TD,GROUPE_GENRE_TP} from './infoconstants';
 //
 export class EventGenre extends MenuDesc {
     //
@@ -41,7 +42,7 @@ export class EventGenre extends MenuDesc {
  } // class EventGenre
 //
 export const ETUDEVENT_TYPES:EventGenre[] = [
-	new EventGenre({_id:'ABSCENCE',_text:'Absence',weight:1000}),
+	new EventGenre({_id:ETUDEVT_GENRE_ABSENCE,_text:'Absence',weight:1000}),
 	new EventGenre({_id:'RETARD1',_text:'Léger retard',weight:100}),
 	new EventGenre({_id:'RETARD2',_text:'Gros retard',weight:100}),
 	new EventGenre({_id:'DISCIPLINE',_text:'Discipline',weight:10000}),

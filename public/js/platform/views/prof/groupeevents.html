@@ -14,17 +14,11 @@
       <tr>
         <td style="text-align:center">
           <div class="form-group">
-            <label class="form-label" for="allGenre">Genre</label>
-            <select id="allGenre" value.bind="allGenre">
-              <option value='TP'>Travaux Pratiques</option>
-              <option value='CONT'>Contrôle</option>
-              <option value='EXAM'>Examen</option>
-              <option value='FAC'>Devoir Facultatif</option>
-              <option value='TD'>Travaux Dirigés</option>
-              <option value='COURS'>Cours Magistral</option>
-              <option value='AUTRE'>Autre Genre</option>
-            </select>
-          </div>
+          <label class="form-label" for="allGenres">Genre</label>
+          <select id="allGenres" value.bind="allGenre">
+            <option repeat.for="xelem of groupeEventTypes" model.bind="xelem">${xelem.text}</option>
+          </select>
+        </div>
         </td>
       </tr>
       <tr if.bind="isEditItem">
