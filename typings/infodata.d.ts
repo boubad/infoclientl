@@ -81,16 +81,19 @@ declare module "infodata" {
         dm_get_semestre_matiere_groupe_grpevts_ids: (semestreid: string, matiereid: string, groupeid: string) => Promise<string[]>;
         dm_destroy: () => Promise<any>;
     }
-    //
-    export interface IElementDesc {
-        id: string;
-        rev: string;
+	//
+	export interface IMenuDesc {
+		id: string;
         description?: string;
-        avatarid?: string;
         text: string;
         url: string;
         has_url?: boolean;
         selected?: boolean;
+	}
+    //
+    export interface IElementDesc extends IMenuDesc {
+        rev?: string;
+        avatarid?: string;
         deleted: boolean;
         //
         base_prefix: () => string;
@@ -172,7 +175,8 @@ declare module "infodata" {
         order?:number;
     } // interface IMatiere
     export interface IGroupe extends IDepartementSigleNameItem {
-
+		genre?:string;
+		childrenids?:string[];
     }
     export interface IIntervalItem extends IDepartementSigleNameItem {
         startDate: Date;

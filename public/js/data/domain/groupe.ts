@@ -5,15 +5,101 @@ import {IBaseItem, IDatabaseManager, IProfAffectation, IEtudAffectation, IGroupe
 import {GROUPE_TYPE, GROUPE_PREFIX, PROFAFFECTATION_BY_GROUPE, ETUDAFFECTATION_BY_GROUPE} from '../utils/infoconstants';
 //
 export class Groupe extends DepSigleNameItem implements IGroupe {
-    constructor(oMap?: any) {
+    //
+	private _genre: string;
+	private _childrenids: string[];
+	//
+	constructor(oMap?: any) {
         super(oMap);
+		if ((oMap !== undefined) && (oMap !== null)) {
+			if (oMap.genre !== undefined) {
+				this._genre = oMap.genre;
+			}
+			if (oMap.childrenids !== undefined) {
+				this._childrenids = oMap.childrenids;
+			}
+		}// oMap
     } // constructor
+	public from_map(oMap: any): void {
+        super.from_map(oMap);
+        if ((oMap !== undefined) && (oMap !== null)) {
+            if (oMap.genre !== undefined) {
+				this._genre = oMap.genre;
+			}
+			if (oMap.childrenids !== undefined) {
+				this._childrenids = oMap.childrenids;
+			}
+        }// oMap
+    }
+	public to_map(oMap: any): void {
+        super.to_map(oMap);
+        if (this.genre !== null) {
+            oMap.genre = this.genre;
+        }
+		if (this.childrenids.length > 0) {
+			oMap.chlidrenids = this.childrenids;
+		}
+    }
+	public get genre(): string {
+		return (this._genre !== undefined) ? this._genre : null;
+	}
+	public set genre(s: string) {
+		this._genre = ((s !== undefined) && (s !== null) && (s.trim().length > 0)) ?
+			s.trim().toUpperCase() : 'TP';
+	}
+	public get childrenids(): string[] {
+		return ((this._childrenids !== undefined) && (this._childrenids !== null)) ?
+			this._childrenids : [];
+	}
+	public set childrenids(s: string[]) {
+		this._childrenids = this.check_array(s);
+	}
     public type(): string {
         return GROUPE_TYPE;
     }
     public base_prefix(): string {
         return GROUPE_PREFIX;
     }
+	public add_child_groupe(pg: IGroupe): boolean {
+		let bRet: boolean = false;
+		if ((pg === undefined) || (pg === null)) {
+			return bRet;
+		}
+		pg.check_id();
+		let curid = pg.id;
+		if (curid == null) {
+			return bRet;
+		}
+		this.check_id();
+		if ((this.id == pg.id) || (this.genre == pg.genre) ||
+			(this.departementid != pg.departementid)) {
+			return false;
+		}
+		let sg1 = this.genre;
+		let sg2 = pg.genre;
+		if (sg1 == 'TP') {
+			return bRet;
+		} else if ((sg1 == 'TD') && (sg2 != 'TP')) {
+			return bRet;
+		} else if ((sg1 == 'COURS') && (sg2 !== 'TD')) {
+			return bRet;
+		}
+		if ((this._childrenids === undefined) || (this._childrenids === null)) {
+			this._childrenids = [];
+		}
+		let bFound = false;
+		for (let x of this._childrenids) {
+			if (x == curid) {
+				bFound = true;
+				break;
+			}
+		}
+		if (!bFound) {
+			this._childrenids.push(curid);
+			bRet = true;
+		}
+		return bRet;
+	}// add_child_groupe
     public remove(service: IDatabaseManager): Promise<any> {
         if ((this.id === null) || (this.rev === null)) {
             throw new Error('Item not removeable error');
@@ -34,7 +120,7 @@ export class Groupe extends DepSigleNameItem implements IGroupe {
                     self.add_id_to_array(docids, x);
                 }
             }
-            return self.remove_with_children(service,docids,id);
+            return self.remove_with_children(service, docids, id);
         });
     }// remove
 } // class Groupe

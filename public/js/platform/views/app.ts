@@ -7,9 +7,8 @@ import {IInfoMessage} from 'infodata';
 import {InfoMessage} from '../../data/utils/infomessage';
 import * as userinf from '../aureliainfouser';
 import {HOME_ROUTE, ADMIN_ROUTE, PROF_ROUTE, INFO_MESSAGE_CHANNEL, SYNC_COMPLETED,
-SYNC_PAUSED, MESSAGE_LOGOUT, MESSAGE_NAVIGATE, MESSAGE_LOGIN} from '../../data/utils/infoconstants';
-//
-const ETUDDETAIL_ROUTE:string = 'etud';
+SYNC_PAUSED, MESSAGE_LOGOUT, MESSAGE_NAVIGATE, MESSAGE_LOGIN,
+ETUDDETAIL_ROUTE,GRPEVTDETAIL_ROUTE,ETUDEVTDETAIL_ROUTE,ETUDNOTES_ROUTE} from '../../data/utils/infoconstants';
 //
 @autoinject
 export class App {
@@ -33,9 +32,9 @@ export class App {
             { route: 'admin-router', name: 'admin-router', moduleId: './admin-router', nav: true, title: 'Etablissement' },
             { route: 'synchro', name: 'synchro', moduleId: './synchro', nav: true, title: 'Admin' },
             { route: 'etud/:id', name: ETUDDETAIL_ROUTE, moduleId: './prof/etudiantdetail', nav: false },
-            { route: 'grpevt/:id', name: 'grpevt', moduleId: './prof/groupeeventdetail', nav: false },
-            { route: 'etudevt/:id', name: 'etudevt', moduleId: './prof/etudeventdetail', nav: false },
-            { route: 'etudnotes/:id', name: 'etudnotes', moduleId: './prof/etudiant-notes', nav: false }
+            { route: 'grpevt/:id', name:GRPEVTDETAIL_ROUTE, moduleId: './prof/groupeeventdetail', nav: false },
+            { route: 'etudevt/:id', name: ETUDEVTDETAIL_ROUTE, moduleId: './prof/etudeventdetail', nav: false },
+            { route: 'etudnotes/:id', name: ETUDNOTES_ROUTE, moduleId: './prof/etudiant-notes', nav: false }
         ]);
         this.router = router;
         this.perform_subscribe();

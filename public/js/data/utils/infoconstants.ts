@@ -32,6 +32,10 @@ export const MESSAGE_REFRESHALL:string = 'refreshall';
 export const HOME_ROUTE:string = 'welcome';
 export const ADMIN_ROUTE:string = 'admin-router';
 export const PROF_ROUTE:string = 'prof-router';
+export const ETUDDETAIL_ROUTE:string='etud';
+export const GRPEVTDETAIL_ROUTE:string='grpevt';
+export const ETUDEVTDETAIL_ROUTE:string='etudevt';
+export const ETUDNOTES_ROUTE:string='etudnotes';
 //
 export const PERSON_KEY: string = 'person';
 export const ETUDIANTPERSON_KEY: string = 'etudperson';
