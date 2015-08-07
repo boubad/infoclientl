@@ -1,6 +1,7 @@
 // eventgenre.ts
 //
 import {MenuDesc} from './menudesc';
+import {GROUPE_GENRE_COURS, GROUPE_GENRE_TD,GROUPE_GENRE_TP} from './infoconstants';
 //
 export class EventGenre extends MenuDesc {
     //
@@ -47,17 +48,17 @@ export const ETUDEVENT_TYPES:EventGenre[] = [
 	new EventGenre({_id:'AUTRE',_text:'Autre',weight:5})
 ];
 export const GROUPEEVENT_TYPES:EventGenre[] = [
-	new EventGenre({_id:'TP',_text:'Travaux Pratiques',weight:1000}),
-	new EventGenre({_id:'TD',_text:'Travaux Dirigés',weight:100}),
-	new EventGenre({_id:'COURS',_text:'Cours Magistral',weight:100}),
+	new EventGenre({_id:GROUPE_GENRE_TP,_text:'Travaux Pratiques',weight:1000}),
+	new EventGenre({_id:GROUPE_GENRE_TD,_text:'Travaux Dirigés',weight:100}),
+	new EventGenre({_id:GROUPE_GENRE_COURS,_text:'Cours Magistral',weight:100}),
 	new EventGenre({_id:'CONTROLE',_text:'Contrôle',weight:10000}),
 	new EventGenre({_id:'EXAM',_text:'Examen',weight:5}),
 	new EventGenre({_id:'FACULT',_text:'Exercice facultatif',weight:5}),
 	new EventGenre({_id:'AUTRE',_text:'Autre',weight:5})
 ];
 export const AFFECTATION_TYPES:EventGenre[] = [
-	new EventGenre({_id:'TP',_text:'Travaux Pratiques',weight:1000}),
-	new EventGenre({_id:'TD',_text:'Travaux Dirigés',weight:100}),
-	new EventGenre({_id:'COURS',_text:'Cours Magistral',weight:100}),
+	new EventGenre({_id:GROUPE_GENRE_TP,_text:'Travaux Pratiques',weight:1000}),
+	new EventGenre({_id:GROUPE_GENRE_TD,_text:'Travaux Dirigés',weight:100}),
+	new EventGenre({_id:GROUPE_GENRE_COURS,_text:'Cours Magistral',weight:100}),
 	new EventGenre({_id:'AUTRE',_text:'Autre',weight:5})
 ];

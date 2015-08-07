@@ -7,6 +7,7 @@ import {UIManager} from '../utils/uimanager';
 import {LocalStore} from '../utils/localstore';
 import {DatabaseManager} from '../services/pouchdb/databasemanager';
 import {InfoMessage} from '../utils/infomessage';
+import {EventGenre,ETUDEVENT_TYPES,GROUPEEVENT_TYPES,AFFECTATION_TYPES} from '../utils/eventgenre';
 //
 import {DEPARTEMENT_TYPE, ANNEE_TYPE, SEMESTRE_TYPE,
 UNITE_TYPE, MATIERE_TYPE, GROUPE_TYPE,
@@ -35,6 +36,15 @@ export class RootElement extends InfoElement {
             this.baseUrl = this.baseUrl + "/";
         }
     }// constructor
+	public get etudEventTypes():EventGenre[]{
+		return ETUDEVENT_TYPES;
+	}
+	public get groupeEventTypes():EventGenre[]{
+		return GROUPEEVENT_TYPES;
+	}
+	public get affectationTypes():EventGenre[]{
+		return AFFECTATION_TYPES;
+	}
     public get images_dir(): string {
         return (this.baseUrl + "images/");
     }

@@ -121,3 +121,6 @@ export const NOTES_BY_SEMESTRE_MATIERE:string ='etudevents/by_semestre_matiere_n
 export const PERSONS_BY_LASTNAME_FIRSTNAME:string ='persons/by_names';
 //
 export const NOTE_GENRE:string = 'note';
+export const GROUPE_GENRE_TP:string='TP';
+export const GROUPE_GENRE_TD:string='TD';
+export const GROUPE_GENRE_COURS:string='COURS';

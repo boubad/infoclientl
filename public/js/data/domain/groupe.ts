@@ -2,7 +2,9 @@
 //
 import {DepSigleNameItem} from './depsiglenameitem';
 import {IBaseItem, IDatabaseManager, IProfAffectation, IEtudAffectation, IGroupe} from 'infodata';
-import {GROUPE_TYPE, GROUPE_PREFIX, PROFAFFECTATION_BY_GROUPE, ETUDAFFECTATION_BY_GROUPE} from '../utils/infoconstants';
+import {GROUPE_TYPE, GROUPE_PREFIX, PROFAFFECTATION_BY_GROUPE,
+	 ETUDAFFECTATION_BY_GROUPE,GROUPE_GENRE_COURS,GROUPE_GENRE_TD,
+	 GROUPE_GENRE_TP} from '../utils/infoconstants';
 //
 export class Groupe extends DepSigleNameItem implements IGroupe {
     //
@@ -45,7 +47,7 @@ export class Groupe extends DepSigleNameItem implements IGroupe {
 	}
 	public set genre(s: string) {
 		this._genre = ((s !== undefined) && (s !== null) && (s.trim().length > 0)) ?
-			s.trim().toUpperCase() : 'TP';
+			s.trim().toUpperCase() : GROUPE_GENRE_TP;
 	}
 	public get childrenids(): string[] {
 		return ((this._childrenids !== undefined) && (this._childrenids !== null)) ?
@@ -77,11 +79,11 @@ export class Groupe extends DepSigleNameItem implements IGroupe {
 		}
 		let sg1 = this.genre;
 		let sg2 = pg.genre;
-		if (sg1 == 'TP') {
+		if (sg1 == GROUPE_GENRE_TP) {
 			return bRet;
-		} else if ((sg1 == 'TD') && (sg2 != 'TP')) {
+		} else if ((sg1 == GROUPE_GENRE_TD) && (sg2 != GROUPE_GENRE_TP)) {
 			return bRet;
-		} else if ((sg1 == 'COURS') && (sg2 !== 'TD')) {
+		} else if ((sg1 == GROUPE_GENRE_COURS) && (sg2 !== GROUPE_GENRE_TD)) {
 			return bRet;
 		}
 		if ((this._childrenids === undefined) || (this._childrenids === null)) {
