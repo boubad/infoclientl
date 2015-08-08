@@ -39,7 +39,7 @@ export class Groupe extends DepSigleNameItem implements IGroupe {
             oMap.genre = this.genre;
         }
 		if (this.childrenids.length > 0) {
-			oMap.chlidrenids = this.childrenids;
+			oMap.childrenids = this.childrenids;
 		}
     }
 	public get genre(): string {
