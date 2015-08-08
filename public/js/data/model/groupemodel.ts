@@ -47,10 +47,8 @@ export class GroupeModel extends DepSigleNameViewModel<Groupe> {
 	public set allGenre(s: EventGenre) {
 		this._allGenre = ((s !== undefined) && (s !== null)) ? s : this.affectationTypes[0];
 		if (this.currentItem !== null) {
-			if (this.currentItem.rev == null) {
-				this.currentItem.genre = this._allGenre.id;
-				this.refresh_children();
-			}
+			this.currentItem.genre = this._allGenre.id;
+			this.refresh_children();
 		}
 	}
 	public add_children(): void {

@@ -304,7 +304,7 @@ export class GroupeEventModel extends BaseEditViewModel<GroupeEvent> {
             semestreid: this.semestreid,
             groupeid: this.groupeid,
             uniteid: this.uniteid,
-            genre: (this.allGenre !== null) ? this.allGenre.id: GROUPE_GENRE_TP,
+            genre: ((this.allGenre !== undefined) && (this.allGenre !== null)) ? this.allGenre.id: GROUPE_GENRE_TP,
             personid: this.personid,
             departementid: this.departementid,
             uniteCoefficient: this.unite.coefficient,
@@ -360,19 +360,6 @@ export class GroupeEventModel extends BaseEditViewModel<GroupeEvent> {
     protected set profAffectations(s: IProfAffectation[]) {
         this._profaffectations = ((s !== undefined) && (s !== null)) ? s : [];
     }
-	protected get_tp_affectation(grpid: string): Promise<IEtudAffectation[]> {
-		let model = this.etudAffectationModel;
-		model.semestreid = this.semestreid;
-		model.groupeid = grpid;
-        let self = this;
-        return this.dataService.dm_get_items(model.start_key(), model.end_key()).then((aa: IEtudAffectation[]) => {
-            let rr = ((aa !== undefined) && (aa !== null)) ? aa : [];
-            return self.retrieve_avatars(rr);
-        }).then((ff: IEtudAffectation[]) => {
-            return ff;
-        });
-
-	}// get_one_affectation
     protected fill_etudaffectations(): Promise<any> {
         for (let a of this.etudAffectations) {
             let x = a.url;
@@ -388,29 +375,8 @@ export class GroupeEventModel extends BaseEditViewModel<GroupeEvent> {
         }
 		let oRet: IEtudAffectation[] = [];
         let self = this;
-		return this.groupe.get_tp_ids(this.dataService).then((ids) => {
-			let pp: Promise<IEtudAffectation[]>[] = [];
-			if ((ids !== undefined) && (ids !== null)) {
-				for (let id of ids) {
-					let p = self.get_tp_affectation(id);
-					pp.push(p);
-				}
-			}
-			return Promise.all(pp);
-		}).then((dd) => {
-			for (let xx of dd) {
-				for (let x of xx) {
-					oRet.push(x);
-				}
-			}// xx
-			if (oRet.length > 1) {
-				let a = oRet[0];
-				let pf = a.sort_func;
-				if ((pf !== undefined) && (pf !== null)) {
-					oRet.sort(pf);
-				}
-			}
-			self.etudAffectations = oRet;
+		return this.get_groupe_etudaffectations(this.groupe,this.semestreid).then((pp)=>{
+			self.etudAffectations = self.check_array(pp);
 			return true;
 		});
     }// fill_etudaffectations

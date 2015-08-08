@@ -1,115 +1,152 @@
 <template>
-  <div class="container" if.bind="is_connected">
-    <table>
-      <tbody>
-        <tr>
-          <td style="text-align:center">
-            <sheader-bar></sheader-bar>
-          </td>
-        </tr>
-        <tr>
-          <td style="text-align:center">
-            <work-bar></work-bar>
-          </td>
-        </tr>
-        <tr if.bind="canShowForm" style="vertical-align:top">
-          <td style="vertical-align:top" if.bind="isEditable">
-            <table>
-              <tbody>
-                <tr>
-                  <td style="vertical-align:top">
-                    <table>
-                      <tr>
-                        <td style="text-align:center">
-                          <h4>Etudiants</h4>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <select id="persons" multiple value.bind="currentPersons" size="16">
-                            <option repeat.for="pers of persons" model.bind="pers">${pers.text}</option>
-                          </select>
-                        </td>
-                      </tr>
-                    </table>
-                  </td>
-                  <td>&nbsp;&nbsp;</td>
-                  <td style="vertical-align:top" if.bind="isEditable">
-                    <table>
-                      <tr>
-                        <td>
-                          <a class="btn btn-primary" click.delegate="refreshAll()" href="#">
+	<div class="container" if.bind="is_connected">
+		<table>
+			<tbody>
+				<tr>
+					<td style="text-align:center">
+						<sheader-bar></sheader-bar>
+					</td>
+				</tr>
+				<tr>
+					<td style="text-align:center">
+						<table>
+							<tr>
+								<td>
+									<div class="form-group">
+										<label class="form-label" for="departements">Dép.</label>
+										<select id="departements" value.bind="departement">
+											<option repeat.for="depelem of departements" model.bind="depelem">${depelem.text}</option>
+										</select>
+									</div>
+								</td>
+								<td>
+									<div class="form-group">
+										<label class="form-label" for="annees">Année</label>
+										<select id="annees" value.bind="annee">
+											<option repeat.for="anelem of annees" model.bind="anelem">${anelem.text}</option>
+										</select>
+									</div>
+								</td>
+								<td>
+									<div class="form-group">
+										<label class="form-label" for="semestres">Sem.</label>
+										<select id="semestres" value.bind="semestre">
+											<option repeat.for="semelem of semestres" model.bind="semelem">${semelem.text}</option>
+										</select>
+									</div>
+								</td>
+								<td>
+									<div class="form-group">
+										<label class="form-label" for="groupes">Groupe</label>
+										<select id="groupes" value.bind="xgroupe">
+											<option repeat.for="grpelem of xgroupes" model.bind="grpelem">${grpelem.text}</option>
+										</select>
+									</div>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr if.bind="canShowForm" style="vertical-align:top">
+					<td style="vertical-align:top" if.bind="isEditable">
+						<table>
+							<tbody>
+								<tr>
+									<td style="vertical-align:top">
+										<table>
+											<tr>
+												<td style="text-align:center">
+													<h4>Etudiants</h4>
+												</td>
+											</tr>
+											<tr>
+												<td>
+													<select id="persons" multiple value.bind="currentPersons" size="16">
+														<option repeat.for="pers of persons" model.bind="pers">${pers.text}</option>
+													</select>
+												</td>
+											</tr>
+										</table>
+									</td>
+									<td>&nbsp;&nbsp;</td>
+									<td style="vertical-align:top" if.bind="isEditable">
+										<table>
+											<tr>
+												<td>
+													<a class="btn btn-primary" click.delegate="refreshAll()" href="#">
                             <i class="fa fa-refresh fa-fw"></i>Rafraîchir
                           </a>
-                        </td>
-                      </tr>
-                      <tr >
-                        <td>
-                          <div class="form-group">
-                            <label class="form-label" for="startDate">Date de début</label>
-                            <input class="form-control" type="date" id="startDate" value.bind="allStartDate" min.bind="minDate" max.bind="maxDate" required></input>
-                          </div>
-                          <div class="form-group">
-                            <label class="form-label" for="endDate">Date de fin</label>
-                            <input class="form-control" type="date" id="endDate" value.bind="allEndDate" min.bind="minDate" max.bind="maxDate" required></input>
-                          </div>
-                          <div class="btn-group">
-                            <a class="btn btn-primary" click.delegate="save()" href="#" show.bind="canSave">
+												</td>
+											</tr>
+											<tr>
+												<td>
+													<div class="form-group">
+														<label class="form-label" for="startDate">Date de début</label>
+														<input class="form-control" type="date" id="startDate" value.bind="allStartDate" min.bind="minDate"
+														max.bind="maxDate" required></input>
+													</div>
+													<div class="form-group">
+														<label class="form-label" for="endDate">Date de fin</label>
+														<input class="form-control" type="date" id="endDate" value.bind="allEndDate" min.bind="minDate" max.bind="maxDate"
+														required></input>
+													</div>
+													<div class="btn-group">
+														<a class="btn btn-primary" click.delegate="save()" href="#" show.bind="canSave">
                               <i class="fa fa-plus fa-fw"></i>Ajouter
                             </a>
-                            <a class="btn btn-danger" click.delegate="remove()" href="#" show.bind="canRemove">
+														<a class="btn btn-danger" click.delegate="remove()" href="#" show.bind="canRemove">
                               <i class="fa fa-trash-o fa-fw"></i>Supprimer
                             </a>
-                          </div>
-                        </td>
-                      </tr>
-                    </table>
-                  </td>
-                  <td>&nbsp;&nbsp;</td>
-                  <td style="vertical-align:top">
-                    <table>
-                      <tr>
-                        <td style="text-align:center">
-                          <h4>Affectations</h4>
-                        </td>
-                      </tr>
-                      <tr style="vertical-align:top">
-                        <td>
-                          <ul class="pagination" if.bind="hasPages">
-                            <li show.bind="canPrevPage">
-                              <a href="#" click.delegate="firstPage()">
+													</div>
+												</td>
+											</tr>
+										</table>
+									</td>
+									<td>&nbsp;&nbsp;</td>
+									<td style="vertical-align:top">
+										<table>
+											<tr>
+												<td style="text-align:center">
+													<h4>Affectations</h4>
+												</td>
+											</tr>
+											<tr style="vertical-align:top">
+												<td>
+													<ul class="pagination" if.bind="hasPages">
+														<li show.bind="canPrevPage">
+															<a href="#" click.delegate="firstPage()">
                                 <i class="fa fa-fast-backward fa-fw"></i>Début</a>
-                            </li>
-                            <li show.bind="canPrevPage">
-                              <a href="#" click.delegate="prevPage()">
+														</li>
+														<li show.bind="canPrevPage">
+															<a href="#" click.delegate="prevPage()">
                                 <i class="fa fa-step-backward fa-fw"></i>Préc.</a>
-                            </li>
-                            <li show.bind="canNextPage">
-                              <a href="#" click.delegate="nextPage()">
+														</li>
+														<li show.bind="canNextPage">
+															<a href="#" click.delegate="nextPage()">
                                 <i class="fa fa-step-forward fa-fw"></i>Suivant</a>
-                            </li>
-                            <li show.bind="canNextPage">
-                              <a href="#" click.delegate="lastPage()">
+														</li>
+														<li show.bind="canNextPage">
+															<a href="#" click.delegate="lastPage()">
                                 <i class="fa fa-fast-forward fa-fw"></i>Fin</a>
-                            </li>
-                          </ul>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td style="vertical-align:top">
-                          <select id="affectations" multiple value.bind="currentAffectations" size="16">
-                            <option repeat.for="elem of items" model.bind="elem">${elem.text}</option>
-                          </select>
-                        </td>
-                      </tr>
-                    </table>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+														</li>
+													</ul>
+												</td>
+											</tr>
+											<tr>
+												<td style="vertical-align:top">
+													<select id="affectations" multiple value.bind="currentAffectations" size="16">
+														<option repeat.for="elem of items" model.bind="elem">${elem.text}</option>
+													</select>
+												</td>
+											</tr>
+										</table>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
 </template>

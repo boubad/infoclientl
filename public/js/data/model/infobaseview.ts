@@ -2,7 +2,8 @@
 //
 import {InfoRootElement} from './inforootelement';
 import {InfoUserInfo} from './infouserinfo';
-import {IEtudEvent} from 'infodata';
+import {EtudAffectation} from '../domain/etudaffectation';
+import {IEtudEvent,IEtudAffectation,IGroupe} from 'infodata';
 //
 export class InfoBaseView extends InfoRootElement {
     //
@@ -25,6 +26,50 @@ export class InfoBaseView extends InfoRootElement {
         this.choose_matiere = false;
         this.choose_groupe = false;
     }
+	protected get_tp_affectation(semid:string, grpid: string): Promise<IEtudAffectation[]> {
+		let model = new EtudAffectation({
+			semestreid:semid,
+			groupeid: grpid
+		});
+        let self = this;
+        return this.dataService.dm_get_items(model.start_key(), model.end_key()).then((aa: IEtudAffectation[]) => {
+            let rr = ((aa !== undefined) && (aa !== null)) ? aa : [];
+            return self.retrieve_avatars(rr);
+        }).then((ff: IEtudAffectation[]) => {
+            return ff;
+        });
+	}// get_tp_affectation
+	protected get_groupe_etudaffectations(g:IGroupe, semid:string): Promise<IEtudAffectation[]>{
+		let oRet: IEtudAffectation[] = [];
+		if ((g === undefined) || (g === null) || (semid === undefined) || (semid === null)){
+			return Promise.resolve(oRet);
+		}
+		let self = this;
+		return g.get_tp_ids(this.dataService).then((ids)=>{
+			let pp: Promise<IEtudAffectation[]>[] = [];
+			if ((ids !== undefined) && (ids !== null)) {
+				for (let id of ids) {
+					let p = self.get_tp_affectation(semid,id);
+					pp.push(p);
+				}
+			}
+			return Promise.all(pp);
+		}).then((dd)=>{
+			for (let xx of dd) {
+				for (let x of xx) {
+					oRet.push(x);
+				}
+			}// xx
+			if (oRet.length > 1) {
+				let a = oRet[0];
+				let pf = a.sort_func;
+				if ((pf !== undefined) && (pf !== null)) {
+					oRet.sort(pf);
+				}
+			}
+			return oRet;
+		});
+	}//groupe_etudaffectations
     protected perform_activate(): Promise<any> {
         this.my_reset();
         return Promise.resolve(true);

@@ -1,7 +1,8 @@
 //affectationmodel.ts
 import {InfoUserInfo} from './infouserinfo';
 import {BaseEditViewModel} from './baseeditmodel';
-import {IAffectation, IDepartementPerson, IUIManager} from 'infodata';
+import {IAffectation, IDepartementPerson, IUIManager, IGroupe} from 'infodata';
+import {GROUPE_GENRE_TP} from '../utils/infoconstants';
 //
 export class AffectationViewModel<T extends IAffectation, P extends IDepartementPerson>
     extends BaseEditViewModel<T> {
@@ -13,6 +14,9 @@ export class AffectationViewModel<T extends IAffectation, P extends IDepartement
     private _person_model: P;
     protected _start: Date;
     protected _end: Date;
+	//
+	private xgroupes: IGroupe[];
+	private _xgroupe: IGroupe;
     //
     constructor(userinfo: InfoUserInfo) {
         super(userinfo);
@@ -22,6 +26,8 @@ export class AffectationViewModel<T extends IAffectation, P extends IDepartement
         this._person_model = this.create_person();
         this._start = null;
         this._end = null;
+		this._xgroupe = null;
+		this.xgroupes = [];
     }
 
     public get persons(): P[] {
@@ -41,11 +47,11 @@ export class AffectationViewModel<T extends IAffectation, P extends IDepartement
         this._currentPersons = s;
     }
     protected update_from_userinfo(): void {
-      let userinfo = this.userInfo;
-      this.modelItem.departementid = userinfo.departementid;
-      this.modelItem.anneeid = userinfo.anneeid;
-      this.modelItem.semestreid = userinfo.semestreid;
-      this.modelItem.groupeid = userinfo.groupeid;
+		let userinfo = this.userInfo;
+		this.modelItem.departementid = userinfo.departementid;
+		this.modelItem.anneeid = userinfo.anneeid;
+		this.modelItem.semestreid = userinfo.semestreid;
+		this.modelItem.groupeid = userinfo.groupeid;
     }
     protected perform_activate(): Promise<any> {
         let self = this;
@@ -55,6 +61,18 @@ export class AffectationViewModel<T extends IAffectation, P extends IDepartement
             self.choose_semestre = true;
             self.choose_groupe = true;
             self.update_from_userinfo();
+			self._xgroupe = null;
+			self.xgroupes = [];
+			let pp: IGroupe[] = [];
+			for (let x of self.groupes) {
+				if (x.genre == GROUPE_GENRE_TP) {
+					pp.push(x);
+				}
+			}
+			self.xgroupes = pp;
+			if (self.xgroupes.length > 0) {
+				self.xgroupe = self.xgroupes[0];
+			}
             return self.fill_persons();
         });
     }
@@ -65,23 +83,42 @@ export class AffectationViewModel<T extends IAffectation, P extends IDepartement
     protected is_refresh(): boolean {
         return (this.semestreid !== null) && (this.groupeid !== null);
     }
-    protected post_change_groupe(): Promise<any> {
-        let self = this;
-        return super.post_change_groupe().then((r) => {
-            self.modelItem.departementid = self.departementid;
-            self.modelItem.anneeid = self.anneeid;
-            self.modelItem.semestreid = self.semestreid;
-            self.modelItem.groupeid = self.groupeid;
-            return self.refreshAll();
-        });
-    }
+	protected post_change_departement(): Promise<any> {
+		let self = this;
+		this._xgroupe = null;
+		this.xgroupes = [];
+		return super.post_change_departement().then((r) => {
+			let pp: IGroupe[] = [];
+			for (let x of self.groupes) {
+				if (x.genre == GROUPE_GENRE_TP) {
+					pp.push(x);
+				}
+			}
+			self.xgroupes = pp;
+			if (self.xgroupes.length > 0) {
+				self.xgroupe = self.xgroupes[0];
+			}
+			return true;
+		});
+	}
+	public get xgroupe(): IGroupe {
+		return this._xgroupe;
+	}
+	public set xgroupe(s: IGroupe) {
+		this._xgroupe = (s !== undefined) ? s : null;
+		this.modelItem.departementid = this.departementid;
+		this.modelItem.anneeid = this.anneeid;
+		this.modelItem.semestreid = this.semestreid;
+		this.modelItem.groupeid = (this.xgroupe !== null) ? this.xgroupe.id : null;
+		this.refreshAll();
+	}
     protected post_change_semestre(): Promise<any> {
         let self = this;
         return super.post_change_semestre().then((r) => {
             self.modelItem.departementid = self.departementid;
             self.modelItem.anneeid = self.anneeid;
             self.modelItem.semestreid = self.semestreid;
-            self.modelItem.groupeid = self.groupeid;
+            self.modelItem.groupeid = (self.xgroupe !== null) ? self.xgroupe.id : null;
             self._start = null;
             self._end = null;
             let sem = self.semestre;
@@ -258,11 +295,11 @@ export class AffectationViewModel<T extends IAffectation, P extends IDepartement
     }// retrieve_add_items
     public save(): Promise<any> {
         if (!this.is_storeable()) {
-             return Promise.resolve(false);
+			return Promise.resolve(false);
         }
         let oItems = this.retrieve_add_items();
         if (oItems.length < 1) {
-             return Promise.resolve(false);
+			return Promise.resolve(false);
         }
         let self = this;
         this.clear_error();
