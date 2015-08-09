@@ -1,4 +1,7 @@
 //infodata.d.ts
+//
+/// <reference path='es6.d.ts' />
+//
 declare module "infodata" {
     //
     export interface IInfoMessage {
@@ -130,12 +133,12 @@ declare module "infodata" {
         retardString: string;
         miscString: string;
         sortCriteria: number;
-        matiereSigle:string;
-        uniteSigle:string;
-        description:string;
-        matiereCoefficient:number;
-        uniteCoefficient:number;
-        order:number;
+        matiereSigle: string;
+        uniteSigle: string;
+        description: string;
+        matiereCoefficient: number;
+        uniteCoefficient: number;
+        order: number;
         //
         _count?: number;
         _sumcoefs?: number;
@@ -164,7 +167,7 @@ declare module "infodata" {
         departementid: string;
     }
     export interface IUnite extends IDepartementSigleNameItem {
-        coefficient?:number;
+        coefficient?: number;
     }
     export interface IMatiere extends IDepartementSigleNameItem {
         uniteid: string;
@@ -172,12 +175,15 @@ declare module "infodata" {
         mat_module?: string;
         coefficient?: number;
         ecs?: number;
-        order?:number;
+        order?: number;
     } // interface IMatiere
     export interface IGroupe extends IDepartementSigleNameItem {
-		genre?:string;
-		childrenids?:string[];
-		get_tp_ids: (service: IDatabaseManager)=>Promise<string[]>;
+		genre?: string;
+		childrenids?: string[];
+		get_tp_ids?: (service: IDatabaseManager) => Promise<string[]>;
+		has_child_id?: (childid: string) => boolean;
+		add_child_id?: (childid: string) => boolean;
+		remove_child_id?: (childid: string) => boolean;
     }
     export interface IIntervalItem extends IDepartementSigleNameItem {
         startDate: Date;
@@ -313,9 +319,9 @@ declare module "infodata" {
         note: number;
         groupeEventName?: string;
         coefficient?: number;
-        matiereCoefficient?:number;
-        uniteCoefficient?:number;
-        order?:number;
+        matiereCoefficient?: number;
+        uniteCoefficient?: number;
+        order?: number;
     }
     export interface IItemFactory {
         create: (oMap: any, stype?: string) => IBaseItem;

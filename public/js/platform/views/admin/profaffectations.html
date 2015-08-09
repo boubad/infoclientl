@@ -12,19 +12,6 @@
 						<work-bar></work-bar>
 					</td>
 				</tr>
-				<tr>
-					<td style="text-align:center">
-						<div class="form-group">
-							<label class="form-label" for="genre">Genre</label>
-							<select id="genre" value.bind="genre">
-								<option value='TP'>Travaux Pratiques</option>
-								<option value='TD'>Travaux Dirigés</option>
-								<option value='COURS'>Cours Magistral</option>
-								<option value='AUTRE'>Autre Genre</option>
-							</select>
-						</div>
-					</td>
-				</tr>
 				<tr if.bind="canShowForm" style="vertical-align:top">
 					<td style="vertical-align:top" if.bind="isEditable">
 						<table>
@@ -56,11 +43,13 @@
 											</div>
 											<div class="form-group">
 												<label class="form-label" for="startDate">Date de début</label>
-												<input class="form-control" type="date" id="startDate" value.bind="allStartDate" min.bind="minDate" max.bind="maxDate" required></input>
+												<input class="form-control" type="date" id="startDate" value.bind="allStartDate" min.bind="minDate"
+												max.bind="maxDate" required></input>
 											</div>
 											<div class="form-group">
 												<label class="form-label" for="endDate">Date de fin</label>
-												<input class="form-control" type="date" id="endDate" value.bind="allEndDate" min.bind="minDate" max.bind="maxDate" required></input>
+												<input class="form-control" type="date" id="endDate" value.bind="allEndDate" min.bind="minDate" max.bind="maxDate"
+												required></input>
 											</div>
 											<div class="btn-group">
 												<a class="btn btn-primary" click.delegate="save()" href="#" show.bind="canSave">

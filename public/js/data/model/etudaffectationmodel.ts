@@ -3,6 +3,8 @@ import {InfoUserInfo} from './infouserinfo';
 import {AffectationViewModel} from './affectationmodel';
 import {EtudAffectation} from '../domain/etudaffectation';
 import {Etudiant} from '../domain/etudiant';
+import {IGroupe} from 'infodata';
+import {GROUPE_GENRE_TP} from '../utils/infoconstants';
 //
 export class EtudaffectationModel extends AffectationViewModel<EtudAffectation, Etudiant> {
     //
@@ -15,6 +17,9 @@ export class EtudaffectationModel extends AffectationViewModel<EtudAffectation, 
         let p = new Etudiant({ departementid: this.departementid });
         return p;
     }
+	protected filter_groupe(g:IGroupe): boolean {
+		return (g.genre == GROUPE_GENRE_TP) ? true : false;
+	}
     protected create_item(): EtudAffectation {
         let p = new EtudAffectation({
             departementid: this.departementid,

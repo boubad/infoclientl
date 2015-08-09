@@ -83,6 +83,9 @@ export class AffectationViewModel<T extends IAffectation, P extends IDepartement
     protected is_refresh(): boolean {
         return (this.semestreid !== null) && (this.groupeid !== null);
     }
+	protected filter_groupe(g: IGroupe): boolean {
+		return true;
+	}
 	protected post_change_departement(): Promise<any> {
 		let self = this;
 		this._xgroupe = null;
@@ -90,7 +93,7 @@ export class AffectationViewModel<T extends IAffectation, P extends IDepartement
 		return super.post_change_departement().then((r) => {
 			let pp: IGroupe[] = [];
 			for (let x of self.groupes) {
-				if (x.genre == GROUPE_GENRE_TP) {
+				if (this.filter_groupe(x)) {
 					pp.push(x);
 				}
 			}
@@ -99,6 +102,16 @@ export class AffectationViewModel<T extends IAffectation, P extends IDepartement
 				self.xgroupe = self.xgroupes[0];
 			}
 			return true;
+		});
+	}
+	protected post_change_groupe(): Promise<any> {
+		let self = this;
+		return super.post_change_groupe().then((r) => {
+			self.modelItem.departementid = self.departementid;
+			self.modelItem.anneeid = self.anneeid;
+			self.modelItem.semestreid = self.semestreid;
+			self.modelItem.groupeid = self.groupeid;
+			return self.refreshAll();
 		});
 	}
 	public get xgroupe(): IGroupe {
@@ -118,7 +131,7 @@ export class AffectationViewModel<T extends IAffectation, P extends IDepartement
             self.modelItem.departementid = self.departementid;
             self.modelItem.anneeid = self.anneeid;
             self.modelItem.semestreid = self.semestreid;
-            self.modelItem.groupeid = (self.xgroupe !== null) ? self.xgroupe.id : null;
+            //self.modelItem.groupeid = (self.xgroupe !== null) ? self.xgroupe.id : null;
             self._start = null;
             self._end = null;
             let sem = self.semestre;

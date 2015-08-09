@@ -3,15 +3,13 @@ import {InfoUserInfo} from './infouserinfo';
 import {AffectationViewModel} from './affectationmodel';
 import {ProfAffectation} from '../domain/profaffectation';
 import {Enseignant} from '../domain/enseignant';
+import {GROUPE_GENRE_TP} from '../utils/infoconstants';
 //
 export class ProfaffectationModel extends AffectationViewModel<ProfAffectation, Enseignant> {
-    //
-    private _genre: string;
     //
     constructor(userinfo: InfoUserInfo) {
         super(userinfo);
         this.title = 'Affectations enseignants';
-        this._genre = null;
     }
     //
     protected create_person(): Enseignant {
@@ -20,7 +18,7 @@ export class ProfaffectationModel extends AffectationViewModel<ProfAffectation, 
     }
     protected is_storeable(): boolean {
         return super.is_storeable() && (this.uniteid !== null)
-            && (this.matiereid !== null) && (this.genre !== null);
+            && (this.matiereid !== null);
     }
     public get canSave(): boolean {
         return this.is_storeable();
@@ -49,7 +47,7 @@ export class ProfaffectationModel extends AffectationViewModel<ProfAffectation, 
             groupeid: this.groupeid,
             uniteid: this.uniteid,
             matiereid: this.matiereid,
-            genre: this.genre,
+            genre: ((this.groupe !== undefined) && (this.groupe !== null)) ? this.groupe.genre : GROUPE_GENRE_TP,
             startDate: this._start,
             endDate: this._end,
             departementSigle: (this.departement !== null) ? this.departement.sigle : null,
@@ -65,7 +63,7 @@ export class ProfaffectationModel extends AffectationViewModel<ProfAffectation, 
         let a = super.compose_item(p);
         a.enseignantid = p.id;
         if (a.genre === null){
-          a.genre = this.genre;
+          a.genre = ((this.groupe !== undefined) && (this.groupe !== null)) ? this.groupe.genre : GROUPE_GENRE_TP;
         }
         a.check_id();
         return a;
@@ -85,18 +83,4 @@ export class ProfaffectationModel extends AffectationViewModel<ProfAffectation, 
         return super.is_refresh() && (this.modelItem.matiereid !== null) &&
             (this.modelItem.genre !== null);
     }
-    //
-    public get genre(): string {
-        if ((this._genre === undefined) || (this._genre === null)) {
-            this._genre = 'TP';
-        }
-        return this._genre;
-    }
-    public set genre(s: string) {
-        this._genre = ((s !== undefined) && (s !== null) && (s.trim().length > 0)) ?
-            s.trim().toUpperCase() : null;
-        this.modelItem.genre = this.genre;
-        this.refreshAll();
-    }
-    //
 }// class ProfAffectationModel

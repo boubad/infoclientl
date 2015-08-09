@@ -3,8 +3,8 @@
 import {DepSigleNameItem} from './depsiglenameitem';
 import {IBaseItem, IDatabaseManager, IProfAffectation, IEtudAffectation, IGroupe} from 'infodata';
 import {GROUPE_TYPE, GROUPE_PREFIX, PROFAFFECTATION_BY_GROUPE,
-	 ETUDAFFECTATION_BY_GROUPE,GROUPE_GENRE_COURS,GROUPE_GENRE_TD,
-	 GROUPE_GENRE_TP} from '../utils/infoconstants';
+ETUDAFFECTATION_BY_GROUPE, GROUPE_GENRE_COURS, GROUPE_GENRE_TD,
+GROUPE_GENRE_TP} from '../utils/infoconstants';
 //
 export class Groupe extends DepSigleNameItem implements IGroupe {
     //
@@ -62,6 +62,63 @@ export class Groupe extends DepSigleNameItem implements IGroupe {
     public base_prefix(): string {
         return GROUPE_PREFIX;
     }
+	public has_child_id(childid: string): boolean {
+		if ((childid === undefined) || (childid === null)) {
+			return false;
+		}
+		if ((this._childrenids === undefined) || (this._childrenids === null)) {
+			return false;
+		}
+		let aa = this._childrenids;
+		let bFound = false;
+		for (let x of aa) {
+			if (x == childid) {
+				bFound = true;
+				break;
+			}
+		}
+		return bFound;
+	}// has_child_id
+	public add_child_id(childid: string): boolean {
+		if ((childid === undefined) || (childid === null)) {
+			return false;
+		}
+		let aa = ((this._childrenids !== undefined) && (this._childrenids !== null)) ? this._childrenids : [];
+		let bFound = false;
+		for (let x of aa) {
+			if (x == childid) {
+				bFound = true;
+				break;
+			}
+		}
+		if (!bFound) {
+			aa.push(childid);
+			this._childrenids = aa;
+		}
+		return (!bFound);
+	}// has_child_id
+	public remove_child_id(childid: string): boolean {
+		if ((childid === undefined) || (childid === null)) {
+			return false;
+		}
+		if ((this._childrenids === undefined) || (this._childrenids === null)) {
+			return false;
+		}
+		let aa: string[] = [];
+		let bFound = false;
+		for (let x of this._childrenids) {
+			if (x == childid) {
+				bFound = true;
+				break;
+			} else {
+				aa.push(x);
+			}
+		}
+		if (bFound) {
+			this._childrenids = aa;
+		}
+		return bFound;
+	}// has_child_id
 	public add_child_groupe(pg: IGroupe): boolean {
 		let bRet: boolean = false;
 		if ((pg === undefined) || (pg === null)) {
@@ -102,20 +159,20 @@ export class Groupe extends DepSigleNameItem implements IGroupe {
 		}
 		return bRet;
 	}// add_child_groupe
-	public get_tp_ids(service: IDatabaseManager):Promise<string[]>{
-	 let oRet:string[] = [];
-	 if (this.genre == GROUPE_GENRE_TP){
-		 oRet.push(this.id);
-		 return Promise.resolve(oRet);
-		} else if (this.genre = GROUPE_GENRE_TD){
+	public get_tp_ids(service: IDatabaseManager): Promise<string[]> {
+		let oRet: string[] = [];
+		if (this.genre == GROUPE_GENRE_TP) {
+			oRet.push(this.id);
+			return Promise.resolve(oRet);
+		} else if (this.genre = GROUPE_GENRE_TD) {
 			oRet = this.childrenids;
 			return Promise.resolve(oRet);
 		}
-		return service.dm_find_items_array(this.childrenids).then((dd:IGroupe[])=>{
-			if ((dd !== undefined) && (dd !== null)){
-				for (let td of dd){
+		return service.dm_find_items_array(this.childrenids).then((dd: IGroupe[]) => {
+			if ((dd !== undefined) && (dd !== null)) {
+				for (let td of dd) {
 					let xi = td.childrenids;
-					for (let y of xi){
+					for (let y of xi) {
 						oRet.push(y);
 					}
 				}// dd
@@ -123,6 +180,31 @@ export class Groupe extends DepSigleNameItem implements IGroupe {
 			return oRet;
 		});
 	}// get_tp_ids
+	private check_parents(service: IDatabaseManager): Promise<any> {
+		if (this.genre == GROUPE_GENRE_COURS) {
+			return Promise.resolve(true);
+		}
+		let self = this;
+		let id = this.id;
+		let start = this.start_key();
+		let end = this.end_key();
+		return service.dm_get_items(start, end).then((pp: IGroupe[]) => {
+			let pg: IGroupe[] = [];
+			if ((pp !== undefined) && (pp !== null)) {
+				for (let p of pp) {
+					if (p.has_child_id(id)) {
+						p.remove_child_id(id);
+						pg.push(p);
+					}// ok
+				}// p
+			}// pp
+			if (pg.length > 0) {
+				return service.dm_maintains_items(pg);
+			} else {
+				return true;
+			}
+		});
+	}// checkParents
 	public remove(service: IDatabaseManager): Promise<any> {
         if ((this.id === null) || (this.rev === null)) {
             throw new Error('Item not removeable error');
@@ -143,7 +225,9 @@ export class Groupe extends DepSigleNameItem implements IGroupe {
                     self.add_id_to_array(docids, x);
                 }
             }
-            return self.remove_with_children(service, docids, id);
-        });
+			return self.check_parents(service);
+        }).then((r) => {
+			return self.remove_with_children(service, docids, id);
+		});
     }// remove
 } // class Groupe
